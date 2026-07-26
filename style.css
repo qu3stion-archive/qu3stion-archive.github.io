@@ -4,7 +4,7 @@ body {
 #universal {
     /* hmm... */
 }
-main {
+nav, main {
     max-width: 80%;
     margin-left: 10%;
     margin-top: 1%;
@@ -21,7 +21,7 @@ section {
     gap: 1vw;
     padding: 1vw;
     background-color: lightgray;
-    max-height: 600px;
+    max-height: 500px;
     overflow-y: scroll;
 }
 article {
@@ -32,3 +32,13 @@ article {
 img {
     max-width: 100%;
 }
+#spyglass > img, #spyglass > video {
+    width: 800px;
+}
+button {
+    all: unset;
+}
+.hidden {
+    display: none;
+}
+
