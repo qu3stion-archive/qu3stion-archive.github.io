@@ -6,9 +6,8 @@ const message = document.querySelector("#status");
 const accepted_file_types = [".jpg", ".mp4"]
 // "eram" is my function testing dummy!!
 const page_num = 50;
-let page = 1;
+let currentPage = 1;
 
-let mediaURLs = [];
 let mediaIDs = [];
 
 let tagsAll = new Map();
@@ -32,37 +31,48 @@ tagsAll.set("a", {name: "Animal",       class: "animal",     color: "#FFF", desc
 tagsAll.set("g", {name: "Games",        class: "Gaming",     color: "#FFF", description: ""});
 tagsAll.set("d", {name: "Drawings",     class: "drawings",   color: "#FFF", description: ""});
 
-async function get() { // CODE IS JANKY, RENOVATE AFTER CSV IS DONE
-    for (x = 1; x < 855; x++) {
-        var REQUEST = await fetch("media/" + "m" + x + ".jpg")
-        if (REQUEST.status == 200) {
-            mediaURLs.push(REQUEST.url);
-        } else {
-            var REQUEST2 = await fetch("media/" + "m" + x + ".mp4")
-            if (REQUEST2.status == 200) {
-                mediaURLs.push(REQUEST2.url);
-            } else {
-                mediaURLs.push(null);
-                console.log(REQUEST2)
-            }
-        }
-        message.innerHTML = "fetching media... (" + x + "/" + 854 + ")"
-    }
-    return true;
-}
+
 async function build() {
-    explorer.style.display = "none";
-    for (x = 0; x < 855; x++) {
-        let mediaID = "m" + x;
+    for (x = 1; x < 855; x++) {
+        message.innerHTML = "fetching media... (" + x + "/" + 854 + ")"
+        let mediaID = "div_m" + x;
         var article = document.createElement("article");
         var img = document.createElement("img");
         var p = document.createElement("p");
         var button = document.createElement("button");
         var elm;
         var url;
-        url = mediaURLs[x];
+        var REQUEST = await fetch("media/" + "m" + x + ".jpg")
+        switch (REQUEST.status) {
+            case 206:
+            case 200:
+                url = REQUEST.url
+                break;
+            case 404:
+                var REQUEST2 = await fetch("media/" + "m" + x + ".mp4")
+                if (REQUEST2.status == 200 || REQUEST2.status == 206) {
+                    url = REQUEST2.url;
+                } else {
+                    url = null;
+                }
+                break;
+            default:
+                console.log("Weird status: " + REQUEST.status)
+                url = null;
+        }
+        if (REQUEST.status == 200) {
+            url = REQUEST.url
+        } else {
+            var REQUEST2 = await fetch("media/" + "m" + x + ".mp4")
+            if (REQUEST2.status == 200) {
+                url = REQUEST2.url;
+            } else {
+                url = null;
+            }
+        }
         if (url === null) {
             console.warn("m" + x + " is NULL.")
+            mediaIDs.push(null);
             continue;
         }
         switch (url.slice(-3)) {
@@ -80,7 +90,6 @@ async function build() {
                 break;
         }
         button.appendChild(elm);
-        console.log(url)
         p.innerHTML = mediaID + url.slice(-4);
         button.addEventListener("click", (event) => {
             console.log("hmph!")
@@ -89,23 +98,52 @@ async function build() {
         article.appendChild(button);
         article.appendChild(p);
         article.id = mediaID;
-        mediaIDs.push(mediaID);
-        article.classList.add("hidden")
+            mediaIDs.push(mediaID);
+
         explorer.appendChild(article);
     }
     return true;
 };
+async function page(step) {
+    if (currentPage + step < 1) {
+        if (currentPage == 1) {
+            return false;
+        } else {
+            currentPage = 1;
+        }
+    }
+    currentPage = currentPage + step;
+    let resetCheck = await reset();
+    if (resetCheck) {
+        let range = [((currentPage * 50) - 50), (currentPage * 50)];
+        for (x = range[0]; x < range[1]; x++) {
+            var this_media = document.getElementById(mediaIDs[x]);
+            if (this_media !== null && this_media.classList.contains("shown") == false) {
+                this_media.classList.add("shown");
+            }
+        }
+    }
+    return true;
+}
+async function reset() {
+    for (id in mediaIDs) {
+        var this_media = document.getElementById(mediaIDs[id]);
+        if (this_media !== null && this_media.classList.contains("shown")) {
+            this_media.classList.remove("shown");
+        }
+    }
+    return true;
+}
 async function load() {
     message.innerHTML = "fetching media..."
-    let check = await get();
+    let check = await build();
     if (check) {
-        message.innerHTML = "building file explorer..."
-        let check2 = await build();
+        let check2 = await page(0);
         if (check2) {
-            explorer.style.display = "grid";
             message.innerHTML = "archive loaded successfully! :3"
         } else {
             console.error("/!\ >> FAILED TO INIT EXPLORER");
+            console.log("yay!")
         }
     } else {
         console.error("/!\ >> FAILED TO GET MEDIA");
