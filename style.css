@@ -32,7 +32,7 @@ article {
 img {
     max-width: 100%;
 }
-#spyglass > img, #spyglass > video {
+#viewer > img, #viewer > video {
     width: 800px;
 }
 button {
