@@ -4,13 +4,28 @@ body {
 #universal {
     /* hmm... */
 }
-nav, main {
+#archive {
+    display: grid;
+    grid-template-rows: 60% 40%;
+    height: 1000px;
     max-width: 80%;
     margin-left: 10%;
     margin-top: 1%;
+    padding: 1vh;
+    gap: 1vh;
+    
+}
+nav {
+
+}
+main {
+
+}
+nav, main {
     background-color: white;
     box-sizing: border-box;
     padding: 1%;
+    gap: 1%;
     border: 1px solid;
 }
 section {
@@ -21,7 +36,8 @@ section {
     gap: 1vw;
     padding: 1vw;
     background-color: lightgray;
-    max-height: 500px;
+    height: 100%;
+    max-height: 100%;
     overflow-y: scroll;
 }
 article {
@@ -29,16 +45,20 @@ article {
     background-color: white;
     padding: 8px;
 }
-img {
+img, video {
     max-width: 100%;
 }
 #viewer > img, #viewer > video {
-    width: 800px;
+    width: 600px;
 }
-button {
+.explorer > button {
     all: unset;
 }
 .hidden {
     display: none;
+}
+.search {
+    display: flex;
+    flex-direction: row;
 }
 
