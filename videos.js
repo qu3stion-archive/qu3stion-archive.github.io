@@ -1,14 +1,92 @@
 const explorer = document.querySelector(".explorer");
 const spyglass = document.querySelector("#viewer");
 const message = document.querySelector("#status");
+
+const FOLDER = "media/"
 //const eram = document.querySelector("#eram");
 
 const accepted_file_types = [".jpg", ".mp4"]
 // "eram" is my function testing dummy!!
-const page_num = 50;
+
+var mediaCSVData = []; // Data parsed from the CSV.
+var mediaProcessedData = new Object(); // Contains all media objects.
+var mediaDisplayed = []; // IDs of all displayed medias.
+
+const mediaTemplate = {
+    id      : undefined,
+    filetype: undefined,
+    tags    : [],
+    note    : undefined,
+    url()   {
+        return FOLDER + this.id + this.filetype;
+    },
+    build() {
+        let template;
+        let clone;
+        switch (this.filetype) {
+            case ".jpg":
+                template = document.querySelector("#template_image");
+                clone = document.importNode(template.content, true);
+                clone.querySelectorAll("img")[0].src = this.url();
+                break;
+            case ".mp4":
+                template = document.querySelector("#template_video");
+                clone = document.importNode(template.content, true);
+                clone.querySelectorAll("source")[0].src = this.url();
+                break;
+        }
+        clone.querySelectorAll("button")[0].addEventListener("click", (event) => {
+            expand(event)
+        });
+        clone.querySelector("article").id = "div_" + this.id;
+        explorer.appendChild(clone);
+    },
+    free() {
+        explorer.removeChild(document.getElementById("div_" + this.id));
+    }
+}
+
+var mediaTotal = 854;
+const perPage = 20;
+var page_count = Math.ceil(mediaTotal / perPage);
+var pageArr = [
+    
+]
+
 let currentPage = 1;
 
-let mediaIDs = [];
+for (p = 1; p <= page_count; p++) {
+    pageArr[p] = {
+        "range": [((p * perPage) - perPage + 1), (p * perPage)],
+        "fetched": false
+    };
+    if (pageArr[p]["range"][1] > [mediaTotal]) {
+        pageArr[p]["range"][1] = mediaTotal;
+    }
+    // [id range (ex. m1->m20), fetched?]
+}
+var counter = 1
+async function parseCSV() {
+    Papa.parse("media.csv", {
+        header: true,
+        download: true,
+        step: function(row) {
+            let data = row.data
+            let mediaNew = {};
+            if (data["filetype"] !== undefined) {
+                mediaNew["id"] = data["id"];
+                mediaNew["filetype"] = data["filetype"];
+                mediaCSVData[counter] = mediaNew;
+                counter += 1;
+            }
+        },
+        complete: function() {
+            init_media()
+        }
+    })
+    return true;
+}
+
 
 let tagsAll = new Map();
 tagsAll.set("Q", {name: "Qu3stion",    class: "qu3stion",    color: "#FFF", description: ""});
@@ -31,124 +109,55 @@ tagsAll.set("a", {name: "Animal",       class: "animal",     color: "#FFF", desc
 tagsAll.set("g", {name: "Games",        class: "Gaming",     color: "#FFF", description: ""});
 tagsAll.set("d", {name: "Drawings",     class: "drawings",   color: "#FFF", description: ""});
 
+async function load() {
+    var check = await parseCSV();
+    setTimeout(() => {
+        page(0)
+    }, 500)
+}
 
-async function build() {
-    for (x = 1; x < 855; x++) {
-        message.innerHTML = "fetching media... (" + x + "/" + 854 + ")"
-        let mediaID = "div_m" + x;
-        var article = document.createElement("article");
-        var img = document.createElement("img");
-        var p = document.createElement("p");
-        var button = document.createElement("button");
-        var elm;
-        var url;
-        var REQUEST = await fetch("media/" + "m" + x + ".jpg")
-        switch (REQUEST.status) {
-            case 206:
-            case 200:
-                url = REQUEST.url
-                break;
-            case 404:
-                var REQUEST2 = await fetch("media/" + "m" + x + ".mp4")
-                if (REQUEST2.status == 200 || REQUEST2.status == 206) {
-                    url = REQUEST2.url;
-                } else {
-                    url = null;
-                }
-                break;
-            default:
-                console.log("Weird status: " + REQUEST.status)
-                url = null;
-        }
-        if (REQUEST.status == 200) {
-            url = REQUEST.url
-        } else {
-            var REQUEST2 = await fetch("media/" + "m" + x + ".mp4")
-            if (REQUEST2.status == 200) {
-                url = REQUEST2.url;
-            } else {
-                url = null;
-            }
-        }
-        if (url === null) {
-            console.warn("m" + x + " is NULL.")
-            mediaIDs.push(null);
-            continue;
-        }
-        switch (url.slice(-3)) {
-            case "jpg":
-                elm = document.createElement("img");
-                elm.src = url;
-                break;
-            case "mp4":
-                elm = document.createElement("video");
-                elm.controls = false;
-                source = document.createElement("source");
-                source.src = url;
-                source.type = "video/mp4";
-                elm.appendChild(source);
-                break;
-        }
-        button.appendChild(elm);
-        p.innerHTML = mediaID + url.slice(-4);
-        button.addEventListener("click", (event) => {
-            console.log("hmph!")
-            expand(event);
-        })
-        article.appendChild(button);
-        article.appendChild(p);
-        article.id = mediaID;
-            mediaIDs.push(mediaID);
-
-        explorer.appendChild(article);
+async function init_media() {
+    for (x = 1; x < mediaCSVData.length; x++) {
+        let template = Object.create(mediaTemplate);
+        let data = mediaCSVData[x];
+        template["id"] = data["id"];
+        template["filetype"] = data["filetype"];
+        mediaProcessedData[data["id"]] = template;
     }
     return true;
 };
 async function page(step) {
-    if (currentPage + step < 1) {
-        if (currentPage == 1) {
-            return false;
-        } else {
-            currentPage = 1;
-        }
-    }
-    currentPage = currentPage + step;
-    let resetCheck = await reset();
-    if (resetCheck) {
-        let range = [((currentPage * 50) - 50), (currentPage * 50)];
-        for (x = range[0]; x < range[1]; x++) {
-            var this_media = document.getElementById(mediaIDs[x]);
-            if (this_media !== null && this_media.classList.contains("shown") == false) {
-                this_media.classList.add("shown");
+    var check2 = await reset();
+    if (check2) {
+        if (currentPage + step < 1) {
+            if (currentPage == 1) {
+                return false;
+            } else {
+                currentPage = 1;
+                return false;
             }
         }
+        currentPage = currentPage + step;
+        let r = pageArr[currentPage]["range"];
+        console.log(r)
+        for (x = r[0]; x <= r[1]; x++) {
+            var tempID = "m" + x
+            mediaProcessedData[tempID].build()
+            mediaDisplayed.push(tempID)
+        }
+        return true;
     }
-    return true;
-}
+};
+
 async function reset() {
-    for (id in mediaIDs) {
-        var this_media = document.getElementById(mediaIDs[id]);
-        if (this_media !== null && this_media.classList.contains("shown")) {
-            this_media.classList.remove("shown");
-        }
+    for (key in mediaDisplayed) {
+        var id = mediaDisplayed[key];
+        mediaProcessedData[id].free();
+        mediaDisplayed[key] = null;
     }
+    mediaDisplayed = [];
     return true;
-}
-async function load() {
-    message.innerHTML = "fetching media..."
-    let check = await build();
-    if (check) {
-        let check2 = await page(0);
-        if (check2) {
-            message.innerHTML = "archive loaded successfully! :3"
-        } else {
-            console.error("/!\ >> FAILED TO INIT EXPLORER");
-            console.log("yay!")
-        }
-    } else {
-        console.error("/!\ >> FAILED TO GET MEDIA");
-    }
-}
+};
 
 function expand(event) {
     const selected = event.target;
@@ -188,7 +197,7 @@ function expand(event) {
             return false;
     }
     spyglass.appendChild(elm);
-}
+};
 function search() {
     
 }
@@ -203,5 +212,3 @@ function removeTag(tagID, ID) {
     const elm = document.getElementById(ID);
     elm.classList.remove(tag)
 }
-
-// Opening a file system with temporary storage
