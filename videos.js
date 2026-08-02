@@ -12,6 +12,7 @@ var mediaCSVData = [];
 // Data parsed from the CSV.
 var mediaProcessedData = new Object();
 // Contains all media objects.
+var mediaProcessedArr = [];
 var mediaDisplayed = [];
 // IDs of all displayed medias.
 var mediaOrdered = [];
@@ -111,23 +112,13 @@ const mediaTemplate = {
 }
 var mediaTotal = 854;
 const perPage = 20;
-var page_count = Math.ceil(mediaTotal / perPage);
+var page_count;
 var pageArr = [
     
 ]
 
-let currentPage = 1;
+var currentPage = 1;
 
-for (p = 1; p <= page_count; p++) {
-    pageArr[p] = {
-        "range": [((p * perPage) - perPage + 1), (p * perPage)],
-        "fetched": false
-    };
-    if (pageArr[p]["range"][1] > [mediaTotal]) {
-        pageArr[p]["range"][1] = mediaTotal;
-    }
-    // [id range (ex. m1->m20), fetched?]
-}
 var counter = 1
 function tags(tagBlob) {
     var tagsArr = []
@@ -179,51 +170,58 @@ async function init_media() {
         template["filetype"] = data["filetype"];
         template["tags"] = tags(data["tags"]);
         mediaProcessedData[data["id"]] = template;
+        mediaProcessedArr.push(data["id"]);
     }
     return true;
 };
-async function page(step) {
-    if (currentPage + step < 1) {
-        console.log("HEY...!")
-        return;
-    }
+var ordered;
+var page_count;
+async function page(s) {
+    var mod = document.getElementById("step").value;
+    var step = s * mod;
     explorer.style.display = "none";
+    if (currentPage + step > page_count) {
+        currentPage = page_count;
+    } else if (currentPage + step < 1) {
+        currentPage = 1;
+    } else {
+        currentPage = currentPage + step;
+    }
+    console.log(page_count);
     var check2 = await reset();
     if (check2) {
         let ordered;
         if (mediaOrdered[0] == undefined) {
             ordered = false;
+            mediaOrdered = mediaProcessedArr;
         } else {
             ordered = true;
         }
-        currentPage = currentPage + step;
+        page_count = Math.ceil(mediaOrdered.length / perPage);
+        console.log(page_count)
         let r = [((currentPage * perPage) - perPage) + 1, (currentPage * perPage)];
-        switch (ordered) {
-            case true:
-                for (x = (r[0] - 1); x < r[1]; x++) {
-                    if (x > mediaOrdered.length) {
-                        break;
-                    }
-                    var tempID = mediaOrdered[x];
-                    var get = mediaProcessedData[tempID];
-                    get.build();
-                    let check = await blobGuzzler(get);
-                console.log(check)
-                    mediaDisplayed.push(tempID);
-                }
+        document.getElementById("back").disabled = false;
+        document.getElementById("top").disabled = false;
+        switch (currentPage) {
+            case 1:
+                document.getElementById("back").disabled = true;
                 break;
-            case false:
-                for (x = r[0]; x <= r[1]; x++) {
-                    if (x > mediaProcessedData.length) {
-                        break;
-                    }
-                    var tempID = "m" + x;
-                    var get = mediaProcessedData[tempID];
-                    get.build();
-                    let check = await blobGuzzler(get);
-                    mediaDisplayed.push(tempID);
-                }
+            case page_count:
+                document.getElementById("top").disabled = true;
                 break;
+        }
+        for (x = r[0]; x <= r[1]; x++) {
+            if (x > mediaProcessedData.length) {
+                break;
+            }
+            var tempID = "m" + x;
+            var get = mediaProcessedData[tempID];
+            if (get === undefined) {
+                continue;
+            }
+            get.build();
+            let check = await blobGuzzler(get);
+            mediaDisplayed.push(tempID);
         }
         explorer.style.display = "grid";
         return true;
@@ -248,30 +246,39 @@ async function want_get(mode, tagName) { // I WANT these medias, so go GET them!
     }
 }
 async function search(tagArr) {
-    mediaOrdered = [];
+    //var tagArr = document.getElementById("tag_select").value;
+    //console.log(tagArr)
+    var arr2 = [];
     for (tag of tagArr) {
         var arr = await want_get(true, tag);
         for (id of arr) {
-            if (mediaOrdered.includes(id)) {
+            if (arr2 .includes(id)) {
 // if this id already has a key in the order array
                 console.log(id + "is already in this array!")
             } else {
-                mediaOrdered.push(id);
+                arr2 .push(id);
             }
         }
     }
+    if (arr2 .length < 1) {
+        console.log("no entries found!")
+        return false;
+    }
+    mediaOrdered = [];
+    mediaOrdered = arr2;
+    currentPage = 1;
     page(0);
+    return true;
 }
 async function reset() {
     if (mediaDisplayed != []) {
         for (key in mediaDisplayed) {
             var id = mediaDisplayed[key];
             mediaProcessedData[id].free();
-            mediaDisplayed[key] = null;
         }
         mediaDisplayed = [];
+        return true;
     }
-    return true;
 };
 
 async function blobGuzzler(obj) {

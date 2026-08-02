@@ -46,8 +46,15 @@
                 </main>
                 <nav>
                     <div class="search">
-                        <button onclick="page(-1)">BACK PAGE</button>
-                        <button onclick="page(1)">NEXT PAGE</button>
+                        <button id="back" onclick="page(-1)">&lt;&lt;</button>
+                        <select id="step">
+                            <option value=1 selected>1</option>
+                            <option value=5>5</option>
+                            <option value=10>10</option>
+                            <option value=20>20</option>
+                            <option value=1000>End</option>
+                        </select>
+                        <button id="top" onclick="page(1)">&gt;&gt;</button>
                     </div>
                     <section class="explorer">
                     </section>
