@@ -8,9 +8,17 @@ const FOLDER = "media/"
 const accepted_file_types = [".jpg", ".mp4"]
 // "eram" is my function testing dummy!!
 
-var mediaCSVData = []; // Data parsed from the CSV.
-var mediaProcessedData = new Object(); // Contains all media objects.
-var mediaDisplayed = []; // IDs of all displayed medias.
+var mediaCSVData = [];
+// Data parsed from the CSV.
+var mediaProcessedData = new Object();
+// Contains all media objects.
+var mediaDisplayed = [];
+// IDs of all displayed medias.
+var mediaOrdered = [];
+// When searching, is filled with every media matching searched-for tag.
+// We break this up into pages with page(#).
+var searchingFor = [];
+// Array of tags we are searching for!
 
 let tagsAll = new Map();
 tagsAll.set("?", {name: "Qu3stion",     class: "qu3stion",   color: "#FFF", description: ""});
@@ -56,24 +64,25 @@ const mediaTemplate = {
     filetype: undefined,
     tags    : [],
     note    : undefined,
-    url()   {
+    source  : undefined,
+    url: function()   {
         return FOLDER + this.id + this.filetype;
     },
-    build() {
+    build: function() {
         let template;
         let clone;
         switch (this.filetype) {
             case ".jpg":
                 template = document.querySelector("#template_image");
                 clone = document.importNode(template.content, true);
-                clone.querySelectorAll("img")[0].src = this.url();
+                this.source = clone.querySelectorAll("img")[0];
                 break;
             case ".mp4":
                 template = document.querySelector("#template_video");
                 clone = document.importNode(template.content, true);
-                clone.querySelectorAll("source")[0].src = this.url();
+                this.source = clone.querySelectorAll("video")[0];
                 break;
-        }
+        };
         clone.querySelectorAll("button")[0].addEventListener("click", (event) => {
             expand(event)
         });
@@ -81,7 +90,7 @@ const mediaTemplate = {
             var box = clone.querySelectorAll(".tags")[0];
             var card = document.createElement("label");
             card.innerHTML = tag["name"];
-            clone.querySelector("article").classList.add(tags["class"])
+            clone.querySelector("article").classList.add(tag["class"])
             box.appendChild(card);
         }
         clone.querySelectorAll(".div_id")[0].innerHTML = "#" + this.id;
@@ -89,10 +98,17 @@ const mediaTemplate = {
         explorer.appendChild(clone);
     },
     free() {
-        explorer.removeChild(document.getElementById("div_" + this.id));
+        var media = document.getElementById("div_" + this.id);
+        media.querySelectorAll("button")[0].removeEventListener("click", (event) => {
+            expand(event)
+        });
+        var url2 = this.source.src;
+        URL.revokeObjectURL(url2)
+        this.source.src = null;
+        url2 = null;
+        explorer.removeChild(media);
     }
 }
-
 var mediaTotal = 854;
 const perPage = 20;
 var page_count = Math.ceil(mediaTotal / perPage);
@@ -167,41 +183,118 @@ async function init_media() {
     return true;
 };
 async function page(step) {
+    if (currentPage + step < 1) {
+        console.log("HEY...!")
+        return;
+    }
+    explorer.style.display = "none";
     var check2 = await reset();
     if (check2) {
-        if (currentPage + step < 1) {
-            if (currentPage == 1) {
-                return false;
-            } else {
-                currentPage = 1;
-                return false;
-            }
+        let ordered;
+        if (mediaOrdered[0] == undefined) {
+            ordered = false;
+        } else {
+            ordered = true;
         }
         currentPage = currentPage + step;
-        let r = pageArr[currentPage]["range"];
-        console.log(r)
-        for (x = r[0]; x <= r[1]; x++) {
-            var tempID = "m" + x
-            mediaProcessedData[tempID].build()
-            mediaDisplayed.push(tempID)
+        let r = [((currentPage * perPage) - perPage) + 1, (currentPage * perPage)];
+        switch (ordered) {
+            case true:
+                for (x = (r[0] - 1); x < r[1]; x++) {
+                    if (x > mediaOrdered.length) {
+                        break;
+                    }
+                    var tempID = mediaOrdered[x];
+                    var get = mediaProcessedData[tempID];
+                    get.build();
+                    let check = await blobGuzzler(get);
+                console.log(check)
+                    mediaDisplayed.push(tempID);
+                }
+                break;
+            case false:
+                for (x = r[0]; x <= r[1]; x++) {
+                    if (x > mediaProcessedData.length) {
+                        break;
+                    }
+                    var tempID = "m" + x;
+                    var get = mediaProcessedData[tempID];
+                    get.build();
+                    let check = await blobGuzzler(get);
+                    mediaDisplayed.push(tempID);
+                }
+                break;
         }
+        explorer.style.display = "grid";
         return true;
     }
 };
-
-async function reset() {
-    for (key in mediaDisplayed) {
-        var id = mediaDisplayed[key];
-        mediaProcessedData[id].free();
-        mediaDisplayed[key] = null;
+async function want_get(mode, tagName) { // I WANT these medias, so go GET them!
+    switch (mode) {
+        case true:
+            var orderArr = [];
+            for (id in mediaProcessedData) {
+                var media = mediaProcessedData[id];
+                for (tag of media["tags"]) {
+                    if (tag["class"] == tagName) {
+                        orderArr.push(id);
+                    }
+                }
+            }
+            return orderArr;
+        case false:
+            
+            break;
     }
-    mediaDisplayed = [];
+}
+async function search(tagArr) {
+    mediaOrdered = [];
+    for (tag of tagArr) {
+        var arr = await want_get(true, tag);
+        for (id of arr) {
+            if (mediaOrdered.includes(id)) {
+// if this id already has a key in the order array
+                console.log(id + "is already in this array!")
+            } else {
+                mediaOrdered.push(id);
+            }
+        }
+    }
+    page(0);
+}
+async function reset() {
+    if (mediaDisplayed != []) {
+        for (key in mediaDisplayed) {
+            var id = mediaDisplayed[key];
+            mediaProcessedData[id].free();
+            mediaDisplayed[key] = null;
+        }
+        mediaDisplayed = [];
+    }
     return true;
 };
 
+async function blobGuzzler(obj) {
+    var blob = await fetch(FOLDER + obj["id"] + obj["filetype"], { cache: "no-store" })
+    .then(response => response.blob())
+    switch (obj["filetype"]) {
+        case ".jpg":
+            obj["source"].src = URL.createObjectURL(blob);
+            break;
+        case ".mp4":
+            var elm = document.createElement("source");
+            elm.src = URL.createObjectURL(blob);
+            obj["source"].appendChild(elm);
+            obj["source"].load();
+            break;
+    }
+    return true;
+}
+
 function expand(event) {
     const selected = event.target;
-    let url
+    console.log(selected)
+    /*
     switch (selected.tagName) {
         case "IMG":
             url = selected.src;
@@ -210,7 +303,6 @@ function expand(event) {
             url = selected.firstElementChild.src;
             break;
     }
-    console.log(url)
     if (spyglass.children.length > 0) {
         for (element of spyglass.children) {
             spyglass.removeChild(element);
@@ -236,19 +328,6 @@ function expand(event) {
         default:
             return false;
     }
+    */
     spyglass.appendChild(elm);
 };
-function search() {
-    
-}
-
-function addTag(tagID, ID) {
-    const tag = tagsAll.get(tag)["class"];
-    const elm = document.getElementById(ID);
-    elm.classList.add(tag)
-}
-function removeTag(tagID, ID) {
-    const tag = tagsAll.get(tag)["class"];
-    const elm = document.getElementById(ID);
-    elm.classList.remove(tag)
-}
