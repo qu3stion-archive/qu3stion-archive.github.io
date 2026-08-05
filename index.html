@@ -8,7 +8,7 @@
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
         <script src="papaparse.min.js"></script>
     </head>
-    <body onload="load()">
+    <body onload="load()" id="top">
         <!-- TEMPLATE 1: images -->
         <template id="template_image">
             <article>
@@ -37,6 +37,11 @@
             </article>
         </template>
 
+        <!-- Top button -->
+        <a class="to-top" href="#top">
+            <img src="https://www.svgrepo.com/show/506650/chevron-top.svg" alt="^">
+        </a>
+
         <div class="universal">
             <p id="status"></p>
             <div id="archive">
@@ -44,7 +49,7 @@
                     <div id="viewer">
                     </div>
                 </main>
-                <nav>
+                <nav class="gallery">
                     <div class="search">
                         <button id="back" onclick="page(-1)">&lt;&lt;</button>
                         <select id="step">
@@ -58,6 +63,7 @@
                     </div>
                     <section class="explorer">
                     </section>
+                    
                 </nav>
             </div>
         </div>

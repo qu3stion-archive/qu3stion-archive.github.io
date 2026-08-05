@@ -105,3 +105,40 @@ article button {
 .tags > label::before {
     content: "*"
 }
+
+.gallery {
+    height: min-content;
+}
+
+html {
+	scroll-behavior: smooth;
+	container-type: scroll-state;
+  container-name: scroller;
+}
+
+.to-top {
+	position: fixed;
+	bottom: 20px;
+	right: 10px;
+}
+
+.to-top {
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	height: 35px;
+	width: 35px;
+	background: white;
+	border: 2px solid #b5cedf;
+	cursor: pointer;
+	border-radius: 50%;
+}
+
+.to-top img {
+	width: 30px;
+}
+
+.to-top:hover {
+	border-color: #437ca3;
+    transition-duration: 0.2s;
+}
