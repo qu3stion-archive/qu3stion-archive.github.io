@@ -31,34 +31,41 @@ tagsAll.set(":", {name: "Creator",      class: "creator",    color: "#FFF", desc
 tagsAll.set("G", {name: "Green",        class: "green",      color: "#FFF", description: ""});
 tagsAll.set(".", {name: "...Peri0d??",  class: "peri0d",     color: "#FFF", description: ""});
 //
-tagsAll.set("l", {name: "Lore",         class: "lore",       color: "#FFF", description: ""});
-tagsAll.set("i", {name: "Intro",        class: "intro",      color: "#FFF", description: "First time a character appears!"});
-tagsAll.set("s", {name: "Silly",        class: "silly",      color: "#FFF", description: ""});
+tagsAll.set("*", {name: "Lore",         class: "lore",       color: "#FFF", description: "Contains important lore pieces!"});
+tagsAll.set("†", {name: "Intro",        class: "intro",      color: "#FFF", description: "First time a character appears!"});
 tagsAll.set("z", {name: "Spooky",       class: "spooky",     color: "#FFF", description: ""});
 tagsAll.set("m", {name: "Mean",         class: "mean",       color: "#FFF", description: "WHEN THEY'RE MEAN TO QU3STION    ON TWITTER:"});
 tagsAll.set("n", {name: "Nice",         class: "nice",       color: "#FFF", description: "WHEN THEY'RE [Nice! :3] TO QU3STION    ON TWITTER:"});
 tagsAll.set("x", {name: "Explosion",    class: "explosion",  color: "#FFF", description: ""});
 tagsAll.set("f", {name: "Fish",         class: "fish",       color: "#FFF", description: ""});
-tagsAll.set("a", {name: "Animal",       class: "animal",     color: "#FFF", description: ""});
-tagsAll.set("g", {name: "Games",        class: "gaming",     color: "#FFF", description: ""});
-tagsAll.set("d", {name: "Drawings",     class: "drawings",   color: "#FFF", description: ""});
+tagsAll.set("g", {name: "Gaming",       class: "gaming",     color: "#FFF", description: ""});
+tagsAll.set("=", {name: "Fanart",       class: "fanart",     color: "#FFF", description: ""});
 tagsAll.set("c", {name: "X-mas",        class: "x-mas",      color: "#FFF", description: ""});
 tagsAll.set("h", {name: "Halloween",    class: "halloween",  color: "#FFF", description: ""});
+tagsAll.set("w", {name: "Looks Weird",  class: "weird",      color: "#FFF", description: ""});
+tagsAll.set("u", {name: "UT/DR",        class: "utdr",       color: "#FFF", description: ""});
+tagsAll.set("t", {name: "Cats",         class: "cats",       color: "#FFF", description: "Discussion of Cats..."});
+tagsAll.set("e", {name: "Ears",         class: "ears",       color: "#FFF", description: ""});
+tagsAll.set("+", {name: "Gifts",        class: "gifts",      color: "#FFF", description: "The audiences manifests objects in Qu3stion's, um... screen?...world?"});
+tagsAll.set("-", {name: "Errors/Reboots",class: "errors",    color: "#FFF", description: "Times when Qu3stion's computer crashes / breaks down, and/or resets."});
+tagsAll.set("𝅘𝅥", {name: "Music",         class: "music",      color: "#FFF", description: "Qu3stion listens to music!"});
+tagsAll.set("o", {name: "Cool Tricks",         class: "tricks",      color: "#FFF", description: "Qu3stion does some cool tricks!"});
+tagsAll.set("`", {name: "Other Computerlings",         class: "others",      color: "#FFF", description: "Qu3stion interacts with other computerlings!"});
 
 let tagsDate = new Map();
-tagsDate.set(0, {name: "August '25",     class: "august25"});
-tagsDate.set(1, {name: "September '25",  class: "september25"});
-tagsDate.set(2, {name: "October '25",    class: "october25"});
-tagsDate.set(3, {name: "November '25",   class: "november25"});
-tagsDate.set(4, {name: "December '25",   class: "december25"});
-tagsDate.set(5, {name: "January '26",    class: "january26"});
-tagsDate.set(6, {name: "February '26",   class: "february26"});
-tagsDate.set(7, {name: "March '26",      class: "march26"});
-tagsDate.set(9, {name: "April '26",      class: "april26"});
-tagsDate.set(10,{name: "May '26",        class: "may26"});
-tagsDate.set(11,{name: "June '26",       class: "june26"});
-tagsDate.set(12,{name: "July '26",       class: "july26"});
-tagsDate.set(13,{name: "August '26",     class: "august26"});
+tagsDate.set(0,  {name: "August '25",    class: "august25"   });
+tagsDate.set(1,  {name: "September '25", class: "september25"});
+tagsDate.set(2,  {name: "October '25",   class: "october25"  });
+tagsDate.set(3,  {name: "November '25",  class: "november25" });
+tagsDate.set(4,  {name: "December '25",  class: "december25" });
+tagsDate.set(5,  {name: "January '26",   class: "january26"  });
+tagsDate.set(6,  {name: "February '26",  class: "february26" });
+tagsDate.set(7,  {name: "March '26",     class: "march26"    });
+tagsDate.set(8,  {name: "April '26",     class: "april26"    });
+tagsDate.set(9,  {name: "May '26",       class: "may26"      });
+tagsDate.set(10, {name: "June '26",      class: "june26"     });
+tagsDate.set(11, {name: "July '26",      class: "july26"     });
+tagsDate.set(12, {name: "August '26",    class: "august26"   });
 
 const mediaTemplate = {
     id      : undefined,
@@ -110,7 +117,7 @@ const mediaTemplate = {
         explorer.removeChild(media);
     }
 }
-var mediaTotal = 854;
+var mediaTotal = 853;
 const perPage = 20;
 var page_count;
 var pageArr = [
@@ -140,7 +147,7 @@ async function parseCSV() {
             let data = row.data
             let mediaNew = {};
             if (data["filetype"] !== undefined) {
-                mediaNew["id"] = data["id"];
+                mediaNew["id"] = "m" + data["id"];
                 mediaNew["filetype"] = data["filetype"];
                 mediaNew["tags"] = data["tags"];
                 mediaCSVData[counter] = mediaNew;
