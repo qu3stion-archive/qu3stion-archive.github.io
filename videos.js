@@ -32,7 +32,7 @@ tagsAll.set("G", {name: "Green",        class: "green",      color: "#FFF", desc
 tagsAll.set(".", {name: "...Peri0d??",  class: "peri0d",     color: "#FFF", description: ""});
 //
 tagsAll.set("*", {name: "Lore",         class: "lore",       color: "#FFF", description: "Contains important lore pieces!"});
-tagsAll.set("†", {name: "Intro",        class: "intro",      color: "#FFF", description: "First time a character appears!"});
+tagsAll.set("_", {name: "Intro",        class: "intro",      color: "#FFF", description: "First time a character appears!"});
 tagsAll.set("z", {name: "Spooky",       class: "spooky",     color: "#FFF", description: ""});
 tagsAll.set("m", {name: "Mean",         class: "mean",       color: "#FFF", description: "WHEN THEY'RE MEAN TO QU3STION    ON TWITTER:"});
 tagsAll.set("n", {name: "Nice",         class: "nice",       color: "#FFF", description: "WHEN THEY'RE [Nice! :3] TO QU3STION    ON TWITTER:"});
@@ -48,7 +48,7 @@ tagsAll.set("t", {name: "Cats",         class: "cats",       color: "#FFF", desc
 tagsAll.set("e", {name: "Ears",         class: "ears",       color: "#FFF", description: ""});
 tagsAll.set("+", {name: "Gifts",        class: "gifts",      color: "#FFF", description: "The audiences manifests objects in Qu3stion's, um... screen?...world?"});
 tagsAll.set("-", {name: "Errors/Reboots",class: "errors",    color: "#FFF", description: "Times when Qu3stion's computer crashes / breaks down, and/or resets."});
-tagsAll.set("𝅘𝅥", {name: "Music",         class: "music",      color: "#FFF", description: "Qu3stion listens to music!"});
+tagsAll.set("$", {name: "Music",         class: "music",      color: "#FFF", description: "Qu3stion listens to music!"});
 tagsAll.set("o", {name: "Cool Tricks",         class: "tricks",      color: "#FFF", description: "Qu3stion does some cool tricks!"});
 tagsAll.set("`", {name: "Other Computerlings",         class: "others",      color: "#FFF", description: "Qu3stion interacts with other computerlings!"});
 
@@ -97,6 +97,10 @@ const mediaTemplate = {
         for (tag of this.tags) {
             var box = clone.querySelectorAll(".tags")[0];
             var card = document.createElement("label");
+            if (tag === undefined) {
+                console.log(this.tag);
+                continue;
+            }
             card.innerHTML = tag["name"];
             clone.querySelector("article").classList.add(tag["class"])
             box.appendChild(card);
@@ -147,7 +151,7 @@ async function parseCSV() {
             let data = row.data
             let mediaNew = {};
             if (data["filetype"] !== undefined) {
-                mediaNew["id"] = "m" + data["id"];
+                mediaNew["id"] = data["id"];
                 mediaNew["filetype"] = data["filetype"];
                 mediaNew["tags"] = data["tags"];
                 mediaCSVData[counter] = mediaNew;
@@ -221,7 +225,7 @@ async function page(s) {
             if (x > mediaProcessedData.length) {
                 break;
             }
-            var tempID = "m" + x;
+            var tempID = x;
             var get = mediaProcessedData[tempID];
             if (get === undefined) {
                 continue;
@@ -307,41 +311,28 @@ async function blobGuzzler(obj) {
 
 function expand(event) {
     const selected = event.target;
-    console.log(selected)
-    /*
-    switch (selected.tagName) {
-        case "IMG":
-            url = selected.src;
-            break;
-        case "VIDEO":
-            url = selected.firstElementChild.src;
-            break;
-    }
     if (spyglass.children.length > 0) {
         for (element of spyglass.children) {
             spyglass.removeChild(element);
         }
     }
-    let filetype = url.slice(-3);
-    var elm
-    switch (filetype) {
-        case "jpg":
+    var elm;
+    console.log(selected);
+    switch (selected.tagName) {
+        case "IMG":
             elm = document.createElement("img");
-            elm.src = url;
+            elm.src = selected.src
             break;
-        case "mp4":
+        case "VIDEO":
             elm = document.createElement("video");
             elm.controls = true;
             elm.autoplay = true;
             //elm.width = "100%"
             source = document.createElement("source");
-            source.src = url;
+            source.src = selected.querySelector("source").src;
             source.type = "video/mp4";
             elm.appendChild(source);
             break;
-        default:
-            return false;
     }
-    */
     spyglass.appendChild(elm);
 };
