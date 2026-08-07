@@ -1,3 +1,7 @@
+:root {
+    --light: #eef5fa;
+}
+
 body {
     background-color: #DBE9F3;
     font-family: sans-serif;
@@ -56,10 +60,9 @@ article {
 img, video {
     width: 100%;
 }
-img:hover, video:hover{
-    transform: scale(1.02);
+img.thumbnail:hover, video.thumbnail:hover{
+    transform: scale(1.07);
     transition-duration: 0.2s;
-    
 }
 #viewer > img, #viewer > video {
     width: 600px;
@@ -73,13 +76,37 @@ article button {
 .search {
     display: flex;
     flex-direction: row;
+    width: 100%;
+    justify-content: space-between;
+    background-color: var(--light);
+    padding: 4px;
+    border-radius: 10px;
+    margin-bottom: 8px;
+}
+#page_buttons {
+    display: grid;
+    grid-template-columns: 30% 20% 30% 20%;
+    gap: 4px;
+    width: 200px;
+    padding: 8px;
+}
+#tag_searching {
+    display: grid;
+    padding: 8px;
+}
+.search select, .search button {
+    border: 2px solid;
+    border-color: rgb(100, 149, 165);
+    border-radius: 10px;
+    background-color: #FFF;
+    height: 30px;
 }
 .src {
     display: grid;
     grid-template-columns: 70% 30%;
 }
 .div_id {
-    text-align: center;
+    text-align: right;
     font-size: clamp(50%, 14px, 100%)
 }
 .tags {
@@ -90,12 +117,13 @@ article button {
     width: 100%;
     gap: 3px;
     border-radius: 10px;
-    background-color: #eef5fa;
+    background-color: var(--light);
     padding: 4%;
 }
 .tags > label {
     padding: 4px 11px 4px 8px;
     font-size: 14px;
+    color: #000;
     background-color: transparent;
     border: 1.5px solid;
     max-height: 14px;
@@ -141,4 +169,16 @@ html {
 .to-top:hover {
 	border-color: #437ca3;
     transition-duration: 0.2s;
+}
+.popup {
+    display: none;
+    position: absolute;
+    background-color: red;
+    width: 200px;
+    height: 100px;
+    top: 0;
+    right: 0;
+}
+#tag_searching {
+    position: relative;
 }

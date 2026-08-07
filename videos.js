@@ -22,35 +22,43 @@ var searchingFor = [];
 // Array of tags we are searching for!
 
 let tagsAll = new Map();
-tagsAll.set("?", {name: "Qu3stion",     class: "qu3stion",   color: "#FFF", description: ""});
-tagsAll.set("¿", {name: "Old Qu3stion", class: "qu3stion2",  color: "#FFF", description: ""});
-tagsAll.set("!", {name: "3xclamation",  class: "3xclamation",color: "#FFF", description: ""});
-tagsAll.set(",", {name: "C0mma",        class: "c0mma",      color: "#FFF", description: ""});
-tagsAll.set("&", {name: "Amp3rsand",    class: "amp3rsand",  color: "#FFF", description: ""});
-tagsAll.set(":", {name: "Creator",      class: "creator",    color: "#FFF", description: ""});
-tagsAll.set("G", {name: "Green",        class: "green",      color: "#FFF", description: ""});
-tagsAll.set(".", {name: "...Peri0d??",  class: "peri0d",     color: "#FFF", description: ""});
+tagsAll.set("?", {name: "Qu3stion",     class: "qu3stion",   color: "#15c1c3", description: ""});
+tagsAll.set("¿", {name: "Old Qu3stion", class: "qu3stion2",  color: "#124193", description: ""});
+tagsAll.set("!", {name: "3xclamation",  class: "3xclamation",color: "#cc265a", description: ""});
+tagsAll.set(",", {name: "C0mma",        class: "c0mma",      color: "#3e6ab7", description: ""});
+tagsAll.set("&", {name: "Amp3rsand",    class: "amp3rsand",  color: "#cb993e", description: ""});
+tagsAll.set(":", {name: "Creator",      class: "creator",    color: "#252b2b", description: ""});
+tagsAll.set("G", {name: "Ivy",          class: "ivy",      color: "#0e9368", description: ""});
+tagsAll.set(".", {name: "...Peri0d??",  class: "peri0d",     color: "#FFFFFF", description: ""});
+tagsAll.set("|", {name: "Answ3r",  class: "answ3r",     color: "#FFFFFF", description: ""});
 //
-tagsAll.set("*", {name: "Lore",         class: "lore",       color: "#FFF", description: "Contains important lore pieces!"});
-tagsAll.set("_", {name: "Intro",        class: "intro",      color: "#FFF", description: "First time a character appears!"});
-tagsAll.set("z", {name: "Spooky",       class: "spooky",     color: "#FFF", description: ""});
-tagsAll.set("m", {name: "Mean",         class: "mean",       color: "#FFF", description: "WHEN THEY'RE MEAN TO QU3STION    ON TWITTER:"});
-tagsAll.set("n", {name: "Nice",         class: "nice",       color: "#FFF", description: "WHEN THEY'RE [Nice! :3] TO QU3STION    ON TWITTER:"});
-tagsAll.set("x", {name: "Explosion",    class: "explosion",  color: "#FFF", description: ""});
-tagsAll.set("f", {name: "Fish",         class: "fish",       color: "#FFF", description: ""});
-tagsAll.set("g", {name: "Gaming",       class: "gaming",     color: "#FFF", description: ""});
-tagsAll.set("=", {name: "Fanart",       class: "fanart",     color: "#FFF", description: ""});
-tagsAll.set("c", {name: "X-mas",        class: "x-mas",      color: "#FFF", description: ""});
-tagsAll.set("h", {name: "Halloween",    class: "halloween",  color: "#FFF", description: ""});
-tagsAll.set("w", {name: "Looks Weird",  class: "weird",      color: "#FFF", description: ""});
-tagsAll.set("u", {name: "UT/DR",        class: "utdr",       color: "#FFF", description: ""});
-tagsAll.set("t", {name: "Cats",         class: "cats",       color: "#FFF", description: "Discussion of Cats..."});
-tagsAll.set("e", {name: "Ears",         class: "ears",       color: "#FFF", description: ""});
-tagsAll.set("+", {name: "Gifts",        class: "gifts",      color: "#FFF", description: "The audiences manifests objects in Qu3stion's, um... screen?...world?"});
-tagsAll.set("-", {name: "Errors/Reboots",class: "errors",    color: "#FFF", description: "Times when Qu3stion's computer crashes / breaks down, and/or resets."});
-tagsAll.set("$", {name: "Music",         class: "music",      color: "#FFF", description: "Qu3stion listens to music!"});
-tagsAll.set("o", {name: "Cool Tricks",         class: "tricks",      color: "#FFF", description: "Qu3stion does some cool tricks!"});
-tagsAll.set("`", {name: "Other Computerlings",         class: "others",      color: "#FFF", description: "Qu3stion interacts with other computerlings!"});
+tagsAll.set("*", {name: "Lore",         class: "lore",       color: "#FFFFFF", description: "Contains important lore pieces!"});
+tagsAll.set("^", {name: "Trivia",         class: "lore",       color: "#FFFFFF", description: "Fun facts about Qu3stion; not as important as the lore tidbits."});
+tagsAll.set("_", {name: "Intro",        class: "intro",      color: "#FFFFFF", description: "First time a character appears!"});
+tagsAll.set("s", {name: "Cute :3",       class: "cute",     color: "#FFFFFF", description: "All Qu3stion is Cute Medias... but some Medias are more Cuter than others..."});
+tagsAll.set("z", {name: "Spooky",       class: "spooky",     color: "#FFFFFF", description: ""});
+tagsAll.set("m", {name: "MEAN.. >:]",         class: "mean",       color: "#FFFFFF", description: "WHEN THEY'RE MEAN TO QU3STION    ON TWITTER: | (Includes pranks)"});
+tagsAll.set("k", {name: "Stickers",       class: "stickers",     color: "#FFFFFF", description: "All Qu3stion is Cute Medias... but some Medias are more Cuter than others..."});
+tagsAll.set("n", {name: "Nice!",         class: "nice",       color: "#FFFFFF", description: "WHEN THEY'RE [Nice! :3] TO QU3STION    ON TWITTER:"});
+tagsAll.set("x", {name: "Explosion",    class: "explosion",  color: "#FFFFFF", description: ""});
+tagsAll.set("f", {name: "Fish",         class: "fish",       color: "#FFFFFF", description: "Running gag about Qu3stion's pet fish(es)... only medias that focus on the fish are tagged, but they do appear in the background in many posts!"});
+tagsAll.set("g", {name: "Gaming",       class: "gaming",     color: "#FFFFFF", description: ""});
+tagsAll.set("=", {name: "Drawings",       class: "fanart",     color: "#FFFFFF", description: ""});
+tagsAll.set("/", {name: "Drawing Galleries",       class: "fanart",     color: "#FFFFFF", description: ""});
+tagsAll.set("c", {name: "X-mas",        class: "x-mas",      color: "#FFFFFF", description: ""});
+tagsAll.set("h", {name: "Halloween",    class: "halloween",  color: "#FFFFFF", description: ""});
+tagsAll.set("w", {name: "Looks Weird",  class: "weird",      color: "#FFFFFF", description: ""});
+tagsAll.set("u", {name: "UT/DR",        class: "utdr",       color: "#FFFFFF", description: ""});
+tagsAll.set("t", {name: "Cats",         class: "cats",       color: "#FFFFFF", description: "Discussion of Cats..."});
+tagsAll.set("e", {name: "Ears",         class: "ears",       color: "#FFFFFF", description: ""});
+tagsAll.set("+", {name: "Audience Participation",        class: "gifts",      color: "#FFFFFF", description: "The audiences gives Qu3stion gives, tries to change her screen color, etc."});
+tagsAll.set("-", {name: "Errors/Reboots",class: "errors",    color: "#FFFFFF", description: "Times when Qu3stion's computer crashes / breaks down, and/or resets."});
+tagsAll.set("$", {name: "Music",         class: "music",      color: "#FFFFFF", description: "Qu3stion listens to music!"});
+tagsAll.set("o", {name: "Cool Tricks",         class: "tricks",      color: "#FFFFFF", description: "Qu3stion does some cool tricks with her computers, um, powers! Changing colors, changing her screen, etc."});
+tagsAll.set("`", {name: "Other Computerlings",         class: "others",      color: "#FFFFFF", description: "Qu3stion interacts with other computerlings!"});
+tagsAll.set("%", {name: "Overheating",         class: "overheating",      color: "#FFFFFF", description: ""});
+tagsAll.set("a", {name: "Animal Qu3stion",         class: "animal",       color: "#FFFFFF", description: "Qu3stion becomes some kind of animal..."});
+tagsAll.set("y", {name: "Yur- Romance.",         class: "yuri",       color: "#FFFFFF", description: "There are no medias with this tag. Don't look."});
 
 let tagsDate = new Map();
 tagsDate.set(0,  {name: "August '25",    class: "august25"   });
@@ -91,6 +99,7 @@ const mediaTemplate = {
                 this.source = clone.querySelectorAll("video")[0];
                 break;
         };
+        this.source.classList.add("thumbnail");
         clone.querySelectorAll("button")[0].addEventListener("click", (event) => {
             expand(event)
         });
@@ -102,7 +111,12 @@ const mediaTemplate = {
                 continue;
             }
             card.innerHTML = tag["name"];
-            clone.querySelector("article").classList.add(tag["class"])
+            if (tag["color"] !== null) {
+                card.style.backgroundColor = tag["color"] + "33";
+            } else {
+                card.style.backgroundColor = "#FFFFFF"
+            }
+            clone.querySelector("article").classList.add(tag["class"]);
             box.appendChild(card);
         }
         clone.querySelectorAll(".div_id")[0].innerHTML = "#" + this.id;
@@ -165,13 +179,8 @@ async function parseCSV() {
     return true;
 }
 
+const tick = document.getElementById("page_counter");
 
-async function load() {
-    var check = await parseCSV();
-    setTimeout(() => {
-        page(0)
-    }, 500)
-}
 
 async function init_media() {
     for (x = 1; x < mediaCSVData.length; x++) {
@@ -187,9 +196,13 @@ async function init_media() {
 };
 var ordered;
 var page_count;
-async function page(s) {
+
+function pagecrawl(s) {
     var mod = document.getElementById("step").value;
     var step = s * mod;
+    page(step)
+}
+async function page(step) {
     explorer.style.display = "none";
     if (currentPage + step > page_count) {
         currentPage = page_count;
@@ -234,6 +247,7 @@ async function page(s) {
             let check = await blobGuzzler(get);
             mediaDisplayed.push(tempID);
         }
+        tick.value = currentPage;
         explorer.style.display = "grid";
         return true;
     }
@@ -308,7 +322,10 @@ async function blobGuzzler(obj) {
     }
     return true;
 }
-
+function tags_popup() {
+    const tags_box = document.getElementById("tags_selection");
+    tags_box.style.display = "block"
+}
 function expand(event) {
     const selected = event.target;
     if (spyglass.children.length > 0) {
@@ -317,7 +334,7 @@ function expand(event) {
         }
     }
     var elm;
-    console.log(selected);
+    console.log(selected.src);
     switch (selected.tagName) {
         case "IMG":
             elm = document.createElement("img");
@@ -336,3 +353,18 @@ function expand(event) {
     }
     spyglass.appendChild(elm);
 };
+async function load() {
+    var check = await parseCSV();
+    setTimeout(() => {
+        page(0)
+    }, 500)
+    window.addEventListener("keypress", (event) => {
+        if (event.key == "Enter") {
+            var currentPageRequested = tick.value;
+            if (currentPageRequested != currentPage) {
+                var dist = currentPageRequested - currentPage;
+                page(dist);
+            }
+        }
+    })
+}

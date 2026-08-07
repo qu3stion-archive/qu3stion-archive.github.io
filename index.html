@@ -50,20 +50,30 @@
                     </div>
                 </main>
                 <nav class="gallery">
+
                     <div class="search">
-                        <button id="back" onclick="page(-1)">&lt;&lt;</button>
-                        <select id="step">
-                            <option value=1 selected>1</option>
-                            <option value=5>5</option>
-                            <option value=10>10</option>
-                            <option value=20>20</option>
-                            <option value=1000>End</option>
-                        </select>
-                        <button id="top" onclick="page(1)">&gt;&gt;</button>
+                        <div id="page_buttons">
+                            <select id="step">
+                                <option value=1 selected>+1</option>
+                                <option value=5>+5</option>
+                                <option value=10>+10</option>
+                                <option value=20>+20</option>
+                                <option value=1000>End</option>
+                            </select>
+                            <button id="back" onclick="pagecrawl(-1)">&lt;&lt;</button>
+                            <input id="page_counter">
+                            <button id="top" onclick="pagecrawl(1)">&gt;&gt;</button>
+                        </div>
+                        <div id="tag_searching">
+                            <button onclick="tags_popup()">eugh</button>
+                                <div id="tags_selection" class="popup">
+                                    "hi"
+                                </div>
+                        </div>
                     </div>
+
                     <section class="explorer">
                     </section>
-                    
                 </nav>
             </div>
         </div>
