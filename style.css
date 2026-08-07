@@ -11,21 +11,19 @@ body {
 }
 #archive {
     display: grid;
-    grid-template-rows: 60% 40%;
-    height: 1000px;
+    grid-template-columns: 40% 60%;
     max-width: 80%;
     margin-left: 10%;
     margin-top: 1%;
     padding: 1vh;
     gap: 1vh;
-    
 }
 nav {
     display: flex;
     flex-direction: column;
 }
 main {
-
+    height: 75%;
 }
 nav, main {
     background-color: rgb(255, 255, 255);
@@ -39,13 +37,14 @@ nav, main {
 }
 section {
     display: grid;
-    grid-template-columns: auto auto auto auto auto;
+    grid-template-columns: auto auto auto auto;
     gap: 1vw;
     height: 100%;
     max-height: 100%;
     max-width: 100%;
     box-sizing: border-box;
     overflow-y: scroll;
+    overflow-x: none;
 }
 article {
     display: flex;
@@ -65,7 +64,7 @@ img.thumbnail:hover, video.thumbnail:hover{
     transition-duration: 0.2s;
 }
 #viewer > img, #viewer > video {
-    width: 600px;
+    width: 100%;
 }
 article button {
     all: unset;
@@ -135,7 +134,7 @@ article button {
 }
 
 .gallery {
-    height: min-content;
+    height: 1000px;
 }
 
 html {

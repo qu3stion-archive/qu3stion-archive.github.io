@@ -58,7 +58,7 @@ tagsAll.set("o", {name: "Cool Tricks",         class: "tricks",      color: "#FF
 tagsAll.set("`", {name: "Other Computerlings",         class: "others",      color: "#FFFFFF", description: "Qu3stion interacts with other computerlings!"});
 tagsAll.set("%", {name: "Overheating",         class: "overheating",      color: "#FFFFFF", description: ""});
 tagsAll.set("a", {name: "Animal Qu3stion",         class: "animal",       color: "#FFFFFF", description: "Qu3stion becomes some kind of animal..."});
-tagsAll.set("y", {name: "Yur- Romance.",         class: "yuri",       color: "#FFFFFF", description: "There are no medias with this tag. Don't look."});
+tagsAll.set("y", {name: "Yuri- uh, Romance.",         class: "yuri",       color: "#FFFFFF", description: "There are no medias with this tag. Don't look."});
 
 let tagsDate = new Map();
 tagsDate.set(0,  {name: "August '25",    class: "august25"   });
@@ -135,7 +135,7 @@ const mediaTemplate = {
         explorer.removeChild(media);
     }
 }
-var mediaTotal = 853;
+var mediaTotal = 851;
 const perPage = 20;
 var page_count;
 var pageArr = [
@@ -330,7 +330,9 @@ function expand(event) {
     const selected = event.target;
     if (spyglass.children.length > 0) {
         for (element of spyglass.children) {
-            spyglass.removeChild(element);
+            if (element.tagName == "IMG" || element.tagName == "VIDEO") {
+                spyglass.removeChild(element);
+            }
         }
     }
     var elm;
@@ -351,7 +353,7 @@ function expand(event) {
             elm.appendChild(source);
             break;
     }
-    spyglass.appendChild(elm);
+    spyglass.insertBefore(elm, spyglass.firstChild);
 };
 async function load() {
     var check = await parseCSV();
@@ -367,4 +369,8 @@ async function load() {
             }
         }
     })
+}
+const tagsbar = document.getElementById("sidebar");
+function sidebar() {
+
 }
