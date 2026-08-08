@@ -18,10 +18,6 @@ body {
     padding: 1vh;
     gap: 1vh;
 }
-nav {
-    display: flex;
-    flex-direction: column;
-}
 main {
     height: 75%;
 }
@@ -62,9 +58,6 @@ img, video {
 img.thumbnail:hover, video.thumbnail:hover{
     transform: scale(1.07);
     transition-duration: 0.2s;
-}
-#viewer > img, #viewer > video {
-    width: 100%;
 }
 article button {
     all: unset;
@@ -119,7 +112,15 @@ article button {
     background-color: var(--light);
     padding: 4%;
 }
-.tags > label {
+#viewer > .tags {
+    width: 96%;
+    margin: 2%
+}
+#viewer {
+    display: flex;
+    flex-direction: column;
+}
+.tag {
     padding: 4px 11px 4px 8px;
     font-size: 14px;
     color: #000;
@@ -129,27 +130,31 @@ article button {
     border-color: rgb(100, 149, 165);
     border-radius: 999px;
 }
-.tags > label::before {
+.tag::before {
     content: "*"
 }
 
 .gallery {
+    display: flex;
+    flex-direction: column;
     height: 1000px;
 }
 
 html {
 	scroll-behavior: smooth;
 	container-type: scroll-state;
-  container-name: scroller;
+    container-name: scroller;
 }
 
-.to-top {
+div.to-top {
 	position: fixed;
 	bottom: 20px;
 	right: 10px;
+	display: flex;
+    flex-direction: column-reverse;
 }
 
-.to-top {
+a.to-top {
 	display: flex;
 	justify-content: center;
 	align-items: center;
@@ -180,4 +185,48 @@ html {
 }
 #tag_searching {
     position: relative;
+}
+
+.sidebar {
+    position: fixed;
+    top: 0px;
+    right: 0px;
+    height: 100%;
+    width: 300px;
+    background-color: white;
+    padding: 20px;
+    box-sizing: border-box;
+}
+
+.sidebar.in {
+    animation-name: in2;
+    animation-duration: 0.6s;
+    display: block;
+}
+.sidebar.out {
+    animation-name: out2;
+    animation-duration: 0.6s;
+}
+
+.sidebar > h1 {
+    font-size: 20px;
+}
+@keyframes in2 {
+    from {
+        right: -300px;
+    }
+    to {
+        right: 0px;
+    }
+}
+@keyframes out2 {
+    from {
+        right: 0px;
+    }
+    to {
+        right: -300px;
+    }
+}
+.expanded {
+    width: 100%;
 }

@@ -2,7 +2,6 @@ const explorer = document.querySelector(".explorer");
 const spyglass = document.querySelector("#viewer");
 const message = document.querySelector("#status");
 
-const FOLDER = "media/"
 //const eram = document.querySelector("#eram");
 
 const accepted_file_types = [".jpg", ".mp4"]
@@ -61,78 +60,112 @@ tagsAll.set("a", {name: "Animal Qu3stion",         class: "animal",       color:
 tagsAll.set("y", {name: "Yuri- uh, Romance.",         class: "yuri",       color: "#FFFFFF", description: "There are no medias with this tag. Don't look."});
 
 let tagsDate = new Map();
-tagsDate.set(0,  {name: "August '25",    class: "august25"   });
-tagsDate.set(1,  {name: "September '25", class: "september25"});
-tagsDate.set(2,  {name: "October '25",   class: "october25"  });
-tagsDate.set(3,  {name: "November '25",  class: "november25" });
-tagsDate.set(4,  {name: "December '25",  class: "december25" });
-tagsDate.set(5,  {name: "January '26",   class: "january26"  });
-tagsDate.set(6,  {name: "February '26",  class: "february26" });
-tagsDate.set(7,  {name: "March '26",     class: "march26"    });
-tagsDate.set(8,  {name: "April '26",     class: "april26"    });
-tagsDate.set(9,  {name: "May '26",       class: "may26"      });
-tagsDate.set(10, {name: "June '26",      class: "june26"     });
-tagsDate.set(11, {name: "July '26",      class: "july26"     });
-tagsDate.set(12, {name: "August '26",    class: "august26"   });
+tagsDate.set("0",  {name: "August '25",    class: "august25"   , color: "#FFFFFF", description: ""});
+tagsDate.set("1",  {name: "September '25", class: "september25", color: "#FFFFFF", description: ""});
+tagsDate.set("2",  {name: "October '25",   class: "october25"  , color: "#FFFFFF", description: ""});
+tagsDate.set("3",  {name: "November '25",  class: "november25" , color: "#FFFFFF", description: ""});
+tagsDate.set("4",  {name: "December '25",  class: "december25" , color: "#FFFFFF", description: ""});
+tagsDate.set("5",  {name: "January '26",   class: "january26"  , color: "#FFFFFF", description: ""});
+tagsDate.set("6",  {name: "February '26",  class: "february26" , color: "#FFFFFF", description: ""});
+tagsDate.set("7",  {name: "March '26",     class: "march26"    , color: "#FFFFFF", description: ""});
+tagsDate.set("8",  {name: "April '26",     class: "april26"    , color: "#FFFFFF", description: ""});
+tagsDate.set("9",  {name: "May '26",       class: "may26"      , color: "#FFFFFF", description: ""});
+tagsDate.set("10", {name: "June '26",      class: "june26"     , color: "#FFFFFF", description: ""});
+tagsDate.set("11", {name: "July '26",      class: "july26"     , color: "#FFFFFF", description: ""});
+tagsDate.set("12", {name: "August '26",    class: "august26"   , color: "#FFFFFF", description: ""});
+
+const template_img = document.querySelector("#template_img");
+const template_vid = document.querySelector("#template_vid");
+const template_imgEX = document.querySelector("#template_imgEX");
+const template_vidEX = document.querySelector("#template_vidEX");
+
+let currentImageExpanded = undefined;
+// mediaTemplateEx object
+// when requesting an image to be viewed, we:
+// - call this object
+// - free it
+// - build a new mediaTemplate
+// - set currentImageExpanded to that new object
+
 
 const mediaTemplate = {
     id      : undefined,
     filetype: undefined,
+    folder  : "media/",
     tags    : [],
     note    : undefined,
     source  : undefined,
+    source2 : undefined,
+    built   : false,
     url: function()   {
         return FOLDER + this.id + this.filetype;
     },
     build: function() {
-        let template;
         let clone;
         switch (this.filetype) {
             case ".jpg":
-                template = document.querySelector("#template_image");
-                clone = document.importNode(template.content, true);
-                this.source = clone.querySelectorAll("img")[0];
+                clone = document.importNode(template_img.content, true);
                 break;
             case ".mp4":
-                template = document.querySelector("#template_video");
-                clone = document.importNode(template.content, true);
-                this.source = clone.querySelectorAll("video")[0];
+                clone = document.importNode(template_vid.content, true);
                 break;
         };
-        this.source.classList.add("thumbnail");
+        this.source = clone.querySelectorAll(".thumbnail")[0];
+        var article = clone.querySelector("article");
         clone.querySelectorAll("button")[0].addEventListener("click", (event) => {
-            expand(event)
+            expand(event, this.id);
         });
+        var tagsHolder = clone.querySelectorAll(".tags")[0];
         for (tag of this.tags) {
-            var box = clone.querySelectorAll(".tags")[0];
-            var card = document.createElement("label");
-            if (tag === undefined) {
-                console.log(this.tag);
-                continue;
-            }
-            card.innerHTML = tag["name"];
-            if (tag["color"] !== null) {
-                card.style.backgroundColor = tag["color"] + "33";
-            } else {
-                card.style.backgroundColor = "#FFFFFF"
-            }
-            clone.querySelector("article").classList.add(tag["class"]);
-            box.appendChild(card);
-        }
+            tagBuilder(tag, tagsHolder);
+            article.classList.add(tag["class"]);
+        };
         clone.querySelectorAll(".div_id")[0].innerHTML = "#" + this.id;
-        clone.querySelector("article").id = "div_" + this.id;
+        article.id = "div_" + this.id;
         explorer.appendChild(clone);
+        built = true;
     },
-    free() {
+    free: function() {
         var media = document.getElementById("div_" + this.id);
-        media.querySelectorAll("button")[0].removeEventListener("click", (event) => {
-            expand(event)
-        });
-        var url2 = this.source.src;
-        URL.revokeObjectURL(url2)
-        this.source.src = null;
-        url2 = null;
-        explorer.removeChild(media);
+        if (media) {
+            media.querySelectorAll("button")[0].removeEventListener("click", (event) => {
+                expand(event, this.id);
+            });
+            URL.revokeObjectURL(this.source.src);
+            this.source.src = null;
+            explorer.removeChild(media);
+            built = false;
+        };
+    },
+    build_ex: function() { // frees any existing data first, then builds template for expanded image.
+        switch (currentImageExpanded) {
+            case this.id:
+                return;
+            case undefined:
+                break;
+            default:
+                URL.revokeObjectURL(spyglass.querySelector(".expanded").src);
+                spyglass.querySelector(".expanded").src = null;
+                console.log(spyglass.children)
+                spyglass.innerHTML = null;
+                spyglass.innerHTML = "";
+        }
+        let clone;
+        switch (this.filetype) {
+            case ".jpg":
+                clone = document.importNode(template_imgEX.content, true);
+                break;
+            case ".mp4":
+                clone = document.importNode(template_vidEX.content, true);
+                break;
+        };
+        this.source2 = clone.querySelector(".expanded");
+        var tagsHolder = clone.querySelector(".tags");
+        for (tag of this.tags) {
+            tagBuilder(tag, tagsHolder);
+        }
+        spyglass.appendChild(clone);
+        currentImageExpanded = this.id;
     }
 }
 var mediaTotal = 851;
@@ -145,17 +178,43 @@ var pageArr = [
 var currentPage = 1;
 
 var counter = 1
-function tags(tagBlob) {
+function tagReader(dict, tagBlob) {
     var tagsArr = []
-    if (tagBlob != "") {
-        for (l = 0; l < tagBlob.length; l++) {
-            var tagID = tagBlob[l];
-            tagsArr.push(tagsAll.get(tagID));
-        }
-        return tagsArr;
-    } else {
-        return [];
+    switch (dict) {
+        case "tagsAll":
+            if (tagBlob != "") {
+                for (l = 0; l < tagBlob.length; l++) {
+                    var tagID = tagBlob[l];
+                    tagsArr.push(tagsAll.get(tagID));
+                }
+                return tagsArr;
+            } else {
+                return [];
+            }
+            break;
+        case "tagsDate":
+            console.log(tagsDate)
+            tagsArr.push(tagsDate.get(tagBlob));
+                console.log(tagsArr)
+            return tagsArr;
     }
+
+}
+function tagBuilder(tag, to) {
+    var label = document.createElement("label");
+    if (tag === undefined) {
+        console.log(this.tag);
+        return false;
+    }
+    label.innerHTML = tag["name"];
+    if (tag["color"] !== null) {
+        label.style.backgroundColor = tag["color"] + "33";
+    } else {
+        label.style.backgroundColor = "#FFFFFF"
+    }
+    label.classList.add("tag")
+    to.appendChild(label);
+    return true;
 }
 async function parseCSV() {
     Papa.parse("media.csv", {
@@ -168,6 +227,7 @@ async function parseCSV() {
                 mediaNew["id"] = data["id"];
                 mediaNew["filetype"] = data["filetype"];
                 mediaNew["tags"] = data["tags"];
+                mediaNew["date"] = data["date"];
                 mediaCSVData[counter] = mediaNew;
                 counter += 1;
             }
@@ -188,7 +248,9 @@ async function init_media() {
         let data = mediaCSVData[x];
         template["id"] = data["id"];
         template["filetype"] = data["filetype"];
-        template["tags"] = tags(data["tags"]);
+        var arr1 = tagReader("tagsAll", data["tags"]);
+        var arr2 = tagReader("tagsDate", data["date"]);
+        template["tags"] = arr1.concat(arr2);
         mediaProcessedData[data["id"]] = template;
         mediaProcessedArr.push(data["id"]);
     }
@@ -244,7 +306,7 @@ async function page(step) {
                 continue;
             }
             get.build();
-            let check = await blobGuzzler(get);
+            let check = await blobGuzzler(get, get["source"]);
             mediaDisplayed.push(tempID);
         }
         tick.value = currentPage;
@@ -306,54 +368,28 @@ async function reset() {
     }
 };
 
-async function blobGuzzler(obj) {
-    var blob = await fetch(FOLDER + obj["id"] + obj["filetype"], { cache: "no-store" })
+async function blobGuzzler(obj, src) {
+    var blob = await fetch(obj["folder"] + obj["id"] + obj["filetype"], { cache: "no-store" })
     .then(response => response.blob())
     switch (obj["filetype"]) {
         case ".jpg":
-            obj["source"].src = URL.createObjectURL(blob);
+            src.src = URL.createObjectURL(blob);
             break;
         case ".mp4":
             var elm = document.createElement("source");
             elm.src = URL.createObjectURL(blob);
-            obj["source"].appendChild(elm);
-            obj["source"].load();
+            src.appendChild(elm);
+            src.load();
+            src = elm;
             break;
     }
     return true;
 }
-function tags_popup() {
-    const tags_box = document.getElementById("tags_selection");
-    tags_box.style.display = "block"
-}
-function expand(event) {
-    const selected = event.target;
-    if (spyglass.children.length > 0) {
-        for (element of spyglass.children) {
-            if (element.tagName == "IMG" || element.tagName == "VIDEO") {
-                spyglass.removeChild(element);
-            }
-        }
-    }
-    var elm;
-    console.log(selected.src);
-    switch (selected.tagName) {
-        case "IMG":
-            elm = document.createElement("img");
-            elm.src = selected.src
-            break;
-        case "VIDEO":
-            elm = document.createElement("video");
-            elm.controls = true;
-            elm.autoplay = true;
-            //elm.width = "100%"
-            source = document.createElement("source");
-            source.src = selected.querySelector("source").src;
-            source.type = "video/mp4";
-            elm.appendChild(source);
-            break;
-    }
-    spyglass.insertBefore(elm, spyglass.firstChild);
+async function expand(event, id) {
+    let get = mediaProcessedData[id];
+    get.build_ex();
+    let src = spyglass.querySelector(".expanded");
+    let check = await blobGuzzler(get, src);
 };
 async function load() {
     var check = await parseCSV();
@@ -370,7 +406,32 @@ async function load() {
         }
     })
 }
-const tagsbar = document.getElementById("sidebar");
+const tagsBar = document.getElementById("tagsBar");
+tagsBar.style.display = "none";
+var sidebar_state = false
+tagsBar.addEventListener("animationend", (event) => {
+    if (event.animationName == "out2") {
+        tagsBar.style.display = "none";
+        // it's a little finicky, but
+        // when specifically the animation for the sidebar sliding out ends,
+        // we hide the tags bar too.
+    }
+})
 function sidebar() {
-
+    switch (sidebar_state) {
+        case true:
+            tagsBar.classList.remove("in");
+            tagsBar.classList.add("out");
+            sidebar_state = false;
+            break;
+        case false:
+            tagsBar.style.display = "block";
+            tagsBar.classList.remove("out");
+            tagsBar.classList.add("in");
+            sidebar_state = true;
+            break;
+    }
+}
+function tagsBar_buildTags() {
+    
 }
