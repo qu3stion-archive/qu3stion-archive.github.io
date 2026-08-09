@@ -41,15 +41,18 @@
         <template id="template_imgEX">
             <img class="expanded">
             <div class="tags"></div>
+            <textarea class="notes" readonly></textarea>
         </template>
 
         <!-- TEMPLATE 4: expanded video -->
         <template id="template_vidEX">
             <video class="expanded" autoplay controls></video>
             <div class="tags"></div>
+            <textarea class="notes" readonly></textarea>
         </template>
 
         <!-- Top button -->
+         <div id="overlay" class="out"></div>
         <div class="universal">
             <p id="status"></p>
             <div id="archive">
@@ -58,7 +61,6 @@
                     </div>
                 </main>
                 <nav class="gallery">
-
                     <div class="search">
                         <div id="page_buttons">
                             <select id="step">
@@ -83,13 +85,17 @@
             </div>
         </div>
         <div id="tagsBar" class="sidebar out">
-            <h1>TAGS</h1>
+            <div class="tagsMenu">
+                <h1>Tags</h1>
+            </div>
         </div>
         <div class="to-top">
             <a class="to-top" href="#top">
                 <img src="https://www.svgrepo.com/show/506650/chevron-top.svg" alt="^">
             </a>
-            <button onclick="sidebar()">SIDEBAR</button>
+            <button class="to-top" onclick="sidebar()">
+                <img src="https://www.svgrepo.com/show/509711/align-justify.svg" alt="=">
+            </button>
         </div>
     </body>
     <script src="videos.js"></script>
