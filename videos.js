@@ -16,6 +16,9 @@ var mediaOrdered = [];
 // We break this up into pages with page(#).
 var searchingFor = [];
 // Array of tags we are searching for!
+var searchMode = "AND";
+// "OR" = 
+// "AND" = Media needs both tags
 
 var mediaTotal = 851;
 let perPage = 20;
@@ -25,6 +28,7 @@ var currentPage = 1;
 
 let tagsType = new Map();
 tagsType.set("character",   {name: "Characters", color: "#FFFFFF"});
+tagsType.set("meta",        {name: "Metadata", color: "#000"});
 tagsType.set("info",        {name: "Information", color: "#56db21"});
 tagsType.set("gags",        {name: "Running Gags / References", color: "#ebbd29"});
 tagsType.set("arc",         {name: "Arcs", color: "#f01c1c"});
@@ -71,6 +75,8 @@ tagsAll.set("`", {name: "Other Computerlings",  class: "others",     color: "typ
 tagsAll.set("%", {name: "Overheating",          class: "overheating",color: "type", type: "arc", description: ""});
 tagsAll.set("a", {name: "Animal Qu3stion",      class: "animal",     color: "type", type: "gags", description: "Qu3stion becomes some kind of animal..."});
 tagsAll.set("y", {name: "Yuri- uh, Romance.",   class: "yuri",       color: "type", type: "misc", description: "There are no medias with this tag. Don't look."});
+tagsAll.set("[", {name: "Image",                class: "img",       color: "type", type: "meta", description: ""});
+tagsAll.set("]", {name: "Video",                class: "vid",       color: "type", type: "meta", description: ""});
 
 let tagsDate = new Map();
 tagsDate.set("0",  {name: "August '25",    class: "august25"   , type: "date", color: "#FFFFFF", description: ""});
@@ -115,6 +121,7 @@ const mediaTemplate = {
     },
     build: function() {
         let clone;
+        var metadata = [];
         switch (this.filetype) {
             case ".jpg":
                 clone = document.importNode(template_img.content, true);
@@ -163,12 +170,15 @@ const mediaTemplate = {
                 spyglass.innerHTML = "";
         }
         let clone;
+        var metadata = [];
         switch (this.filetype) {
             case ".jpg":
                 clone = document.importNode(template_imgEX.content, true);
+
                 break;
             case ".mp4":
                 clone = document.importNode(template_vidEX.content, true);
+
                 break;
         };
         this.source2 = clone.querySelector(".expanded");
@@ -229,8 +239,13 @@ function tagBuilder(tag, to) {
     label.appendChild(dot)
     label.innerHTML += tag["name"];
     label.classList.add("tag")
-    to.appendChild(label);
-    return true;
+    if (to === false) {
+        return label;
+    } else {
+        to.appendChild(label);
+        console.log(label);
+        return true;
+    }
 }
 window.onload = init_media;
 async function init_media() {
@@ -244,6 +259,14 @@ async function init_media() {
                 mediaNew["id"] = data["id"];
                 mediaNew["filetype"] = data["filetype"];
                 mediaNew["tags"] = data["tags"];
+                switch(data["filetype"]) {
+                    case ".jpg":
+                        mediaNew["tags"] += "[";
+                        break;
+                    case ".mp4":
+                        mediaNew["tags"] += "]";
+                        break;
+                }
                 mediaNew["date"] = data["date"];
                 mediaNew["note"] = data["note"];
                 mediaCSVData[counter] = mediaNew;
@@ -309,10 +332,10 @@ async function page(step) {
                 break;
         }
         for (x = r[0]; x <= r[1]; x++) {
-            if (x > mediaProcessedData.length) {
+            if (x > mediaOrdered.length) {
                 break;
             }
-            var tempID = x;
+            var tempID = mediaOrdered[x - 1];
             var get = mediaProcessedData[tempID];
             if (get === undefined) {
                 continue;
@@ -326,59 +349,7 @@ async function page(step) {
         return true;
     }
 };
-async function want_get(mode, tagName) { // I WANT these medias, so go GET them!
-    switch (mode) {
-        case true:
-            var orderArr = [];
-            for (id in mediaProcessedData) {
-                var media = mediaProcessedData[id];
-                for (tag of media["tags"]) {
-                    if (tag["class"] == tagName) {
-                        orderArr.push(id);
-                    }
-                }
-            }
-            return orderArr;
-        case false:
-            
-            break;
-    }
-}
-async function search(tagArr) {
-    //var tagArr = document.getElementById("tag_select").value;
-    //console.log(tagArr)
-    var arr2 = [];
-    for (tag of tagArr) {
-        var arr = await want_get(true, tag);
-        for (id of arr) {
-            if (arr2 .includes(id)) {
-// if this id already has a key in the order array
-                console.log(id + "is already in this array!")
-            } else {
-                arr2 .push(id);
-            }
-        }
-    }
-    if (arr2 .length < 1) {
-        console.log("no entries found!")
-        return false;
-    }
-    mediaOrdered = [];
-    mediaOrdered = arr2;
-    currentPage = 1;
-    page(0);
-    return true;
-}
-async function reset() {
-    if (mediaDisplayed != []) {
-        for (key in mediaDisplayed) {
-            var id = mediaDisplayed[key];
-            mediaProcessedData[id].free();
-        }
-        mediaDisplayed = [];
-        return true;
-    }
-};
+
 
 async function blobGuzzler(obj, src) {
     var blob = await fetch(obj["folder"] + obj["id"] + obj["filetype"], { cache: "no-store" })
@@ -415,6 +386,7 @@ async function load() {
             }
         }
     })
+    init_placeholder();
     tagsSearchBuilder();
 };
 const tagsBar = document.getElementById("tagsBar");
@@ -466,8 +438,15 @@ function tagsSearchBuilder() {
     for (arr of tagArrs) {
         arr.forEach((value) => {
             for (category of to.children) {
-                if (category.classList.contains(value["type"])) {
-                    tagBuilder(value, category);
+                if (category.tagName == "DIV" && category.classList.contains(value["type"])) {
+                    var label = tagBuilder(value, false);
+                    var newButton = document.createElement("button");
+                    newButton.appendChild(label);
+                    newButton.classList = value["class"];
+                    newButton.addEventListener("click", (event) => {
+                        appendToSearch(event);
+                    })
+                    category.appendChild(newButton);
                 } else {
                     continue;
                 }
@@ -475,11 +454,101 @@ function tagsSearchBuilder() {
         });
     }
 };
+function appendToSearch(event) {
+    var label = event.target;
+    var button = label.parentElement;
+    var tagClass = button.classList[0];
+    var arr = [...searchingFor]; // I <3 Spread Operator...
+    switch (searchingFor.includes(tagClass)) {
+        case true:
+            var i = searchingFor.indexOf(tagClass);
+            searchingFor = searchingFor.filter((item) => item != tagClass);
+            selectedTagCSS(label, false);
+            break;
+        case false:
+            arr.push(tagClass)
+            searchingFor = arr;
+            selectedTagCSS(label, true);
+            break;
+        default:
+            "WHAT????"
+            break;
+    }
+    console.log(searchingFor)
+    search(searchingFor)
+}
+function selectedTagCSS(elm, bool) {
+    var color;
+    switch (bool) {
+        case true:
+            color = getComputedStyle(elm).getPropertyValue("border-color");
+            elm.style.backgroundColor = color;
+            elm.firstElementChild.style.color = "#FFF";
+            elm.style.color = "#FFF";
+            elm.style.borderColor = "#FFF";
+            break;
+        case false:
+            color = getComputedStyle(elm).getPropertyValue("background-color");
+            elm.style.color = "#000";
+            elm.firstElementChild.style.color = color;
+            elm.style.borderColor = color;
+            elm.style.backgroundColor = "transparent";
+            break;
+    }
+}
+async function search() {
+    if (searchingFor.length < 1) {
+        console.log("no entries found!")
+        mediaOrdered = [];
+        page(0);
+        return false;
+    }
+    var validArr = [...mediaProcessedArr];
+    for (tag of searchingFor) {
+        for (id of validArr) {
+            var media = mediaProcessedData[id];
+            for (x = 0; x < media["tags"].length; x++) {
+                var tagReceived = media["tags"][x];
+                if (tagReceived["class"] == tag) {
+                    break;
+                } else if (x + 1 == media["tags"].length) {
+                    validArr = validArr.filter((item) => item != id);
+                } else {
+                    continue;
+                }
+            }
+        }
+    };
+    if (validArr.length < 1) {
+        console.warn("Nothing found.")
+        reset();
+        return;
+    } else if (validArr == mediaOrdered) {
+        console.warn("Nothing changed. Because an Array, is just an Array.")
+        return;
+    } else {
+        mediaOrdered = [];
+        mediaOrdered = validArr;
+        currentPage = 1;
+        page(0);
+        return true;
+    }
+}
+async function reset() {
+    if (mediaDisplayed != []) {
+        for (key in mediaDisplayed) {
+            var id = mediaDisplayed[key];
+            mediaProcessedData[id].free();
+        }
+        mediaDisplayed = [];
+        return true;
+    }
+};
 async function init_placeholder() {
     try {
         let placeholderMedia = Object.create(mediaTemplate);
-        placeholderMedia["id"] = "0"
-        placeholderMedia["filetype"] = ".jpg"
+        placeholderMedia["id"] = "0";
+        placeholderMedia["filetype"] = ".jpg";
         placeholderMedia.build_ex();
         let src = spyglass.querySelector(".expanded");
         let check = await blobGuzzler(placeholderMedia, src);

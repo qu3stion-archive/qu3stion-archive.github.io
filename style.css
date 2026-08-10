@@ -112,6 +112,9 @@ article button {
     background-color: var(--light);
     padding: 4%;
 }
+.tags > button {
+    all: unset;
+}
 #viewer > .tags {
     width: 96%;
     margin: 2%;
@@ -134,7 +137,10 @@ article button {
     max-height: 14px;
     border-color: rgb(100, 149, 165);
     border-radius: 999px;
-    vertical-align: c;
+    vertical-align: center;
+}
+.tag.selected {
+    background-color: red;
 }
 .tag > span {
     font-size: 24px;
