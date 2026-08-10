@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>.</title>
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+        <style>
+            body {
+                background-color: black;
+                font-family: sans-serif;
+                align-items: center;
+                margin: 0;
+            }
+            #man {
+                height: 100vh;
+                display: flex;
+                flex-direction: column;
+                justify-content: center;
+            }
+            #well {
+                display: flex;
+                flex-direction: column;
+                align-items: center;
+            }
+            #well > img {
+                width: 500px;
+                height: 500px;
+            }
+            #well > p {
+                height: 10px;
+            }
+            #dialog {
+                font-size: 18px;
+            }
+            button.interact {
+                all: unset;
+            }
+            button.interact:hover {
+                color: yellow;
+            }
+            div.choice {
+                display: flex;
+                flex-direction: row;
+                justify-content: center;
+                height: 10px;
+                gap: 50px;
+                margin-block: 18px;
+            }
+            a {
+                all: unset;
+                color: white;
+                font-size: 18px;
+            }
+            a:hover {
+                color: yellow;
+            }
+        </style>
+    </head>
+    <body>
+        <audio autoplay loop style="display: none;"><source src="assets/answ3r.ogg" type="audio/ogg"></audio>
+            <div id="man"><div id="well">
+                <button class="interact" onclick="play()"><img src="assets/answ3r.gif"></button>
+                    <p id="dialog" style="color: white; position: relative; top: 0px; left: 0px;"></p>
+            </div></div>
+    </body>
+    <script>
+        var playing = false;
+        document.documentElement.requestFullscreen();
+        const cont = document.getElementById("well");
+        const dialog = document.getElementById("dialog");
+        var text = ["Well, there is a computerling here.", "She offers you something."]
+
+        function delay(ms) {
+            return new Promise((resolve, reject) => {
+                setTimeout(function(){
+                    resolve("yay!")
+                }, ms)
+            })
+        }
+
+        async function play() {
+            if (playing == false) {
+                playing = true;
+                for (line of text) {
+                    var interval;
+                    dialog.innerHTML = "";
+                    for (letter of line) {
+                        dialog.innerHTML += letter;
+                        var ms;
+                        switch (letter) {
+                            case ",":
+                                ms = 250;
+                                break;
+                            case " ":
+                                ms = 0;
+                                break;
+                            default:
+                                ms = 50;
+                                break;
+                        }
+                        var check = await delay(ms)
+                    }
+                    var check2 = await delay(3000);
+                }
+                console.log("yay!")
+                cont.removeChild(dialog);
+                var choice = ["Yes", "No"];
+                var box = document.createElement("div");
+                box.classList.add("choice");
+                box.id = "choice1"
+                for (option of choice) {
+                    var link = document.createElement("a")
+                    link.innerHTML = option;
+                    switch (option) {
+                        case "Yes":
+                            link.href = "assets/egg.png"
+                            link.download = "egg";
+                            link.addEventListener("click", (event) => {
+                                cont.removeChild(document.getElementById("choice1"));
+                                setTimeout(() => {
+                                    window.location.replace("index.html");
+                                }, 3000)
+                            });
+                            break;
+                        case "No":
+                            link.addEventListener("click", () => {
+                                window.location.replace("index.html");
+                            });
+                            break;
+                    }
+                    box.appendChild(link);
+                }
+                cont.appendChild(box);
+            } else {
+                return false;
+            }
+        }
+    </script>
+</html>

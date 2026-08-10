@@ -1,10 +1,18 @@
+@font-face {
+    font-family: "primary";
+    src: url("assets/fonts/fira_sans_regular.ttf") format("truetype");
+}
+
 :root {
     --light: #eef5fa;
 }
 
 body {
     background-color: #DBE9F3;
-    font-family: sans-serif;
+    font-family: "primary", sans-serif;
+}
+* {
+    font-family: "primary", sans-serif;
 }
 #universal {
     /* hmm... */
@@ -130,7 +138,7 @@ article button {
     align-items:center;
     gap: 4px;
     padding: 4px 11px 4px 8px;
-    font-size: 13px;
+    font-size: clamp(75%, 12px, 100%);
     color: #000;
     background-color: transparent;
     border: 1.5px solid;
@@ -144,6 +152,7 @@ article button {
 }
 .tag > span {
     font-size: 24px;
+    pointer-events: none;
 }
 .sidebar {
     position: fixed;
@@ -305,4 +314,7 @@ textarea {
     to {
         opacity: 0%;
     }
+}
+button.interact {
+    all: unset;
 }

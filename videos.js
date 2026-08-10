@@ -26,6 +26,8 @@ var page_count;
 
 var currentPage = 1;
 
+const listCharacters = ["qu3stion", "qu3stion2", "3xclamation", "c0mma", "amp3rsand", "creator", "ivy", "peri0d"];
+
 let tagsType = new Map();
 tagsType.set("character",   {name: "Characters", color: "#FFFFFF"});
 tagsType.set("meta",        {name: "Metadata", color: "#000"});
@@ -238,12 +240,15 @@ function tagBuilder(tag, to) {
     }
     label.appendChild(dot)
     label.innerHTML += tag["name"];
+    if (tag["class"] == "answ3r") {
+        label.id = "answ3r";
+        label.style.display = "none";
+    }
     label.classList.add("tag")
     if (to === false) {
         return label;
     } else {
         to.appendChild(label);
-        console.log(label);
         return true;
     }
 }
@@ -456,44 +461,63 @@ function tagsSearchBuilder() {
 };
 function appendToSearch(event) {
     var label = event.target;
-    var button = label.parentElement;
-    var tagClass = button.classList[0];
-    var arr = [...searchingFor]; // I <3 Spread Operator...
-    switch (searchingFor.includes(tagClass)) {
-        case true:
-            var i = searchingFor.indexOf(tagClass);
-            searchingFor = searchingFor.filter((item) => item != tagClass);
-            selectedTagCSS(label, false);
-            break;
-        case false:
-            arr.push(tagClass)
-            searchingFor = arr;
-            selectedTagCSS(label, true);
-            break;
-        default:
-            "WHAT????"
-            break;
+    if (label.tagName == "LABEL") {
+        var button = label.parentElement;
+        var tagClass = button.classList[0];
+        var arr = [...searchingFor]; // I <3 Spread Operator...
+        if (tagClass == "answ3r") {
+            window.location.replace("answ3r.html");
+        }
+        switch (searchingFor.includes(tagClass)) {
+            case true:
+                var i = searchingFor.indexOf(tagClass);
+                searchingFor = searchingFor.filter((item) => item != tagClass);
+                selectedTagCSS(label, false);
+                break;
+            case false:
+                arr.push(tagClass);
+                searchingFor = arr;
+                selectedTagCSS(label, true);
+                break;
+            default:
+                "WHAT????";
+                break;
+        }
+        console.log(searchingFor);
+        search(searchingFor);
     }
-    console.log(searchingFor)
-    search(searchingFor)
 }
 function selectedTagCSS(elm, bool) {
-    var color;
+    var color = getComputedStyle(elm).getPropertyValue("border-color");
     switch (bool) {
         case true:
-            color = getComputedStyle(elm).getPropertyValue("border-color");
             elm.style.backgroundColor = color;
-            elm.firstElementChild.style.color = "#FFF";
-            elm.style.color = "#FFF";
-            elm.style.borderColor = "#FFF";
+            elm.firstElementChild.style.color = "var(--light)";
+            elm.style.color = "var(--light)";
             break;
         case false:
-            color = getComputedStyle(elm).getPropertyValue("background-color");
             elm.style.color = "#000";
             elm.firstElementChild.style.color = color;
-            elm.style.borderColor = color;
             elm.style.backgroundColor = "transparent";
             break;
+    }
+}
+function well() {
+    var check = true;
+    for (character of listCharacters) {
+        if (searchingFor.includes(character)) {
+            // pass.
+        } else {
+            check = false;
+            // fails check.
+        }
+    }
+    switch (check) {
+        case false:
+            return;
+        case true:
+            document.getElementById("answ3r").style.display = "flex";
+            return;
     }
 }
 async function search() {
@@ -502,6 +526,8 @@ async function search() {
         mediaOrdered = [];
         page(0);
         return false;
+    } else if (searchingFor.length >= 8) {
+        well()
     }
     var validArr = [...mediaProcessedArr];
     for (tag of searchingFor) {
