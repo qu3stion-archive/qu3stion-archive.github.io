@@ -13,7 +13,7 @@
         <template id="template_img">
             <article>
                 <div class="src">
-                    <button><img loading="lazy" class="thumbnail"></button>
+                    <button><img loading="lazy" class="thumbnail" preload="none"></button>
                     <label class="div_id"></label>
                 </div>
                 <div class="tags">
@@ -26,7 +26,7 @@
             <article>
                 <div class="src">
                     <button>
-                        <video class="thumbnail">
+                        <video class="thumbnail" preload="none">
                         </video>
                     </button>
                     <label class="div_id"></label>
@@ -39,14 +39,14 @@
 
         <!-- TEMPLATE 3: expanded image -->
         <template id="template_imgEX">
-            <img class="expanded">
+            <img class="expanded" loading="eager" preload="none">
             <div class="tags"></div>
             <textarea class="notes" readonly></textarea>
         </template>
 
         <!-- TEMPLATE 4: expanded video -->
         <template id="template_vidEX">
-            <video class="expanded" autoplay controls></video>
+            <video class="expanded" controls loading="eager" autoplay muted loop preload="none"></video>
             <div class="tags"></div>
             <textarea class="notes" readonly></textarea>
         </template>

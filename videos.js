@@ -48,7 +48,7 @@ tagsAll.set("&", {name: "Amp3rsand",    class: "amp3rsand",  type: "character", 
 tagsAll.set(":", {name: "Creator",      class: "creator",    type: "character", color: "#252b2b", description: ""});
 tagsAll.set("G", {name: "Ivy",          class: "ivy",        type: "character", color: "#0e9368", description: ""});
 tagsAll.set(".", {name: "...Peri0d??",  class: "peri0d",     type: "character", color: "#9deb44",      description: ""});
-tagsAll.set("|", {name: "Answ3r",       class: "answ3r",     type: "character", color: "#000000",      description: ""});
+tagsAll.set("|", {name: "Answ3r",       class: "answ3r",     type: "character", color: "#00000020",      description: ""});
 //
 tagsAll.set("*", {name: "Lore",                 class: "lore",       color: "type", type: "info", description: "Contains important lore pieces!"});
 tagsAll.set("^", {name: "Trivia",               class: "lore",       color: "type", type: "info", description: "Fun facts about Qu3stion; not as important as the lore tidbits."});
@@ -240,10 +240,13 @@ function tagBuilder(tag, to) {
     }
     label.appendChild(dot)
     label.innerHTML += tag["name"];
+    
     if (tag["class"] == "answ3r") {
         label.id = "answ3r";
         label.style.display = "none";
+        label.style.color = "#00000020";
     }
+
     label.classList.add("tag")
     if (to === false) {
         return label;
