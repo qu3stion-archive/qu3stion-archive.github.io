@@ -9,8 +9,8 @@
         <script src="papaparse.min.js"></script>
     </head>
     <body onload="load()" id="top">
-        <!-- TEMPLATE 1: images -->
-        <template id="template_img">
+        <!-- TEMPLATE 1: thumbnail -->
+        <template id="template_">
             <article>
                 <div class="src">
                     <button><img loading="lazy" class="thumbnail" preload="none"></button>
@@ -21,30 +21,15 @@
                 </div>
             </article>
         </template>
-        <!-- TEMPLATE 2: videos -->
-        <template id="template_vid">
-            <article>
-                <div class="src">
-                    <button>
-                        <video class="thumbnail" preload="none">
-                        </video>
-                    </button>
-                    <label class="div_id"></label>
-                </div>
-                <div class="tags">
 
-                </div>
-            </article>
-        </template>
-
-        <!-- TEMPLATE 3: expanded image -->
+        <!-- TEMPLATE 2: expanded image -->
         <template id="template_imgEX">
             <img class="expanded" loading="eager" preload="none">
             <div class="tags"></div>
             <textarea class="notes" readonly></textarea>
         </template>
 
-        <!-- TEMPLATE 4: expanded video -->
+        <!-- TEMPLATE 3: expanded video -->
         <template id="template_vidEX">
             <video class="expanded" controls loading="eager" autoplay muted loop preload="none"></video>
             <div class="tags"></div>

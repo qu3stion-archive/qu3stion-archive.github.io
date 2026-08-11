@@ -32,7 +32,7 @@ main {
 nav, main {
     background-color: rgb(255, 255, 255);
     box-sizing: border-box;
-    padding: 1%;
+    padding: 2%;
     gap: 1%;
     border: 1px solid;
     border-radius: 1%;
@@ -41,14 +41,14 @@ nav, main {
 }
 section {
     display: grid;
-    grid-template-columns: auto auto auto auto;
-    gap: 1vw;
+    grid-template-columns: 25% 25% 25% 25%;
     height: 100%;
     max-height: 100%;
     max-width: 100%;
     box-sizing: border-box;
     overflow-y: scroll;
     overflow-x: none;
+    scrollbar-width: none;
 }
 article {
     display: flex;
@@ -81,7 +81,7 @@ article button {
     background-color: var(--light);
     padding: 4px;
     border-radius: 10px;
-    margin-bottom: 8px;
+    box-sizing: border-box;
 }
 #page_buttons {
     display: grid;

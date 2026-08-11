@@ -29,15 +29,15 @@ var currentPage = 1;
 const listCharacters = ["qu3stion", "qu3stion2", "3xclamation", "c0mma", "amp3rsand", "creator", "ivy", "peri0d"];
 
 let tagsType = new Map();
-tagsType.set("character",   {name: "Characters", color: "#FFFFFF"});
-tagsType.set("meta",        {name: "Metadata", color: "#000"});
-tagsType.set("info",        {name: "Information", color: "#56db21"});
-tagsType.set("gags",        {name: "Running Gags / References", color: "#ebbd29"});
-tagsType.set("arc",         {name: "Arcs", color: "#f01c1c"});
-tagsType.set("audience",    {name: "Audience", color: "#ee6cdd"}); // Audience does/shares things with Qu3stion
-tagsType.set("date",        {name: "Date", color: "black"});
-tagsType.set("events",      {name: "Events", color: "#185ddf"}); // Moments / events
-tagsType.set("misc",        {name: "Miscellaneous", color: "#6e15b8"});
+tagsType.set("character",   {name: "Characters",                color: "#FFFFFF", order: 2});
+tagsType.set("date",        {name: "Date",                      color: "black",     order: 3});
+tagsType.set("meta",        {name: "Metadata",                  color: "#000",    order: 1});
+tagsType.set("info",        {name: "Information",               color: "#56db21", order: 4});
+tagsType.set("gags",        {name: "Running Gags / References", color: "#ebbd29", order: 8});
+tagsType.set("arc",         {name: "Arcs",                      color: "#f01c1c", order: 5});
+tagsType.set("audience",    {name: "Audience",                  color: "#ee6cdd", order: 7}); // Audience does/shares things with Qu3stion
+tagsType.set("events",      {name: "Events",                    color: "#185ddf", order: 6}); // Moments / events
+tagsType.set("misc",        {name: "Miscellaneous",             color: "#6e15b8", order: 9});
 
 let tagsAll = new Map();
 tagsAll.set("?", {name: "Qu3stion",     class: "qu3stion",   type: "character", color: "#15c1c3", description: ""});
@@ -52,7 +52,7 @@ tagsAll.set("|", {name: "Answ3r",       class: "answ3r",     type: "character", 
 //
 tagsAll.set("*", {name: "Lore",                 class: "lore",       color: "type", type: "info", description: "Contains important lore pieces!"});
 tagsAll.set("^", {name: "Trivia",               class: "lore",       color: "type", type: "info", description: "Fun facts about Qu3stion; not as important as the lore tidbits."});
-tagsAll.set("_", {name: "Intro",                class: "intro",      color: "type", type: "events", description: "First time a character appears!"});
+tagsAll.set("_", {name: "Intro",                class: "intro",      color: "type", type: "info", description: "First time a character appears!"});
 tagsAll.set("s", {name: "Cute :3",              class: "cute",       color: "type", type: "misc", description: "All Qu3stion is Cute Medias... but some Medias are more Cuter than others..."});
 tagsAll.set("z", {name: "Spooky",               class: "spooky",     color: "type", type: "misc", description: ""});
 tagsAll.set("m", {name: "MEAN.. >:]",           class: "mean",       color: "type", type: "audience", description: "WHEN THEY'RE MEAN TO QU3STION    ON TWITTER: | (Includes pranks)"});
@@ -77,8 +77,9 @@ tagsAll.set("`", {name: "Other Computerlings",  class: "others",     color: "typ
 tagsAll.set("%", {name: "Overheating",          class: "overheating",color: "type", type: "arc", description: ""});
 tagsAll.set("a", {name: "Animal Qu3stion",      class: "animal",     color: "type", type: "gags", description: "Qu3stion becomes some kind of animal..."});
 tagsAll.set("y", {name: "Yuri- uh, Romance.",   class: "yuri",       color: "type", type: "misc", description: "There are no medias with this tag. Don't look."});
-tagsAll.set("[", {name: "Image",                class: "img",       color: "type", type: "meta", description: ""});
-tagsAll.set("]", {name: "Video",                class: "vid",       color: "type", type: "meta", description: ""});
+tagsAll.set("[", {name: "Image",                class: "img",        color: "type", type: "meta", description: ""});
+tagsAll.set("]", {name: "Video",                class: "vid",        color: "type", type: "meta", description: ""});
+tagsAll.set("#", {name: "Audio Warning!",       class: "warning",    color: "#FF0000", type: "meta", description: ""});
 
 let tagsDate = new Map();
 tagsDate.set("0",  {name: "August '25",    class: "august25"   , type: "date", color: "#FFFFFF", description: ""});
@@ -95,8 +96,7 @@ tagsDate.set("10", {name: "June '26",      class: "june26"     , type: "date", c
 tagsDate.set("11", {name: "July '26",      class: "july26"     , type: "date", color: "#FFFFFF", description: ""});
 tagsDate.set("12", {name: "August '26",    class: "august26"   , type: "date", color: "#FFFFFF", description: ""});
 
-const template_img = document.querySelector("#template_img");
-const template_vid = document.querySelector("#template_vid");
+const template_ = document.querySelector("#template_");
 const template_imgEX = document.querySelector("#template_imgEX");
 const template_vidEX = document.querySelector("#template_vidEX");
 
@@ -122,8 +122,9 @@ const mediaTemplate = {
         return FOLDER + this.id + this.filetype;
     },
     build: function() {
-        let clone;
+        let clone = document.importNode(template_.content, true);
         var metadata = [];
+        /*
         switch (this.filetype) {
             case ".jpg":
                 clone = document.importNode(template_img.content, true);
@@ -132,6 +133,7 @@ const mediaTemplate = {
                 clone = document.importNode(template_vid.content, true);
                 break;
         };
+        */
         this.source = clone.querySelectorAll(".thumbnail")[0];
         var article = clone.querySelector("article");
         clone.querySelectorAll("button")[0].addEventListener("click", (event) => {
@@ -225,7 +227,7 @@ function tagBuilder(tag, to) {
     }
     var label = document.createElement("label");
     var dot = document.createElement("span");
-    dot.innerHTML = "•"
+    dot.innerHTML = "•";
     if (tag["color"] !== null && tag["color"] != "#FFFFFF") {
         if (tag["color"] == "type") {
             label.style.borderColor = tagsType.get(tag["type"])["color"];
@@ -238,6 +240,7 @@ function tagBuilder(tag, to) {
         label.style.borderColor = "#6495a5";
         dot.style.color = "#6495a5";
     }
+    label.style.order = tagsType.get(tag["type"])["order"];
     label.appendChild(dot)
     label.innerHTML += tag["name"];
     
@@ -349,7 +352,7 @@ async function page(step) {
                 continue;
             }
             get.build();
-            let check = await blobGuzzler(get, get["source"]);
+            let check = await blobGuzzler(get, get["source"], true);
             mediaDisplayed.push(tempID);
         }
         tick.value = currentPage;
@@ -359,20 +362,36 @@ async function page(step) {
 };
 
 
-async function blobGuzzler(obj, src) {
-    var blob = await fetch(obj["folder"] + obj["id"] + obj["filetype"], { cache: "no-store" })
+async function blobGuzzler(obj, src, getThumbnail) {
+    var file;
+    var isCached;
+    switch (getThumbnail) {
+        case false:
+            file = obj["folder"] + obj["id"] + obj["filetype"];
+            isCached = "no-store";
+            break;
+        case true:
+            file = obj["folder"] + "thumbnails/" + obj["id"] + ".jpg";
+            isCached = "no-store";
+            break;
+    }
+    var blob = await fetch(file, { cache: "no-cache" })
     .then(response => response.blob())
-    switch (obj["filetype"]) {
-        case ".jpg":
-            src.src = URL.createObjectURL(blob);
-            break;
-        case ".mp4":
-            var elm = document.createElement("source");
-            elm.src = URL.createObjectURL(blob);
-            src.appendChild(elm);
-            src.load();
-            src = elm;
-            break;
+    if (getThumbnail == true) {
+        src.src = URL.createObjectURL(blob);
+    } else {
+        switch (obj["filetype"]) {
+            case ".jpg":
+                src.src = URL.createObjectURL(blob);
+                break;
+            case ".mp4":
+                var elm = document.createElement("source");
+                elm.src = URL.createObjectURL(blob);
+                src.appendChild(elm);
+                src.load();
+                src = elm;
+                break;
+        }
     }
     return true;
 }
@@ -380,7 +399,7 @@ async function expand(event, id) {
     let get = mediaProcessedData[id];
     get.build_ex();
     let src = spyglass.querySelector(".expanded");
-    let check = await blobGuzzler(get, src);
+    let check = await blobGuzzler(get, src, false);
 };
 async function load() {
     let check = await page(0);
@@ -580,7 +599,7 @@ async function init_placeholder() {
         placeholderMedia["filetype"] = ".jpg";
         placeholderMedia.build_ex();
         let src = spyglass.querySelector(".expanded");
-        let check = await blobGuzzler(placeholderMedia, src);
+        let check = await blobGuzzler(placeholderMedia, src, false);
         return true;
     } catch (err) {
         console.error(err)
