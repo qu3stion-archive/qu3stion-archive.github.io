@@ -124,9 +124,9 @@ async function orientationApply() {
         case false:
             weirdRoot.style.setProperty("--tagsBar-width", "20%");
             archive  .style.gridTemplateColumns           = "40% 60%";
-            archive  .style.gridTemplateRows              = "auto";
-            archive  .style.marginLeft                    = "5%"
-            archive  .style.marginRight                   = "5%"
+            archive  .style.gridTemplateRows              = "100%";
+            archive  .style.marginLeft                    = "10%"
+            archive  .style.marginRight                   = "10%"
             explorer .style.gridTemplateColumns           = "25% 25% 25% 25%";
             searchBar.querySelector("nav").style.width    = "30%";
             searchBar.querySelector("span").style.display = "block";
@@ -134,7 +134,7 @@ async function orientationApply() {
             break;
         case true:
             weirdRoot.style.setProperty("--tagsBar-width", "100%");
-            archive  .style.gridTemplateColumns           = "auto";
+            archive  .style.gridTemplateColumns           = "100%";
             archive  .style.gridTemplateRows              = "auto auto";
             archive  .style.marginLeft                    = "1%"
             archive  .style.marginRight                   = "1%"
