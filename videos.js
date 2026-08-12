@@ -1,31 +1,28 @@
-const explorer = document.querySelector(".explorer");
-const spyglass = document.querySelector("#viewer");
-const message = document.querySelector("#status");
-// "eram" is my function testing dummy!!
-const placeholder_img = "media/0.jpg";
+const weirdRoot = document.querySelector(":root");
+const archive   = document.getElementById("archive");
+const gallery   = document.querySelector(".gallery");
+const explorer  = document.querySelector(".explorer");
+const spyglass  = document.querySelector("#viewer");
+const searchBar = document.querySelector(".search");
 
-var mediaCSVData = [];
-// Data parsed from the CSV.
-var mediaProcessedData = new Object();
-// Contains all media objects.
-var mediaProcessedArr = [];
-var mediaDisplayed = [];
-// IDs of all displayed medias.
-var mediaOrdered = [];
-// When searching, is filled with every media matching searched-for tag.
-// We break this up into pages with page(#).
-var searchingFor = [];
-// Array of tags we are searching for!
-var searchMode = "AND";
-// "OR" = 
-// "AND" = Media needs both tags
+const tagsBar           = document.getElementById("tagsBar");
+const overlay           = document.getElementById("overlay");
+const tagsButton        = document.querySelector("#buttons").querySelector("button");
 
-var mediaTotal = 851;
-let perPage = 20;
+const placeholder_img   = "media/0.jpg";
+
+var mediaCSVData        = []; // Data parsed from the CSV.
+var mediaProcessedData  = new Object(); // Contains all media objects.
+var mediaProcessedArr   = [];
+var mediaDisplayed      = []; // IDs of all displayed medias.
+var mediaOrdered        = []; // When searching, is filled with every media matching searched-for tag, we break this up into pages with page(#).
+var searchingFor        = []; // Array of tags we are searching for!
+var perPage             = undefined;
 var page_count;
 
 var currentPage = 1;
 
+let currentImageExpanded = undefined;
 const listCharacters = ["qu3stion", "qu3stion2", "3xclamation", "c0mma", "amp3rsand", "creator", "ivy", "peri0d"];
 
 let tagsType = new Map();
@@ -96,18 +93,75 @@ tagsDate.set("10", {name: "June '26",      class: "june26"     , type: "date", c
 tagsDate.set("11", {name: "July '26",      class: "july26"     , type: "date", color: "#FFFFFF", description: ""});
 tagsDate.set("12", {name: "August '26",    class: "august26"   , type: "date", color: "#FFFFFF", description: ""});
 
-const template_ = document.querySelector("#template_");
-const template_imgEX = document.querySelector("#template_imgEX");
-const template_vidEX = document.querySelector("#template_vidEX");
+/*
+MOBILE DETECTION BELOW THIS POINT!
+__________________________________
 
-let currentImageExpanded = undefined;
-// mediaTemplateEx object
-// when requesting an image to be viewed, we:
-// - call this object
-// - free it
-// - build a new mediaTemplate
-// - set currentImageExpanded to that new object
+*/
+var CSSvertical = undefined;
+async function orientationHandler() {
+    if (weirdRoot.clientWidth < weirdRoot.clientHeight) {
+        if (CSSvertical != true) {
+            CSSvertical = true;
+            orientationApply();
+        }
+    } else {
+        if (CSSvertical != false) {
+            CSSvertical = false;
+            orientationApply();
+        }
+    }
+}
+async function orientationApply() {
+    if (CSSvertical == undefined) {
+        var check = await orientationHandler();
+    }
+    var reload = false;
+    if (perPage != undefined) {
+        reload = true;
+    }
+    switch (CSSvertical) {
+        case false:
+            weirdRoot.style.setProperty("--tagsBar-width", "20%");
+            archive  .style.gridTemplateColumns           = "40% 60%";
+            archive  .style.gridTemplateRows              = "auto";
+            archive  .style.marginLeft                    = "5%"
+            archive  .style.marginRight                   = "5%"
+            explorer .style.gridTemplateColumns           = "25% 25% 25% 25%";
+            searchBar.querySelector("nav").style.width    = "30%";
+            searchBar.querySelector("span").style.display = "block";
+            perPage                                       = 16;
+            break;
+        case true:
+            weirdRoot.style.setProperty("--tagsBar-width", "100%");
+            archive  .style.gridTemplateColumns           = "auto";
+            archive  .style.gridTemplateRows              = "auto auto";
+            archive  .style.marginLeft                    = "1%"
+            archive  .style.marginRight                   = "1%"
+            explorer .style.gridTemplateColumns           = "50% 50%";
+            searchBar.querySelector("nav").style.width    = "100%";
+            searchBar.querySelector("span").style.display = "none";
+            perPage                                       = 6;
+            break;
+    }
+    return true;
+}
+window.onload = (event) => {
+    init_all(); 
+};
+window.onresize = (event) => {
+    orientationHandler();
+};
+async function init_all() {
+    var check = await orientationApply();
+    if (check) {
+        init_media();
+    }
+}
 
+const template_    = document.querySelector("#template_");
+const template_img = document.querySelector("#template_img");
+const template_vid = document.querySelector("#template_vid");
 
 const mediaTemplate = {
     id      : undefined,
@@ -136,9 +190,7 @@ const mediaTemplate = {
         */
         this.source = clone.querySelectorAll(".thumbnail")[0];
         var article = clone.querySelector("article");
-        clone.querySelectorAll("button")[0].addEventListener("click", (event) => {
-            expand(event, this.id);
-        });
+        clone.querySelectorAll("button")[0].addEventListener("click", (event) => {expand(event, this.id);});
         var tagsHolder = clone.querySelectorAll(".tags")[0];
         for (tag of this.tags) {
             tagBuilder(tag, tagsHolder);
@@ -177,15 +229,13 @@ const mediaTemplate = {
         var metadata = [];
         switch (this.filetype) {
             case ".jpg":
-                clone = document.importNode(template_imgEX.content, true);
-
+                clone = document.importNode(template_img.content, true);
                 break;
             case ".mp4":
-                clone = document.importNode(template_vidEX.content, true);
-
+                clone = document.importNode(template_vid.content, true);
                 break;
         };
-        this.source2 = clone.querySelector(".expanded");
+        this.source2   = clone.querySelector(".expanded");
         var tagsHolder = clone.querySelector(".tags");
         var noteHolder = clone.querySelector(".notes");
         for (tag of this.tags) {
@@ -231,10 +281,10 @@ function tagBuilder(tag, to) {
     if (tag["color"] !== null && tag["color"] != "#FFFFFF") {
         if (tag["color"] == "type") {
             label.style.borderColor = tagsType.get(tag["type"])["color"];
-            dot.style.color = tagsType.get(tag["type"])["color"];
+            dot.style.color         = tagsType.get(tag["type"])["color"];
         } else {
             label.style.borderColor = tag["color"];
-            dot.style.color = tag["color"];
+            dot.style.color         = tag["color"];
         }
     } else {
         label.style.borderColor = "#6495a5";
@@ -245,9 +295,9 @@ function tagBuilder(tag, to) {
     label.innerHTML += tag["name"];
     
     if (tag["class"] == "answ3r") {
-        label.id = "answ3r";
+        label.id            = "answ3r";
         label.style.display = "none";
-        label.style.color = "#00000020";
+        label.style.color   = "#00000020";
     }
 
     label.classList.add("tag")
@@ -258,7 +308,6 @@ function tagBuilder(tag, to) {
         return true;
     }
 }
-window.onload = init_media;
 async function init_media() {
     Papa.parse("media.csv", {
         header: true,
@@ -357,6 +406,10 @@ async function page(step) {
         }
         tick.value = currentPage;
         explorer.style.display = "grid";
+        var statuses = document.getElementsByClassName("status");
+        for (output of statuses) {
+            output.innerHTML = "Page " + currentPage+ "/" + page_count + " (" + mediaOrdered.length + "/" + mediaProcessedArr.length + " files in search)";
+        }
         return true;
     }
 };
@@ -368,11 +421,9 @@ async function blobGuzzler(obj, src, getThumbnail) {
     switch (getThumbnail) {
         case false:
             file = obj["folder"] + obj["id"] + obj["filetype"];
-            isCached = "no-store";
             break;
         case true:
             file = obj["folder"] + "thumbnails/" + obj["id"] + ".jpg";
-            isCached = "no-store";
             break;
     }
     var blob = await fetch(file, { cache: "no-cache" })
@@ -387,18 +438,18 @@ async function blobGuzzler(obj, src, getThumbnail) {
             case ".mp4":
                 var elm = document.createElement("source");
                 elm.src = URL.createObjectURL(blob);
-                src.appendChild(elm);
-                src.load();
-                src = elm;
+                src     .appendChild(elm);
+                src     .load();
+                src     = elm;
                 break;
         }
     }
     return true;
 }
 async function expand(event, id) {
-    let get = mediaProcessedData[id];
+    let get   = mediaProcessedData[id];
     get.build_ex();
-    let src = spyglass.querySelector(".expanded");
+    let src   = spyglass.querySelector(".expanded");
     let check = await blobGuzzler(get, src, false);
 };
 async function load() {
@@ -415,13 +466,17 @@ async function load() {
     })
     init_placeholder();
     tagsSearchBuilder();
+    orientationHandler();
 };
-const tagsBar = document.getElementById("tagsBar");
-const overlay = document.getElementById("overlay");
+
 tagsBar.style.display = "none";
 overlay.style.display = "none";
 var sidebar_state = false
+tagsBar.addEventListener("animationstart", (event) => {
+    tagsButton.disabled = true;
+});
 tagsBar.addEventListener("animationend", (event) => {
+    tagsButton.disabled = false;
     if (event.animationName == "slideOut") {
         tagsBar.style.display = "none";
         overlay.style.display = "none";
@@ -453,9 +508,9 @@ function sidebar() {
 function tagsSearchBuilder() {
     var to = tagsBar.querySelector(".tagsMenu");
     tagsType.forEach((value, key, map) => {
-        var newLabel = document.createElement("h2");
+        var newLabel       = document.createElement("h2");
         newLabel.innerHTML = value["name"];
-        var newCategory = document.createElement("div");
+        var newCategory    = document.createElement("div");
         newCategory.classList.add("tags");
         newCategory.classList.add(key);
         to.appendChild(newLabel);
@@ -513,14 +568,14 @@ function selectedTagCSS(elm, bool) {
     var color = getComputedStyle(elm).getPropertyValue("border-color");
     switch (bool) {
         case true:
-            elm.style.backgroundColor = color;
+            elm.style.backgroundColor         = color;
             elm.firstElementChild.style.color = "var(--light)";
-            elm.style.color = "var(--light)";
+            elm.style.color                   = "var(--light)";
             break;
         case false:
-            elm.style.color = "#000";
+            elm.style.color                   = "#000";
             elm.firstElementChild.style.color = color;
-            elm.style.backgroundColor = "transparent";
+            elm.style.backgroundColor         = "transparent";
             break;
     }
 }
@@ -549,7 +604,7 @@ async function search() {
         page(0);
         return false;
     } else if (searchingFor.length >= 8) {
-        well()
+        well();
     }
     var validArr = [...mediaProcessedArr];
     for (tag of searchingFor) {
@@ -594,15 +649,15 @@ async function reset() {
 };
 async function init_placeholder() {
     try {
-        let placeholderMedia = Object.create(mediaTemplate);
-        placeholderMedia["id"] = "0";
+        let placeholderMedia         = Object.create(mediaTemplate);
+        placeholderMedia["id"]       = "0";
         placeholderMedia["filetype"] = ".jpg";
         placeholderMedia.build_ex();
-        let src = spyglass.querySelector(".expanded");
-        let check = await blobGuzzler(placeholderMedia, src, false);
+        let src                      = spyglass.querySelector(".expanded");
+        let check                    = await blobGuzzler(placeholderMedia, src, false);
         return true;
     } catch (err) {
-        console.error(err)
+        console.error(err);
         return false;
     }
 }

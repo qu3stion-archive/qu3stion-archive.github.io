@@ -9,7 +9,7 @@
         <script src="papaparse.min.js"></script>
     </head>
     <body onload="load()" id="top">
-        <!-- TEMPLATE 1: thumbnail -->
+        <!-- TEMPLATE 1: Thumbnails -->
         <template id="template_">
             <article>
                 <div class="src">
@@ -22,15 +22,15 @@
             </article>
         </template>
 
-        <!-- TEMPLATE 2: expanded image -->
-        <template id="template_imgEX">
+        <!-- TEMPLATE 2: Image -->
+        <template id="template_img">
             <img class="expanded" loading="eager" preload="none">
             <div class="tags"></div>
             <textarea class="notes" readonly></textarea>
         </template>
 
-        <!-- TEMPLATE 3: expanded video -->
-        <template id="template_vidEX">
+        <!-- TEMPLATE 3: Video -->
+        <template id="template_vid">
             <video class="expanded" controls loading="eager" autoplay muted loop preload="none"></video>
             <div class="tags"></div>
             <textarea class="notes" readonly></textarea>
@@ -39,15 +39,14 @@
         <!-- Top button -->
          <div id="overlay" class="out"></div>
         <div class="universal">
-            <p id="status"></p>
             <div id="archive">
                 <main>
                     <div id="viewer">
                     </div>
                 </main>
                 <nav class="gallery">
-                    <div class="search">
-                        <div id="page_buttons">
+                    <section class="search">
+                        <nav>
                             <select id="step">
                                 <option value=1 selected>+1</option>
                                 <option value=5>+5</option>
@@ -58,12 +57,9 @@
                             <button id="back" onclick="pagecrawl(-1)">&lt;&lt;</button>
                             <input id="page_counter">
                             <button id="top" onclick="pagecrawl(1)">&gt;&gt;</button>
-                        </div>
-                        <div>
-                            
-                        </div>
-                    </div>
-
+                        </nav>
+                        <span class="status"></span>
+                    </section>
                     <section class="explorer">
                     </section>
                 </nav>
@@ -74,7 +70,10 @@
                 <h1>Tags</h1>
             </div>
         </div>
-        <div class="to-top">
+        <div class="notification">
+            <label id="statusAlt" class="status"></label>
+        </div>
+        <div id="buttons" class="to-top">
             <a class="to-top" href="#top">
                 <img src="https://www.svgrepo.com/show/506650/chevron-top.svg" alt="^">
             </a>

@@ -5,6 +5,7 @@
 
 :root {
     --light: #eef5fa;
+    --tagsBar-width : 20%;
 }
 
 body {
@@ -20,16 +21,16 @@ body {
 #archive {
     display: grid;
     grid-template-columns: 40% 60%;
-    max-width: 80%;
-    margin-left: 10%;
+    width: auto;
     margin-top: 1%;
-    padding: 1vh;
+    margin-left: 5%;
+    margin-right: 5%;
     gap: 1vh;
 }
 main {
-    height: 75%;
+    height: auto;
 }
-nav, main {
+.gallery, main {
     background-color: rgb(255, 255, 255);
     box-sizing: border-box;
     padding: 2%;
@@ -39,7 +40,12 @@ nav, main {
     border-color: #c8d8e4;
     align-items: anchor-center;
 }
-section {
+.gallery {
+    display: grid;
+    grid-template-rows: 5% auto;
+    height: 1000px;
+}
+.explorer {
     display: grid;
     grid-template-columns: 25% 25% 25% 25%;
     height: 100%;
@@ -58,7 +64,10 @@ article {
     border-color: #c8d8e4;
     border-radius: 5%;
     background-color: white;
-    padding: 8px;
+    padding: 12px;
+}
+#status {
+    vertical-align: center;
 }
 img, video {
     width: 100%;
@@ -79,27 +88,31 @@ article button {
     width: 100%;
     justify-content: space-between;
     background-color: var(--light);
-    padding: 4px;
+    padding: 8px;
     border-radius: 10px;
+    align-items: center;
+    height: 100%;
     box-sizing: border-box;
 }
-#page_buttons {
+.search > nav {
     display: grid;
-    grid-template-columns: 30% 20% 10% 20% 20%;
+    grid-template-columns: 20% 10% auto 10%;
     gap: 4px;
-    width: 200px;
-    padding: 8px;
+    height: 100%;
+    box-sizing: border-box;
 }
 #tag_searching {
     display: grid;
     padding: 8px;
 }
-.search select, .search button {
+.search select, .search button, .search input {
     border: 2px solid;
     border-color: rgb(100, 149, 165);
     border-radius: 10px;
     background-color: #FFF;
-    height: 30px;
+    box-sizing: border-box;
+    padding: 4px;
+    font-size: clamp(50%, 14px, 100%);
 }
 .src {
     display: grid;
@@ -107,7 +120,7 @@ article button {
 }
 .div_id {
     text-align: right;
-    font-size: clamp(50%, 14px, 100%)
+    font-size: clamp(50%, 16px, 100%)
 }
 .tags {
     display: flex;
@@ -142,7 +155,7 @@ article button {
     color: #000;
     background-color: transparent;
     border: 1.5px solid;
-    max-height: 14px;
+    max-height: 20px;
     border-color: rgb(100, 149, 165);
     border-radius: 999px;
     vertical-align: center;
@@ -159,7 +172,7 @@ article button {
     top: 0px;
     right: 0px;
     height: 100%;
-    width: 20%;
+    width: var(--tagsBar-width);
     background-color: white;
     padding: 20px;
     box-sizing: border-box;
@@ -170,12 +183,12 @@ article button {
 
 .sidebar.in {
     animation-name: slideIn;
-    animation-duration: 0.6s;
+    animation-duration: 0.5s;
     display: block;
 }
 .sidebar.out {
     animation-name: slideOut;
-    animation-duration: 0.6s;
+    animation-duration: 0.5s;
 }
 
 .sidebar > h1 {
@@ -200,11 +213,6 @@ article button {
     margin-block-start: 10px;
     margin-block-end: 4px;
 }
-.gallery {
-    display: flex;
-    flex-direction: column;
-    height: 1000px;
-}
 
 html {
 	scroll-behavior: smooth;
@@ -220,6 +228,23 @@ div.to-top {
     flex-direction: column-reverse;
     row-gap: 4px;
 }
+div.notification {
+    position: fixed;
+	bottom: 20px;
+	left: 10px;
+    display: flex;
+    flex-direction: column-reverse;
+    row-gap: 4px;
+}
+.notification > label {
+    font-size: 16px;
+    padding: 10px;
+    border-radius: 10px;
+    background-color: #FFF;
+    border: 2px solid #b5cedf;
+    pointer-events: none;
+    box-sizing: border-box;
+}
 .to-top > button {
     all: unset;
 }
@@ -227,8 +252,8 @@ a.to-top, button.to-top {
 	display: flex;
 	justify-content: center;
 	align-items: center;
-	height: 35px;
-	width: 35px;
+	height: 50px;
+	width: 50px;
 	background: white;
 	border: 2px solid #b5cedf;
 	cursor: pointer;
@@ -269,12 +294,12 @@ a.to-top, button.to-top {
 }
 #overlay.in {
     animation-name: fadeIn;
-    animation-duration: 0.6s;
+    animation-duration: 0.5s;
     display: none;
 }
 #overlay.out {
     animation-name: fadeOut;
-    animation-duration: 0.6s;
+    animation-duration: 0.5s;
 }
 textarea {
     border: #c8d8e4 1.5px solid;
@@ -285,7 +310,7 @@ textarea {
 }
 @keyframes slideIn {
     from {
-        right: -20%;
+        right: calc(-1 * var(--tagsBar-width));
     }
     to {
         right: 0px;
@@ -296,7 +321,7 @@ textarea {
         right: 0px;
     }
     to {
-        right: -20%;
+        right: calc(-1 * var(--tagsBar-width));
     }
 }
 @keyframes fadeIn {
