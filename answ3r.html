@@ -6,9 +6,14 @@
         <title>.</title>
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
         <style>
+            @font-face {
+                font-family: "pixel";
+                src: url("assets/fonts/pixel_operator.ttf") format("truetype");
+            }
             body {
                 background-color: black;
-                font-family: sans-serif;
+                font-family: "pixel", sans-serif;
+                font-weight: bold;
                 align-items: center;
                 margin: 0;
             }
@@ -31,7 +36,7 @@
                 height: 10px;
             }
             #dialog {
-                font-size: 18px;
+                font-size: 24px;
             }
             button.interact {
                 all: unset;
@@ -39,18 +44,18 @@
             button.interact:hover {
                 color: yellow;
             }
-            div.choice {
+            #choice {
                 display: flex;
                 flex-direction: row;
                 justify-content: center;
                 height: 10px;
                 gap: 50px;
-                margin-block: 18px;
+                margin-block: 24px;
             }
             a {
                 all: unset;
                 color: white;
-                font-size: 18px;
+                font-size: 24px;
             }
             a:hover {
                 color: yellow;
@@ -58,18 +63,52 @@
         </style>
     </head>
     <body>
-        <audio autoplay loop style="display: none;"><source src="assets/answ3r.ogg" type="audio/ogg"></audio>
-            <div id="man"><div id="well">
-                <button class="interact" onclick="play()"><img src="assets/answ3r.gif"></button>
-                    <p id="dialog" style="color: white; position: relative; top: 0px; left: 0px;"></p>
-            </div></div>
+        <audio id="audio" loop style="display: none;"><source src="assets/other/answ3r.ogg" type="audio/ogg"></audio>
+        <div id="man">
+            <div id="well">
+                <button class="interact" onclick="play()"><img src="assets/other/answ3r.gif"></button>
+                <p id="dialog" style="color: white; position: relative; top: 0px; left: 0px;"></p>
+                <div id="choice"></div>
+            </div>
+        </div>
     </body>
     <script>
         var playing = false;
         document.documentElement.requestFullscreen();
-        const cont = document.getElementById("well");
+        const cont   = document.getElementById("well");
         const dialog = document.getElementById("dialog");
-        var text = ["Well, there is a computerling here.", "She offers you something."]
+        const choice = document.getElementById("choice");
+        const audio = document.getElementById("audio");
+        const snd_text = new Audio("assets/text.wav");
+        audio.play();
+        var text = [
+            "Well, there is a computerling here.",
+            "She seems happy to see you.",
+            "She offers you something.",
+            [
+                {
+                    text: "Yes",
+                    type: "a",
+                    link: "assets/other/egg.png",
+                    download: "egg",
+                    delay: 3000,
+                    do: function() {
+                        setTimeout(() => {
+                            window.location.replace(this.link);
+                        }, this.delay)
+                    },
+                },
+                {
+                    text: "No",
+                    type: "a",
+                    link: "index.html",
+                    delay: 3000,
+                    do: function() {
+                        window.location.replace(this.link)
+                    },
+                }
+            ]
+        ]
 
         function delay(ms) {
             return new Promise((resolve, reject) => {
@@ -78,63 +117,67 @@
                 }, ms)
             })
         }
-
+        dialog.style.display = "none";
+        choice.style.display = "flex";
         async function play() {
             if (playing == false) {
                 playing = true;
                 for (line of text) {
                     var interval;
                     dialog.innerHTML = "";
-                    for (letter of line) {
-                        dialog.innerHTML += letter;
-                        var ms;
-                        switch (letter) {
-                            case ",":
-                                ms = 250;
-                                break;
-                            case " ":
-                                ms = 0;
-                                break;
-                            default:
-                                ms = 50;
-                                break;
-                        }
-                        var check = await delay(ms)
+                    var type = typeof line;
+                    switch (type) {
+                        case "string":
+                            dialog.style.display = "block";
+                            choice.style.display = "none";
+                            for (letter of line) {
+                                dialog.innerHTML += letter;
+                                var ms;
+                                switch (letter) {
+                                    case ",":
+                                        ms = 250;
+                                        break;
+                                    case " ":
+                                        ms = 0;
+                                        break;
+                                    default:
+                                        ms = 50;
+                                        break;
+                                }
+                                snd_text.play();
+                                var check = await delay(ms)
+                            }
+                            break;
+                        case "object":
+                            dialog.style.display = "none";
+                            choice.style.display = "flex";
+                            for (option of line) {
+                                var elm = document.createElement(option.type);
+                                if (option.download) {
+                                    elm.href = option.link;
+                                    elm.download = option.download;
+                                }
+                                elm.addEventListener("click", (event) => {
+                                    setTimeout(() => {
+                                        window.location.replace("index.html");
+                                    }, 3000)
+                                });
+                                
+                                elm.innerHTML = option.text;
+                                choice.appendChild(elm)
+                            }
+                            var check = await delay(option.delay);
+                            break;
                     }
+                    
                     var check2 = await delay(3000);
                 }
-                console.log("yay!")
-                cont.removeChild(dialog);
-                var choice = ["Yes", "No"];
-                var box = document.createElement("div");
-                box.classList.add("choice");
-                box.id = "choice1"
-                for (option of choice) {
-                    var link = document.createElement("a")
-                    link.innerHTML = option;
-                    switch (option) {
-                        case "Yes":
-                            link.href = "assets/egg.png"
-                            link.download = "egg";
-                            link.addEventListener("click", (event) => {
-                                cont.removeChild(document.getElementById("choice1"));
-                                setTimeout(() => {
-                                    window.location.replace("index.html");
-                                }, 3000)
-                            });
-                            break;
-                        case "No":
-                            link.addEventListener("click", () => {
-                                window.location.replace("index.html");
-                            });
-                            break;
-                    }
-                    box.appendChild(link);
-                }
-                cont.appendChild(box);
             } else {
                 return false;
             }
         }
+        setTimeout(() => {
+            play()
+        }, 10000)
     </script>
 </html>

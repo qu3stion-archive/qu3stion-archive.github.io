@@ -73,12 +73,86 @@ img.thumbnail:hover, video.thumbnail:hover{
     transform: scale(1.07);
     transition-duration: 0.2s;
 }
+article button:focus {
+    transform: scale(1.07);
+    transition-duration: 0.2s;
+}
 article button {
     all: unset;
 }
 .shown {
     display: block;
 }
+.screen {
+    position: fixed;
+    top: 0px;
+    left: 0px;
+    width: 100%;
+    height: 100%;
+    padding: 10%;
+    padding-top: 5%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    box-sizing: border-box;
+}
+.infobox {
+    background-color: #fff;
+    height: 100%;
+    width: 100%;
+    padding: 8px;
+    display: grid;
+    grid-template-columns: 20% auto;
+}
+.info {
+    width: auto;
+}
+.drone {
+    background-color: #c8d8e4;
+    display: grid;
+    grid-template-columns: auto;
+    grid-template-rows: 1fr auto;
+    width: auto;
+    height: 100%;
+    border-radius: 10px;
+}
+.drone > div {
+    padding: 16px;
+}
+.drone > div > h1 {
+    margin: 0;
+    font-size: 20px;
+}
+.drone > figure {
+    position: relative;
+    top: 0;
+    right: 0;
+    margin: 0;
+}
+.drone > figure > img {
+    transform: scale(-1, 1);
+}
+/*
+.drone > figure > div {
+    position: absolute;
+    top: 15%;
+    right: -60%;
+    max-width: 100%;
+    height: auto;
+    max-height: 30%;
+    padding: 4px;
+    background-color: #fff;
+    border: rgb(100, 149, 165) 2px solid;
+    background-image: url("assets/egg.png");
+    background-repeat: no-repeat;
+    background-size: cover;
+
+}
+.drone > figure > div > p {
+    font-size: 1.5vh;
+}
+*/
 .search {
     display: flex;
     flex-direction: row;
@@ -95,7 +169,7 @@ article button {
     display: grid;
     grid-template-columns: 20% 10% auto 10%;
     gap: 4px;
-    height: 100%;
+    height: auto;
     box-sizing: border-box;
 }
 #tag_searching {
@@ -298,6 +372,14 @@ a.to-top, button.to-top {
     display: none;
 }
 #overlay.out {
+    animation-name: fadeOut;
+    animation-duration: 0.5s;
+}
+#infoBox.in {
+    animation-name: fadeIn;
+    animation-duration: 0.5s;
+}
+#infoBox.out {
     animation-name: fadeOut;
     animation-duration: 0.5s;
 }

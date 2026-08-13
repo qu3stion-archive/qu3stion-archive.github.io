@@ -6,8 +6,10 @@ const spyglass  = document.querySelector("#viewer");
 const searchBar = document.querySelector(".search");
 
 const tagsBar           = document.getElementById("tagsBar");
+const infoBox           = document.getElementById("infoBox");
 const overlay           = document.getElementById("overlay");
-const tagsButton        = document.querySelector("#buttons").querySelector("button");
+const tagsButton        = document.getElementById("tagsButton")
+const infoButton        = document.getElementById("infoButton")
 
 const placeholder_img   = "media/0.jpg";
 
@@ -350,6 +352,22 @@ async function init_media() {
         }
     })
 }
+async function load() {
+    let check = await page(0);
+    console.log("loaded!")
+    window.addEventListener("keypress", (event) => {
+        if (event.key == "Enter") {
+            var currentPageRequested = tick.value;
+            if (currentPageRequested != currentPage) {
+                var dist = currentPageRequested - currentPage;
+                page(dist);
+            }
+        }
+    })
+    init_placeholder();
+    tagsSearchBuilder();
+    orientationHandler();
+};
 
 const tick = document.getElementById("page_counter");
 
@@ -452,56 +470,66 @@ async function expand(event, id) {
     let src   = spyglass.querySelector(".expanded");
     let check = await blobGuzzler(get, src, false);
 };
-async function load() {
-    let check = await page(0);
-    console.log("loaded!")
-    window.addEventListener("keypress", (event) => {
-        if (event.key == "Enter") {
-            var currentPageRequested = tick.value;
-            if (currentPageRequested != currentPage) {
-                var dist = currentPageRequested - currentPage;
-                page(dist);
-            }
-        }
-    })
-    init_placeholder();
-    tagsSearchBuilder();
-    orientationHandler();
-};
 
 tagsBar.style.display = "none";
+infoBox.style.display = "none";
 overlay.style.display = "none";
-var sidebar_state = false
+var sidebar_state = false;
+var infobox_state = false;
 tagsBar.addEventListener("animationstart", (event) => {
     tagsButton.disabled = true;
+    infoButton.disabled = true;
 });
 tagsBar.addEventListener("animationend", (event) => {
     tagsButton.disabled = false;
     if (event.animationName == "slideOut") {
         tagsBar.style.display = "none";
         overlay.style.display = "none";
-        // it's a little finicky, but
-        // when specifically the animation for the sidebar sliding out ends,
-        // we hide the tags bar too.
+        infoButton.disabled = false;
     }
 });
-function sidebar() {
-    switch (sidebar_state) {
+
+infoBox.addEventListener("animationstart", (event) => {
+    tagsButton.disabled = true;
+    infoButton.disabled = true;
+});
+infoBox.addEventListener("animationend", (event) => {
+    infoButton.disabled = false;
+    if (event.animationName == "fadeOut") {
+        infoBox.style.display = "none";
+        overlay.style.display = "none";
+        tagsButton.disabled = false;
+    }
+});
+function appear(menuID) {
+    var menu = document.getElementById(menuID);
+    var state = window.getComputedStyle(menu).display;
+    var display;
+    switch (menuID) {
+        case "tagsBar":
+            display = "block";
+            break;
+        case "infoBox":
+            display = "flex";
+            break;
+    }
+    switch (state == display) {
         case true:
-            tagsBar.classList.remove("in");
-            tagsBar.classList.add("out");
+            menu.classList.remove("in");
+            menu.classList.add("out");
             overlay.classList.remove("in");
             overlay.classList.add("out");
-            sidebar_state = false;
+            state = false;
             break;
         case false:
-            tagsBar.style.display = "block";
+            menu.style.display = display;
             overlay.style.display = "block";
-            tagsBar.classList.remove("out");
-            tagsBar.classList.add("in");
+
+            menu.classList.remove("out");
+            menu.classList.add("in");
             overlay.classList.remove("out");
             overlay.classList.add("in");
-            sidebar_state = true;
+            state = true;
             break;
     }
 };
@@ -661,3 +689,6 @@ async function init_placeholder() {
         return false;
     }
 }
+/*
+CODING BY: QNAWAVE & DRONE #4 !!!!!!!!
+*/
