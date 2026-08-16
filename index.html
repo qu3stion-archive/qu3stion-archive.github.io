@@ -5,6 +5,9 @@
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <title>Qu3stion Archive</title>
         <link href="style.css" rel="stylesheet" type="text/css" media="all">
+        <link rel="icon" href="assets/logos/logo.ico">
+        <link rel="icon" type="image/jpg" sizes="32x32" href="assets/logos/logo_32x32.jpg">
+        <link rel="icon" type="image/jpg" sizes="16x16" href="assets/logos/logo_16x16.jpg">
         <script src="papaparse.min.js"></script>
     </head>
     <body onload="load()" id="top">
@@ -12,39 +15,50 @@
         <template id="template_">
             <article>
                 <div class="src">
-                    <button><img loading="lazy" class="thumbnail" preload="none"></button>
+                    <button><img src="assets/blank.gif" class="thumbnail" loading="eager" preload="none"></button>
                     <label class="div_id"></label>
                 </div>
-                <div class="tags">
-                    
-                </div>
+                <div class="tags"></div>
             </article>
         </template>
 
         <!-- TEMPLATE 2: Image -->
         <template id="template_img">
-            <img class="expanded" loading="eager" preload="none">
+            <img src="assets/blank.gif" class="expanded" loading="eager" preload="none">
             <div class="tags"></div>
             <textarea class="notes" readonly disabled></textarea>
         </template>
 
         <!-- TEMPLATE 3: Video -->
         <template id="template_vid">
-            <video class="expanded" controls loading="eager" autoplay muted loop preload="none"></video>
+            <video class="expanded" controls loading="eager" autoplay muted loop preload="none">
+                <source src="assets/blank.gif">
+            </video>
             <div class="tags"></div>
             <textarea class="notes" readonly disabled></textarea>
         </template>
 
         <!-- Top button -->
-         <div id="overlay" class="out"></div>
-        <div class="universal">
-            <div id="archive">
-                <main>
+        <div id="overlay" class="out"></div>
+        <div class="banner"></div>
+        <div id="universal">
+            <header>
+                <section class="title panel">
+                    <img src="assets/logos/logo.jpg"><label>Qu3stion Archive | v0.1 circa August 2026| QNA & Drone #4</label>
+                </section>
+            </header>
+            <main>
+                <section class="details panel">
+                    <div class="search2 bar">
+                        <button id="backwards2" onclick="pageViewer(-1)">&lt;&lt;</button>
+                        <input id="viewCounter">
+                        <button id="forwards2" onclick="pageViewer(1)">&gt;&gt;</button>
+                    </div>
                     <div id="viewer">
                     </div>
-                </main>
-                <nav class="gallery">
-                    <section class="search">
+                </section>
+                <section class="gallery panel">
+                    <section class="search bar">
                         <nav>
                             <select id="step" tabindex="1">
                                 <option value=1 selected>+1</option>
@@ -54,16 +68,16 @@
                                 <option value=50>+50</option>
                                 <option value=1000>End</option>
                             </select>
-                            <button id="back" tabindex="1" onclick="pagecrawl(-1)">&lt;&lt;</button>
-                            <input id="page_counter" tabindex="1">
-                            <button id="top" tabindex="1" onclick="pagecrawl(1)">&gt;&gt;</button>
+                            <button id="backwards" tabindex="1" onclick="pageTick(-1)">&lt;&lt;</button>
+                            <input id="pageCounter" tabindex="1">
+                            <button id="forwards" tabindex="1" onclick="pageTick(1)">&gt;&gt;</button>
                         </nav>
                         <span class="status"></span>
                     </section>
                     <section class="explorer">
                     </section>
-                </nav>
-            </div>
+                </section>
+            </main>
         </div>
         <div id="tagsBar" class="sidebar out">
             <div class="tagsMenu">
@@ -75,16 +89,20 @@
         </div>
         <div class="screen" id="infoBox">
             <section class="infobox">
-                <div class="drone">
+                <div class="droneContainmentCell">
                     <div>
                         <h1>Got Qu(e)stions?</h1>
-                        <p>We have answ(e)rs! In the form of a form! Report all your...</p>
+                        <p>We have answ(e)rs!<br>This archive comes with <b>a feedback form!</b></p>
+                        <p>Send all of your...
                         <ul>
                             <li>Bug reports</li>
                             <li>Qu(e)stions</li>
                             <li>Comments</li>
                             <li>Suggestions</li>
                         </ul>
+                        </p>
+                        <p>I will respond to as many as them as I can on my Twitter account!</p>
+                        <a href="https://forms.gle/ehuYV8dXh23B2arw5">Link to Feedback Form!</a>
                     </div>
                     <figure>
                         <img src="assets/drone4.png">
@@ -98,10 +116,10 @@
             </section>
         </div>
         <div id="buttons" class="to-top">
-            <button id="infoButton" class="to-top" tabindex="0" onclick="appear('infoBox')">
+            <button id="infoButton" class="to-top" tabindex="0" onclick="showHide('infoBox')">
                 <img src="https://www.svgrepo.com/show/513832/info-circle.svg" alt="Info">
             </button>
-            <button id="tagsButton" class="to-top" tabindex="0" onclick="appear('tagsBar')">
+            <button id="tagsButton" class="to-top" tabindex="0" onclick="showHide('tagsBar')">
                 <img src="https://www.svgrepo.com/show/509711/align-justify.svg" alt="Search by Tags">
             </button>
             <a class="to-top" href="#top" tabindex="0">
@@ -109,5 +127,5 @@
             </a>
         </div>
     </body>
-    <script src="videos.js"></script>
+    <script src="archive.js"></script>
 </html>

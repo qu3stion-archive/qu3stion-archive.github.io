@@ -1,30 +1,31 @@
 const weirdRoot = document.querySelector(":root");
-const archive   = document.getElementById("archive");
+const universal = document.getElementById("universal")
+const archive   = document.querySelector("main");
 const gallery   = document.querySelector(".gallery");
 const explorer  = document.querySelector(".explorer");
-const spyglass  = document.querySelector("#viewer");
-const searchBar = document.querySelector(".search");
+const viewer    = document.querySelector("#viewer");
+const searchBar = gallery.querySelector(".search");
+const scrubBar  = viewer.querySelector(".search");
 
 const tagsBar           = document.getElementById("tagsBar");
 const infoBox           = document.getElementById("infoBox");
 const overlay           = document.getElementById("overlay");
-const tagsButton        = document.getElementById("tagsButton")
-const infoButton        = document.getElementById("infoButton")
 
 const placeholder_img   = "media/0.jpg";
 
 var mediaCSVData        = []; // Data parsed from the CSV.
 var mediaProcessedData  = new Object(); // Contains all media objects.
-var mediaProcessedArr   = [];
+var mediaProcessedArr   = []; // Only exists because it's easier to iterate.
 var mediaDisplayed      = []; // IDs of all displayed medias.
 var mediaOrdered        = []; // When searching, is filled with every media matching searched-for tag, we break this up into pages with page(#).
 var searchingFor        = []; // Array of tags we are searching for!
 var perPage             = undefined;
-var page_count;
+var pageCount;
 
 var currentPage = 1;
+var currentImageExpanded = undefined;
+var activeMenu;
 
-let currentImageExpanded = undefined;
 const listCharacters = ["qu3stion", "qu3stion2", "3xclamation", "c0mma", "amp3rsand", "creator", "ivy", "peri0d"];
 
 let tagsType = new Map();
@@ -96,7 +97,7 @@ tagsDate.set("11", {name: "July '26",      class: "july26"     , type: "date", c
 tagsDate.set("12", {name: "August '26",    class: "august26"   , type: "date", color: "#FFFFFF", description: ""});
 
 /*
-MOBILE DETECTION BELOW THIS POINT!
+MOBILE DETECTION!
 __________________________________
 
 */
@@ -125,23 +126,23 @@ async function orientationApply() {
     switch (CSSvertical) {
         case false:
             weirdRoot.style.setProperty("--tagsBar-width", "20%");
-            archive  .style.gridTemplateColumns           = "40% 60%";
+            archive  .style.gridTemplateColumns           = "2fr 3fr";
             archive  .style.gridTemplateRows              = "100%";
-            archive  .style.marginLeft                    = "10%"
-            archive  .style.marginRight                   = "10%"
-            explorer .style.gridTemplateColumns           = "25% 25% 25% 25%";
-            searchBar.querySelector("nav").style.width    = "30%";
+            universal.style.marginLeft                    = "10%";
+            universal.style.marginRight                   = "10%";
+            explorer .style.gridTemplateColumns           = "1fr 1fr 1fr 1fr";
+            searchBar.style.gridTemplateColumns           = "40% auto";
             searchBar.querySelector("span").style.display = "block";
             perPage                                       = 16;
             break;
         case true:
             weirdRoot.style.setProperty("--tagsBar-width", "100%");
-            archive  .style.gridTemplateColumns           = "100%";
+            archive  .style.gridTemplateColumns           = "1fr";
             archive  .style.gridTemplateRows              = "auto auto";
-            archive  .style.marginLeft                    = "1%"
-            archive  .style.marginRight                   = "1%"
-            explorer .style.gridTemplateColumns           = "50% 50%";
-            searchBar.querySelector("nav").style.width    = "100%";
+            universal.style.marginLeft                    = "1%";
+            universal.style.marginRight                   = "1%";
+            explorer .style.gridTemplateColumns           = "1fr 1fr";
+            searchBar.style.gridTemplateColumns           = "100% auto";
             searchBar.querySelector("span").style.display = "none";
             perPage                                       = 6;
             break;
@@ -161,6 +162,11 @@ async function init_all() {
     }
 }
 
+/*
+THE ACTUALL STUFF!!
+__________________________________
+
+*/
 const template_    = document.querySelector("#template_");
 const template_img = document.querySelector("#template_img");
 const template_vid = document.querySelector("#template_vid");
@@ -180,16 +186,6 @@ const mediaTemplate = {
     build: function() {
         let clone = document.importNode(template_.content, true);
         var metadata = [];
-        /*
-        switch (this.filetype) {
-            case ".jpg":
-                clone = document.importNode(template_img.content, true);
-                break;
-            case ".mp4":
-                clone = document.importNode(template_vid.content, true);
-                break;
-        };
-        */
         this.source = clone.querySelectorAll(".thumbnail")[0];
         var article = clone.querySelector("article");
         clone.querySelectorAll("button")[0].addEventListener("click", (event) => {expand(event, this.id);});
@@ -222,10 +218,10 @@ const mediaTemplate = {
             case undefined:
                 break;
             default:
-                URL.revokeObjectURL(spyglass.querySelector(".expanded").src);
-                spyglass.querySelector(".expanded").src = null;
-                spyglass.innerHTML = null;
-                spyglass.innerHTML = "";
+                URL.revokeObjectURL(viewer.querySelector(".expanded").src);
+                viewer.querySelector(".expanded").src = null;
+                viewer.innerHTML = null;
+                viewer.innerHTML = "";
         }
         let clone;
         var metadata = [];
@@ -247,7 +243,7 @@ const mediaTemplate = {
             noteHolder.innerHTML = this.note;
         }
 
-        spyglass.appendChild(clone);
+        viewer.appendChild(clone);
         currentImageExpanded = this.id;
     }
 }
@@ -352,15 +348,30 @@ async function init_media() {
         }
     })
 }
+// I know dot notation is the more "correct" way to write it,
+// but brackets are easier on my eyes
+// (brackets properties are orange in my code viewer since they're string,
+// while the var is blue, while dot properties are all blue).
 async function load() {
     let check = await page(0);
-    console.log("loaded!")
     window.addEventListener("keypress", (event) => {
         if (event.key == "Enter") {
-            var currentPageRequested = tick.value;
-            if (currentPageRequested != currentPage) {
-                var dist = currentPageRequested - currentPage;
-                page(dist);
+            switch (document.activeElement.id) {
+                case "pageCounter":
+                    var currentPageRequested = tick.value;
+                    if (currentPageRequested != currentPage) {
+                        var dist = currentPageRequested - currentPage;
+                        page(dist);
+                    }
+                    break;
+                case "viewCounter":
+                    var mediaExpandedRequested = tick2.value;
+                    if (mediaExpandedRequested != currentPage) {
+                        expand(null, mediaExpandedRequested);
+                    }
+                    break;
+                default:
+                    return;
             }
         }
     })
@@ -369,20 +380,21 @@ async function load() {
     orientationHandler();
 };
 
-const tick = document.getElementById("page_counter");
+const tick = document.getElementById("pageCounter");
+const tick2 = document.getElementById("viewCounter")
 
 var ordered;
-var page_count;
+var pageCount;
 
-function pagecrawl(s) {
+function pageTick(direction) {
     var mod = document.getElementById("step").value;
-    var step = s * mod;
-    page(step)
+    var step = direction * mod;
+    page(step);
 }
 async function page(step) {
     explorer.style.display = "none";
-    if (currentPage + step > page_count) {
-        currentPage = page_count;
+    if (currentPage + step > pageCount) {
+        currentPage = pageCount;
     } else if (currentPage + step < 1) {
         currentPage = 1;
     } else {
@@ -397,16 +409,16 @@ async function page(step) {
         } else {
             ordered = true;
         }
-        page_count = Math.ceil(mediaOrdered.length / perPage);
+        pageCount = Math.ceil(mediaOrdered.length / perPage);
         let r = [((currentPage * perPage) - perPage) + 1, (currentPage * perPage)];
-        document.getElementById("back").disabled = false;
-        document.getElementById("top").disabled = false;
+        document.getElementById("backwards").disabled = false;
+        document.getElementById("forwards").disabled = false; // i don't know why i named this button "top" at first...
         switch (currentPage) {
             case 1:
-                document.getElementById("back").disabled = true;
+                document.getElementById("backwards").disabled = true;
                 break;
-            case page_count:
-                document.getElementById("top").disabled = true;
+            case pageCount:
+                document.getElementById("forwards").disabled = true;
                 break;
         }
         for (x = r[0]; x <= r[1]; x++) {
@@ -426,7 +438,7 @@ async function page(step) {
         explorer.style.display = "grid";
         var statuses = document.getElementsByClassName("status");
         for (output of statuses) {
-            output.innerHTML = "Page " + currentPage+ "/" + page_count + " (" + mediaOrdered.length + "/" + mediaProcessedArr.length + " files in search)";
+            output.innerHTML = "Page " + currentPage+ "/" + pageCount + " (" + mediaOrdered.length + "/" + mediaProcessedArr.length + " files in search)";
         }
         return true;
     }
@@ -467,69 +479,124 @@ async function blobGuzzler(obj, src, getThumbnail) {
 async function expand(event, id) {
     let get   = mediaProcessedData[id];
     get.build_ex();
-    let src   = spyglass.querySelector(".expanded");
+    let src   = viewer.querySelector(".expanded");
     let check = await blobGuzzler(get, src, false);
+    tick2.value = id;
 };
 
-tagsBar.style.display = "none";
-infoBox.style.display = "none";
-overlay.style.display = "none";
-var sidebar_state = false;
-var infobox_state = false;
-tagsBar.addEventListener("animationstart", (event) => {
-    tagsButton.disabled = true;
-    infoButton.disabled = true;
-});
-tagsBar.addEventListener("animationend", (event) => {
-    tagsButton.disabled = false;
-    if (event.animationName == "slideOut") {
-        tagsBar.style.display = "none";
-        overlay.style.display = "none";
-        infoButton.disabled = false;
-    }
-});
+function pageViewer(direction) {
+    console.log(direction)
+    var next = (currentImageExpanded * 1) + direction;
+    expand(null, next);
+}
 
-infoBox.addEventListener("animationstart", (event) => {
-    tagsButton.disabled = true;
-    infoButton.disabled = true;
-});
-infoBox.addEventListener("animationend", (event) => {
-    infoButton.disabled = false;
-    if (event.animationName == "fadeOut") {
-        infoBox.style.display = "none";
-        overlay.style.display = "none";
-        tagsButton.disabled = false;
+var animData = {
+    "tagsBar" : {
+        toggle  : document.getElementById("tagsButton"),
+        anims   : {
+            on  : "slideIn",
+            off : "slideOut",
+        },
+        type    : "block",
+        state   : false,
+        disabled: false,
+        able() {
+            switch(disabled) {
+                case true:
+                    this.disabled = false;
+                    break;
+                case false:
+                    this.disabled = true;
+                    break;
+            }
+            this.toggle.disabled = this.disabled;
+        }
+    },
+    "infoBox"   : {
+        toggle  : document.getElementById("infoButton"),
+        anims   : {
+            on  : "fadeIn",
+            off : "fadeOut",
+        },
+        type    : "flex",
+        state   : false,
+        disabled: false,
+        able() {
+            switch(this.disabled) {
+                case true:
+                    this.disabled = false;
+                    break;
+                case false:
+                    this.disabled = true;
+                    break;
+            }
+            this.toggle.disabled = this.disabled;
+        }
+    },
+    "overlay"   : {
+        toggle  : undefined, // overlay only comes w/ other elements...
+        anims   : {
+            on  : "fadeIn",
+            off : "fadeOut",
+        },
+        type    : "block",
+        state   : false,
     }
-});
-function appear(menuID) {
-    var menu = document.getElementById(menuID);
-    var state = window.getComputedStyle(menu).display;
-    var display;
-    switch (menuID) {
-        case "tagsBar":
-            display = "block";
+}
+for (id of ["tagsBar", "infoBox", "overlay"]) {
+    const elm = document.getElementById(id);
+    elm.addEventListener("animationstart", (event) => {
+        elm.style.display = animData[elm.id]["type"];
+    })
+    elm.addEventListener("animationend", (event) => {
+        var data = animData[elm.id];
+        switch(event.animationName) {
+            case data["anims"]["on"]:
+                
+                break;
+            case data["anims"]["off"]:
+                elm.style.display = "none";
+                break;
+        }
+    })
+}
+
+function overlayToggle() {
+    switch(animData["overlay"]["state"]) {
+        case false:
+            overlay.style.display = animData["overlay"]["type"];
+            overlay.classList.add("in");
+            overlay.classList.remove("out");
+            animData["overlay"]["state"] = true;
             break;
-        case "infoBox":
-            display = "flex";
-            break;
-    }
-    switch (state == display) {
         case true:
-            menu.classList.remove("in");
-            menu.classList.add("out");
-            overlay.classList.remove("in");
             overlay.classList.add("out");
-            state = false;
+            overlay.classList.remove("in");
+            animData["overlay"]["state"] = false;
+            break;
+    }
+}
+function showHide(menuID) {
+    var menu = document.getElementById(menuID);
+    var data = animData[menuID];
+    if (activeMenu !== undefined && menuID != activeMenu) {
+        return false;
+    }
+    switch (data["state"]) {
+        case true:
+            menu.classList.add("out");
+            menu.classList.remove("in");
+            overlayToggle();
+            data["state"] = false;
+            activeMenu = undefined;
             break;
         case false:
-            menu.style.display = display;
-            overlay.style.display = "block";
-
-            menu.classList.remove("out");
+            menu.style.display = data["type"];
             menu.classList.add("in");
-            overlay.classList.remove("out");
-            overlay.classList.add("in");
-            state = true;
+            menu.classList.remove("out");
+            overlayToggle();
+            data["state"] = true;
+            activeMenu = menuID;
             break;
     }
 };
@@ -625,9 +692,9 @@ function well() {
             return;
     }
 }
+
 async function search() {
     if (searchingFor.length < 1) {
-        console.log("no entries found!")
         mediaOrdered = [];
         page(0);
         return false;
@@ -651,7 +718,10 @@ async function search() {
         }
     };
     if (validArr.length < 1) {
-        console.warn("Nothing found.")
+        console.warn("Nothing found.");
+        mediaOrdered = [];
+        mediaOrdered = validArr;
+        page(0);
         reset();
         return;
     } else if (validArr == mediaOrdered) {
@@ -681,13 +751,17 @@ async function init_placeholder() {
         placeholderMedia["id"]       = "0";
         placeholderMedia["filetype"] = ".jpg";
         placeholderMedia.build_ex();
-        let src                      = spyglass.querySelector(".expanded");
+        let src                      = viewer.querySelector(".expanded");
         let check                    = await blobGuzzler(placeholderMedia, src, false);
+        tick2.value = 0;
         return true;
     } catch (err) {
         console.error(err);
         return false;
     }
+}
+async function scrub(step) {
+
 }
 /*
 CODING BY: QNAWAVE & DRONE #4 !!!!!!!!
