@@ -24,7 +24,7 @@ body {
     grid-template-rows: 1fr auto;
     gap: var(--gap);
     margin-top: var(--gap);
-    margin-bottom: calc(var(--gap) * 2); /* buffer from bottom */
+    margin-bottom: var(--gap); /* buffer from bottom */
     height: auto;
 }
 .panel {
@@ -75,7 +75,7 @@ body {
     background-clip: border-box;
     background-size: contain;
     background-attachment: fixed;
-    height: 20vh;
+    height: 15vh;
 }
 main {
     display: grid;
