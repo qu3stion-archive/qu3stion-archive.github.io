@@ -1,7 +1,8 @@
 const weirdRoot = document.querySelector(":root");
 const universal = document.getElementById("universal")
 const archive   = document.querySelector("main");
-const gallery   = document.querySelector(".gallery");
+const gallery   = archive.querySelector(".gallery");
+const details   = archive.querySelector(".details");
 const explorer  = document.querySelector(".explorer");
 const viewer    = document.querySelector("#viewer");
 const searchBar = gallery.querySelector(".search");
@@ -103,7 +104,7 @@ __________________________________
 */
 var CSSvertical = undefined;
 async function orientationHandler() {
-    if (weirdRoot.clientWidth < weirdRoot.clientHeight) {
+    if (weirdRoot.clientWidth <= weirdRoot.clientHeight) {
         if (CSSvertical != true) {
             CSSvertical = true;
             orientationApply();
@@ -133,6 +134,7 @@ async function orientationApply() {
             explorer .style.gridTemplateColumns           = "1fr 1fr 1fr 1fr";
             searchBar.style.gridTemplateColumns           = "40% auto";
             searchBar.querySelector("span").style.display = "block";
+            details   .style.gridTemplateRows              = "5% auto";
             perPage                                       = 16;
             break;
         case true:
@@ -144,6 +146,7 @@ async function orientationApply() {
             explorer .style.gridTemplateColumns           = "1fr 1fr";
             searchBar.style.gridTemplateColumns           = "100% auto";
             searchBar.querySelector("span").style.display = "none";
+            details   .style.gridTemplateRows              = "1fr auto";
             perPage                                       = 6;
             break;
     }
@@ -205,9 +208,11 @@ const mediaTemplate = {
             media.querySelectorAll("button")[0].removeEventListener("click", (event) => {
                 expand(event, this.id);
             });
-            URL.revokeObjectURL(this.source.src);
-            this.source.src = null;
             explorer.removeChild(media);
+            if (this.source) {
+                URL.revokeObjectURL(this.source.src);
+            }
+            media = null;
             built = false;
         };
     },
@@ -218,10 +223,11 @@ const mediaTemplate = {
             case undefined:
                 break;
             default:
-                URL.revokeObjectURL(viewer.querySelector(".expanded").src);
-                viewer.querySelector(".expanded").src = null;
+                URL.revokeObjectURL(this.source2);
+                for (child of viewer.children) {
+                    child = null;
+                }
                 viewer.innerHTML = null;
-                viewer.innerHTML = "";
         }
         let clone;
         var metadata = [];
@@ -314,9 +320,9 @@ async function init_media() {
             let data = row.data
             let mediaNew = {};
             if (data["filetype"] !== undefined) {
-                mediaNew["id"] = data["id"];
-                mediaNew["filetype"] = data["filetype"];
-                mediaNew["tags"] = data["tags"];
+                mediaNew["id"]          = data["id"];
+                mediaNew["filetype"]    = data["filetype"];
+                mediaNew["tags"]        = data["tags"];
                 switch(data["filetype"]) {
                     case ".jpg":
                         mediaNew["tags"] += "[";
@@ -325,23 +331,24 @@ async function init_media() {
                         mediaNew["tags"] += "]";
                         break;
                 }
-                mediaNew["date"] = data["date"];
-                mediaNew["note"] = data["note"];
-                mediaCSVData[counter] = mediaNew;
+                mediaNew["date"]        = data["date"];
+                mediaNew["note"]        = data["note"];
+                mediaCSVData[counter]   = mediaNew;
                 counter += 1;
             }
         },
         complete: function() {
             for (x = 1; x < mediaCSVData.length; x++) {
-                let template = Object.create(mediaTemplate);
-                let data = mediaCSVData[x];
-                template["id"] = data["id"];
-                template["filetype"] = data["filetype"];
-                var arr1 = tagReader("tagsAll", data["tags"]);
-                var arr2 = tagReader("tagsDate", data["date"]);
-                template["tags"] = arr1.concat(arr2);
-                template["note"] = data["note"];
-                mediaProcessedData[data["id"]] = template;
+                let template                    = Object.create(mediaTemplate);
+                let data                        = mediaCSVData[x];
+                template["id"]                  = data["id"];
+                template["filetype"]            = data["filetype"];
+                var arr1                        = tagReader("tagsAll", data["tags"]);
+                var arr2                        = tagReader("tagsDate", data["date"]);
+                template["tags"]                = arr1.concat(arr2);
+                template["note"]                = data["note"];
+                mediaProcessedData[data["id"]]  = template;
+
                 mediaProcessedArr.push(data["id"]);
             }
             load();
@@ -352,12 +359,44 @@ async function init_media() {
 // but brackets are easier on my eyes
 // (brackets properties are orange in my code viewer since they're string,
 // while the var is blue, while dot properties are all blue).
+const validPageCharacters = new RegExp("[0-9]")
 async function load() {
     let check = await page(0);
+    for (bar of [tick, tick2]) {
+        bar.addEventListener("keypress", (event) => {
+            var elm = event.target;
+            var key = event.key;
+            if (key != "Enter") {
+                if (validPageCharacters.test(key) == false) {
+                    event.preventDefault();
+                };
+            } else {
+                var requested = elm.value;
+                switch (elm.id) {
+                    case "pageCounter":
+                        if (requested != currentPage) {
+                            page(requested - currentPage);
+                        }
+                        break;
+                    case "viewCounter":
+                        if (requested != (currentImageExpanded * 1)) {
+                            expand(undefined, requested);
+                        }
+                        break;
+                }
+            }
+        })
+        bar.addEventListener("paste", (event) => {
+            event.preventDefault();
+        })
+    }
     window.addEventListener("keypress", (event) => {
         if (event.key == "Enter") {
             switch (document.activeElement.id) {
                 case "pageCounter":
+                    if (typeof tick.value != "number" || tick.value * 1 == NaN) {
+                        return false;
+                    }
                     var currentPageRequested = tick.value;
                     if (currentPageRequested != currentPage) {
                         var dist = currentPageRequested - currentPage;
@@ -365,13 +404,14 @@ async function load() {
                     }
                     break;
                 case "viewCounter":
+                    if (typeof tick2.value != "number" || tick.value * 1 == NaN) {
+                        return false;
+                    }
                     var mediaExpandedRequested = tick2.value;
                     if (mediaExpandedRequested != currentPage) {
                         expand(null, mediaExpandedRequested);
                     }
                     break;
-                default:
-                    return;
             }
         }
     })
@@ -381,7 +421,7 @@ async function load() {
 };
 
 const tick = document.getElementById("pageCounter");
-const tick2 = document.getElementById("viewCounter")
+const tick2 = document.getElementById("viewCounter");
 
 var ordered;
 var pageCount;
@@ -412,13 +452,13 @@ async function page(step) {
         pageCount = Math.ceil(mediaOrdered.length / perPage);
         let r = [((currentPage * perPage) - perPage) + 1, (currentPage * perPage)];
         document.getElementById("backwards").disabled = false;
-        document.getElementById("forwards").disabled = false; // i don't know why i named this button "top" at first...
+        document.getElementById("forwards").disabled  = false; // i don't know why i named this button "top" at first...
         switch (currentPage) {
             case 1:
                 document.getElementById("backwards").disabled = true;
                 break;
             case pageCount:
-                document.getElementById("forwards").disabled = true;
+                document.getElementById("forwards").disabled  = true;
                 break;
         }
         for (x = r[0]; x <= r[1]; x++) {
@@ -427,7 +467,7 @@ async function page(step) {
             }
             var tempID = mediaOrdered[x - 1];
             var get = mediaProcessedData[tempID];
-            if (get === undefined) {
+            if (get === undefined || get == null) {
                 continue;
             }
             get.build();
@@ -477,16 +517,31 @@ async function blobGuzzler(obj, src, getThumbnail) {
     return true;
 }
 async function expand(event, id) {
+    if (id > mediaProcessedArr.length) {
+        id = mediaProcessedArr.length;
+    } else if (id < 1) {
+        id = 1;
+    }
+    document.getElementById("backwards2").disabled = false;
+    document.getElementById("forwards2").disabled  = false; 
+    switch (id) {
+        case 1:
+            document.getElementById("backwards2").disabled = true;
+            break;
+        case mediaProcessedArr.length:
+            document.getElementById("forwards2").disabled  = true;
+            break;
+    }
     let get   = mediaProcessedData[id];
     get.build_ex();
     let src   = viewer.querySelector(".expanded");
     let check = await blobGuzzler(get, src, false);
-    tick2.value = id;
+    tick2.value = id;// i don't know why i named this button "top" at first...
 };
 
 function pageViewer(direction) {
-    console.log(direction)
     var next = (currentImageExpanded * 1) + direction;
+    
     expand(null, next);
 }
 
@@ -719,10 +774,7 @@ async function search() {
     };
     if (validArr.length < 1) {
         console.warn("Nothing found.");
-        mediaOrdered = [];
-        mediaOrdered = validArr;
-        page(0);
-        reset();
+        explorer.style.display = "none";
         return;
     } else if (validArr == mediaOrdered) {
         console.warn("Nothing changed. Because an Array, is just an Array.")
