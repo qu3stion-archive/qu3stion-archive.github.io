@@ -62,7 +62,7 @@ tagsAll.set("n", {name: "Nice!",                class: "nice",       color: "typ
 tagsAll.set("x", {name: "Explosion",            class: "explosion",  color: "type", type: "gags", description: ""});
 tagsAll.set("f", {name: "Fish",                 class: "fish",       color: "type", type: "gags", description: "Running gag about Qu3stion's pet fish(es)... only medias that focus on the fish are tagged, but they do appear in the background in many posts!"});
 tagsAll.set("g", {name: "Gaming",               class: "gaming",     color: "type", type: "gags", description: ""});
-tagsAll.set("=", {name: "Drawings",             class: "fanart",     color: "type", type: "events", description: ""});
+tagsAll.set("=", {name: "Drawings",             class: "drawings",     color: "type", type: "events", description: ""});
 tagsAll.set("/", {name: "Fanart Galleries",     class: "fanart",     color: "type", type: "audience", description: ""});
 tagsAll.set("c", {name: "X-mas",                class: "x-mas",      color: "type", type: "arc", description: ""});
 tagsAll.set("h", {name: "Halloween",            class: "halloween",  color: "type", type: "arc", description: ""});
@@ -135,6 +135,7 @@ async function orientationApply() {
             searchBar.style.gridTemplateColumns           = "40% auto";
             searchBar.querySelector(".status").style.display = "block";
             details   .style.gridTemplateRows              = "5% auto";
+            
             perPage                                       = 16;
             break;
         case true:
@@ -147,6 +148,7 @@ async function orientationApply() {
             searchBar.style.gridTemplateColumns           = "100% auto";
             searchBar.querySelector(".status").style.display = "none";
             details   .style.gridTemplateRows              = "1fr auto";
+
             perPage                                       = 6;
             break;
     }
@@ -240,10 +242,16 @@ const mediaTemplate = {
                 break;
         };
         this.source2   = clone.querySelector(".expanded");
+        if (this.filetype == ".mp4") {
+            this.source2.volume = 0.25;
+        }
         var tagsHolder = clone.querySelector(".tags");
         var noteHolder = clone.querySelector(".notes");
         for (tag of this.tags) {
             tagBuilder(tag, tagsHolder);
+            if (tag["class"] == "warning" && this.filetype == ".mp4") {
+                this.source2.autoplay = false;
+            }
         }
         if (this.note !== undefined) {
             noteHolder.innerHTML = this.note;

@@ -130,6 +130,7 @@ article {
 }
 img, video {
     width               : 100%;
+    z-index             : 50;
 }
 img.thumbnail:hover, video.thumbnail:hover{
     transform           : scale(1.07);
@@ -167,6 +168,7 @@ article button {
                         : 1fr 4fr 1fr;
     grid-template-rows
                         : 100%;
+    gap                 : var(--gap);
     position            : relative;
     border-radius       : 10px;
     background-color    : #DBE9F3;
@@ -184,9 +186,13 @@ article button {
                         : 0;
     border-top-right-radius
                         : 0;
+    border              : 8px solid #DBE9F3;
+    border-top          : 0;
+    background-color    : #b5cedf;
 }
 .infobox > button > img {
-    height: 100%;
+    margin-top          : 2%;
+    height              : 90%;
 }
 .close {
     background-color    : #fdd6d6;
@@ -215,7 +221,6 @@ article button {
 .droneContainmentCell > div {
     padding             : var(--gap);
     margin              : var(--gap);
-    background-color    : #DBE9F3;
     border-radius       : 10px;
     font-size           : clamp(1%, 20px, 100%);
 }
