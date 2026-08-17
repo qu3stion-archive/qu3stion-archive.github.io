@@ -16,7 +16,7 @@
             <article>
                 <div class="src">
                     <button>
-                        <img src="assets/blank.gif" class="thumbnail" preload="none">
+                        <img src="assets/blank.gif" class="thumbnail" loading="lazy" preload="none">
                     </button>
                     <label class="div_id"></label>
                 </div>
@@ -51,27 +51,36 @@
             </header>
             <main>
                 <section class="details panel">
-                    <div class="search2 bar">
+                    <nav class="search2 bar">
                         <button id="backwards2" onclick="pageViewer(-1)">&lt;&lt;</button>
-                        <input id="viewCounter">
+                        <div class="tick tooltip">
+                            <input id="viewCounter">
+                            <span>Media number. Every file's number is listed in the gallery. Type in a number to skip to that file.</span>
+                        </div>
                         <button id="forwards2" onclick="pageViewer(1)">&gt;&gt;</button>
-                    </div>
+                    </nav>
                     <div id="viewer">
                     </div>
                 </section>
                 <section class="gallery panel">
                     <section class="search bar">
                         <nav>
-                            <select id="step" tabindex="1">
-                                <option value=1 selected>+1</option>
-                                <option value=5>+5</option>
-                                <option value=10>+10</option>
-                                <option value=20>+20</option>
-                                <option value=50>+50</option>
-                                <option value=1000>End</option>
-                            </select>
+                            <div class="skip tooltip">
+                                <select id="step"tabindex="1">
+                                    <option value=1 selected>+1</option>
+                                    <option value=5>+5</option>
+                                    <option value=10>+10</option>
+                                    <option value=20>+20</option>
+                                    <option value=50>+50</option>
+                                    <option value=1000>End</option>
+                                </select>
+                                <span>Amount of pages to skip at a time</span>
+                            </div>
                             <button id="backwards" tabindex="1" onclick="pageTick(-1)">&lt;&lt;</button>
-                            <input id="pageCounter" tabindex="1">
+                            <div class="tick tooltip">
+                                <input id="pageCounter" tabindex="1">
+                                <span>Page number. Type in a number to skip to that page.</span>
+                            </div>
                             <button id="forwards" tabindex="1" onclick="pageTick(1)">&gt;&gt;</button>
                         </nav>
                         <span class="status"></span>
@@ -91,7 +100,7 @@
         </div>
         <div class="screen" id="infoBox">
             <section class="infobox">
-                <div class="droneContainmentCell">
+                <section class="droneContainmentCell panel">
                     <div>
                         <h1>Got Qu(e)stions?</h1>
                         <p>We have answ(e)rs!<br>This archive comes with <b>a feedback form!</b></p>
@@ -111,20 +120,30 @@
                         <!-- <div><p>Hallo! I am Drone #4! I am the manager & programmer of this archive!<br><br><a href="https://x.com/_drone4">Follow me on Twitter (@_drone4)</a> for development & form answers!</p></div>
                         -->
                     </figure>
-                </div>
-                <div class="info">
-
-                </div>
+                </section>
+                <section class="info panel">
+                    <h1>The Qu3stion Archive!</h1>
+                    <p>Created by: QNA (@QNAwave) & Drone #4 (@computerlings)</p>
+                </section>
+                <section class="panel">
+                    <p>hmmmm..</p>>
+                </section>
+                <button onclick="showHide('infoBox')">
+                    <img src="https://www.svgrepo.com/show/459853/double-down-sign.svg" alt="Close Tab">
+                </button>
             </section>
         </div>
         <div id="buttons" class="to-top">
-            <button id="infoButton" class="to-top" tabindex="0" onclick="showHide('infoBox')">
+            <button id="infoButton" class="to-top tooltip" tabindex="0" onclick="showHide('infoBox')">
+                <span>Website Information</span>
                 <img src="https://www.svgrepo.com/show/513832/info-circle.svg" alt="Info">
             </button>
-            <button id="tagsButton" class="to-top" tabindex="0" onclick="showHide('tagsBar')">
+            <button id="tagsButton" class="to-top tooltip" tabindex="0" onclick="showHide('tagsBar')">
+                <span>Tags Menu</span>
                 <img src="https://www.svgrepo.com/show/509711/align-justify.svg" alt="Search by Tags">
             </button>
-            <a class="to-top" href="#top" tabindex="0">
+            <a class="to-top tooltip" href="#top" tabindex="0">
+                <span>Go to Top</span>
                 <img src="https://www.svgrepo.com/show/506650/chevron-top.svg" alt="Go to Top">
             </a>
         </div>

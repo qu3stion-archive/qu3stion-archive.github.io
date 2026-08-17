@@ -47,7 +47,7 @@ tagsAll.set("!", {name: "3xclamation",  class: "3xclamation",type: "character", 
 tagsAll.set(",", {name: "C0mma",        class: "c0mma",      type: "character", color: "#3e6ab7", description: ""});
 tagsAll.set("&", {name: "Amp3rsand",    class: "amp3rsand",  type: "character", color: "#cb993e", description: ""});
 tagsAll.set(":", {name: "Creator",      class: "creator",    type: "character", color: "#252b2b", description: ""});
-tagsAll.set("G", {name: "Ivy",          class: "ivy",        type: "character", color: "#0e9368", description: ""});
+tagsAll.set("G", {name: "Green",        class: "Green",        type: "character", color: "#0e9368", description: ""});
 tagsAll.set(".", {name: "...Peri0d??",  class: "peri0d",     type: "character", color: "#9deb44",      description: ""});
 tagsAll.set("|", {name: "Answ3r",       class: "answ3r",     type: "character", color: "#00000020",      description: ""});
 //
@@ -133,7 +133,7 @@ async function orientationApply() {
             universal.style.marginRight                   = "10%";
             explorer .style.gridTemplateColumns           = "1fr 1fr 1fr 1fr";
             searchBar.style.gridTemplateColumns           = "40% auto";
-            searchBar.querySelector("span").style.display = "block";
+            searchBar.querySelector(".status").style.display = "block";
             details   .style.gridTemplateRows              = "5% auto";
             perPage                                       = 16;
             break;
@@ -145,7 +145,7 @@ async function orientationApply() {
             universal.style.marginRight                   = "1%";
             explorer .style.gridTemplateColumns           = "1fr 1fr";
             searchBar.style.gridTemplateColumns           = "100% auto";
-            searchBar.querySelector("span").style.display = "none";
+            searchBar.querySelector(".status").style.display = "none";
             details   .style.gridTemplateRows              = "1fr auto";
             perPage                                       = 6;
             break;
@@ -418,6 +418,7 @@ async function load() {
     init_placeholder();
     tagsSearchBuilder();
     orientationHandler();
+    showHide("infoBox");
 };
 
 const tick = document.getElementById("pageCounter");
@@ -432,6 +433,8 @@ function pageTick(direction) {
     page(step);
 }
 async function page(step) {
+    document.getElementById("backwards").disabled = false;
+    document.getElementById("forwards").disabled  = false;
     explorer.style.display = "none";
     if (currentPage + step > pageCount) {
         currentPage = pageCount;
@@ -450,17 +453,7 @@ async function page(step) {
             ordered = true;
         }
         pageCount = Math.ceil(mediaOrdered.length / perPage);
-        let r = [((currentPage * perPage) - perPage) + 1, (currentPage * perPage)];
-        document.getElementById("backwards").disabled = false;
-        document.getElementById("forwards").disabled  = false; // i don't know why i named this button "top" at first...
-        switch (currentPage) {
-            case 1:
-                document.getElementById("backwards").disabled = true;
-                break;
-            case pageCount:
-                document.getElementById("forwards").disabled  = true;
-                break;
-        }
+        let r = [((currentPage * perPage) - perPage) + 1, (currentPage * perPage)]; // i don't know why i named this button "top" at first...
         for (x = r[0]; x <= r[1]; x++) {
             if (x > mediaOrdered.length) {
                 break;
@@ -476,6 +469,14 @@ async function page(step) {
         }
         tick.value = currentPage;
         explorer.style.display = "grid";
+        switch (currentPage) {
+            case 1:
+                document.getElementById("backwards").disabled = true;
+                break;
+            case pageCount:
+                document.getElementById("forwards").disabled  = true;
+                break;
+        }
         var statuses = document.getElementsByClassName("status");
         for (output of statuses) {
             output.innerHTML = "Page " + currentPage+ "/" + pageCount + " (" + mediaOrdered.length + "/" + mediaProcessedArr.length + " files in search)";
@@ -517,13 +518,18 @@ async function blobGuzzler(obj, src, getThumbnail) {
     return true;
 }
 async function expand(event, id) {
+    document.getElementById("backwards2").disabled = false;
+    document.getElementById("forwards2").disabled  = false;
     if (id > mediaProcessedArr.length) {
         id = mediaProcessedArr.length;
     } else if (id < 1) {
         id = 1;
     }
-    document.getElementById("backwards2").disabled = false;
-    document.getElementById("forwards2").disabled  = false; 
+    let get   = mediaProcessedData[id];
+    get.build_ex();
+    let src   = viewer.querySelector(".expanded");
+    let check = await blobGuzzler(get, src, false);
+    tick2.value = id;// i don't know why i named this button "top" at first...
     switch (id) {
         case 1:
             document.getElementById("backwards2").disabled = true;
@@ -532,11 +538,6 @@ async function expand(event, id) {
             document.getElementById("forwards2").disabled  = true;
             break;
     }
-    let get   = mediaProcessedData[id];
-    get.build_ex();
-    let src   = viewer.querySelector(".expanded");
-    let check = await blobGuzzler(get, src, false);
-    tick2.value = id;// i don't know why i named this button "top" at first...
 };
 
 function pageViewer(direction) {
@@ -635,7 +636,7 @@ function showHide(menuID) {
     var menu = document.getElementById(menuID);
     var data = animData[menuID];
     if (activeMenu !== undefined && menuID != activeMenu) {
-        return false;
+        showHide(activeMenu);
     }
     switch (data["state"]) {
         case true:
@@ -644,6 +645,7 @@ function showHide(menuID) {
             overlayToggle();
             data["state"] = false;
             activeMenu = undefined;
+            data["toggle"].classList.remove("hovered");
             break;
         case false:
             menu.style.display = data["type"];
@@ -652,6 +654,7 @@ function showHide(menuID) {
             overlayToggle();
             data["state"] = true;
             activeMenu = menuID;
+            data["toggle"].classList.add("hovered");
             break;
     }
 };
