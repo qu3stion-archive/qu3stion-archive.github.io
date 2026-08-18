@@ -27,7 +27,7 @@ var currentPage = 1;
 var currentImageExpanded = undefined;
 var activeMenu;
 
-const listCharacters = ["qu3stion", "qu3stion2", "3xclamation", "c0mma", "amp3rsand", "creator", "ivy", "peri0d"];
+const listCharacters = ["qu3stion", "qu3stion2", "exclamation", "c0mma", "amp3rsand", "creator", "ivy", "peri0d"];
 
 let tagsType = new Map();
 tagsType.set("character",   {name: "Characters",                color: "#FFFFFF", order: 2});
@@ -43,12 +43,12 @@ tagsType.set("misc",        {name: "Miscellaneous",             color: "#6e15b8"
 let tagsAll = new Map();
 tagsAll.set("?", {name: "Qu3stion",     class: "qu3stion",   type: "character", color: "#15c1c3", description: ""});
 tagsAll.set("¿", {name: "Old Qu3stion", class: "qu3stion2",  type: "character", color: "#124193", description: ""});
-tagsAll.set("!", {name: "3xclamation",  class: "3xclamation",type: "character", color: "#cc265a", description: ""});
+tagsAll.set("!", {name: "3xclamation",  class: "exclamation",type: "character", color: "#cc265a", description: ""});
 tagsAll.set(",", {name: "C0mma",        class: "c0mma",      type: "character", color: "#3e6ab7", description: ""});
 tagsAll.set("&", {name: "Amp3rsand",    class: "amp3rsand",  type: "character", color: "#cb993e", description: ""});
-tagsAll.set(":", {name: "Creator",      class: "creator",    type: "character", color: "#252b2b", description: ""});
-tagsAll.set("G", {name: "Green",        class: "Green",        type: "character", color: "#0e9368", description: ""});
+tagsAll.set("G", {name: "Green",        class: "Green",      type: "character", color: "#0e9368", description: ""});
 tagsAll.set(".", {name: "...Peri0d??",  class: "peri0d",     type: "character", color: "#9deb44",      description: ""});
+tagsAll.set(":", {name: "Creator",      class: "creator",    type: "character", color: "#252b2b20", description: ""});
 tagsAll.set("|", {name: "Answ3r",       class: "answ3r",     type: "character", color: "#00000020",      description: ""});
 //
 tagsAll.set("*", {name: "Lore",                 class: "lore",       color: "type", type: "info", description: "Contains important lore pieces!"});
@@ -62,7 +62,7 @@ tagsAll.set("n", {name: "Nice!",                class: "nice",       color: "typ
 tagsAll.set("x", {name: "Explosion",            class: "explosion",  color: "type", type: "gags", description: ""});
 tagsAll.set("f", {name: "Fish",                 class: "fish",       color: "type", type: "gags", description: "Running gag about Qu3stion's pet fish(es)... only medias that focus on the fish are tagged, but they do appear in the background in many posts!"});
 tagsAll.set("g", {name: "Gaming",               class: "gaming",     color: "type", type: "gags", description: ""});
-tagsAll.set("=", {name: "Drawings",             class: "drawings",     color: "type", type: "events", description: ""});
+tagsAll.set("=", {name: "Drawings",             class: "drawings",   color: "type", type: "events", description: ""});
 tagsAll.set("/", {name: "Fanart Galleries",     class: "fanart",     color: "type", type: "audience", description: ""});
 tagsAll.set("c", {name: "X-mas",                class: "x-mas",      color: "type", type: "arc", description: ""});
 tagsAll.set("h", {name: "Halloween",            class: "halloween",  color: "type", type: "arc", description: ""});
@@ -290,29 +290,12 @@ function tagBuilder(tag, to) {
     var label = document.createElement("label");
     var dot = document.createElement("span");
     dot.innerHTML = "•";
-    if (tag["color"] !== null && tag["color"] != "#FFFFFF") {
-        if (tag["color"] == "type") {
-            label.style.borderColor = tagsType.get(tag["type"])["color"];
-            dot.style.color         = tagsType.get(tag["type"])["color"];
-        } else {
-            label.style.borderColor = tag["color"];
-            dot.style.color         = tag["color"];
-        }
-    } else {
-        label.style.borderColor = "#6495a5";
-        dot.style.color = "#6495a5";
-    }
     label.style.order = tagsType.get(tag["type"])["order"];
+    label.classList.add(tag["class"]);
     label.appendChild(dot)
     label.innerHTML += tag["name"];
-    
-    if (tag["class"] == "answ3r") {
-        label.id            = "answ3r";
-        label.style.display = "none";
-        label.style.color   = "#00000020";
-    }
-
-    label.classList.add("tag")
+    label.classList.add("tag");
+    label.dataset.tag = tag["class"];
     if (to === false) {
         return label;
     } else {
@@ -425,6 +408,7 @@ async function load() {
     })
     init_placeholder();
     tagsSearchBuilder();
+    tagsCSSBuilder()
     orientationHandler();
     showHide("infoBox");
 };
@@ -725,18 +709,87 @@ function appendToSearch(event) {
         search(searchingFor);
     }
 }
+const selectedClasses = new Map();
+
+function getLabelByData(tagClass) {
+    return tagsBar.querySelector(".tagsMenu").querySelector("[data-tag='" + tagClass + "']")
+}
+function tagsCSSBuilder() {
+    const style = document.createElement("style");
+
+    for (arr of [tagsAll, tagsDate]) {
+        arr.forEach((value, key, map) => {
+            var tagLabel = getLabelByData(value["class"]);
+            var newClass          = "label." + value["class"];
+            var newClass_selected = "label." + value["class"] + ".selected";
+            var color;
+            if (value["color"] !== null && value["color"] != "#FFFFFF") {
+                if (value["color"] == "type") {
+                    color = tagsType.get(value["type"])["color"];
+                } else {
+                    color = value["color"];
+                }
+            } else {
+                color = "#6495a5";
+            }
+            var coloredText;
+            if (value["class"] == "creator" || value["class"] == "answ3r") {
+                if (value["class"] == "answ3r") {
+                    tagLabel.id = "answ3r";
+                    tagLabel.style.display = "none";
+                }
+                coloredText = `color: ${color};`
+            }
+            var rules =
+            `${newClass} { border-color: ${color}; ${coloredText}} ${newClass} > span { color: ${color}; }` +
+            `${newClass_selected} { background-color: ${color}; color: var(--light); transition-duration : 0.2s; } ${newClass_selected} > span { color: var(--light); }`
+            style.innerHTML += rules;
+            tagLabel.addEventListener("mouseover", (event) => {
+                var label = event.target;
+                if (label.classList.contains("searched") == false && label.classList.contains("selected") == false) {
+                    label.classList.add("selected");
+                }
+            })
+            tagLabel.addEventListener("mouseout", (event) => {
+                var label = event.target;
+                if (label.classList.contains("searched") == false && label.classList.contains("selected") == true) {
+                    label.classList.remove("selected");
+                }
+            })
+        })
+    }
+    document.head.appendChild(style);
+}
+/*
+    if (tag["color"] !== null && tag["color"] != "#FFFFFF") {
+        if (tag["color"] == "type") {
+            label.style.borderColor = tagsType.get(tag["type"])["color"];
+        } else {
+            label.style.borderColor = tag["color"];
+        }
+    } else {
+        label.style.borderColor = "#6495a5";
+        dot.style.color = "#6495a5";
+    }
+if (tag["class"] == "creator") {
+        label.style.color = tag["color"];
+        label.classList.add("coloredText");
+    }
+    if (tag["class"] == "answ3r") {
+        label.id            = "answ3r";
+        label.style.display = "none";
+        label.style.color   = "#00000020";
+    }
+*/
 function selectedTagCSS(elm, bool) {
-    var color = getComputedStyle(elm).getPropertyValue("border-color");
     switch (bool) {
         case true:
-            elm.style.backgroundColor         = color;
-            elm.firstElementChild.style.color = "var(--light)";
-            elm.style.color                   = "var(--light)";
+            elm.classList.add("selected");
+            elm.classList.add("searched");
             break;
         case false:
-            elm.style.color                   = "#000";
-            elm.firstElementChild.style.color = color;
-            elm.style.backgroundColor         = "transparent";
+            elm.classList.remove("selected");
+            elm.classList.remove("searched");
             break;
     }
 }

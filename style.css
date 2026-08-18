@@ -309,8 +309,9 @@ article button {
     border-radius       : 999px;
     vertical-align      : center;
 }
-.tag.selected {
-    background-color    : red;
+.tag:hover {
+    transform           : scale(1.07);
+    transition-duration : 0.2s;
 }
 .tag > span {
     font-size           : 24px;
