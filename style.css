@@ -515,6 +515,7 @@ details {
 .tooltip span {
     position            : absolute;
     visibility          : hidden;
+    opacity             : 0;
     background-color    : #437ca3;
     color               : #fff;
     text-align: center;
@@ -522,6 +523,7 @@ details {
     padding             : 8px;
     border-radius       : 5px;
     box-sizing: border-box;
+    z-index             : 75;
 }
 .to-top.tooltip span {
     right               : 110%;
@@ -540,4 +542,6 @@ nav > .tick.tooltip > span {
 }
 .tooltip:hover span {
     visibility          : visible;
+    opacity             : 100%;
+    transition-duration : 0.2s;
 }

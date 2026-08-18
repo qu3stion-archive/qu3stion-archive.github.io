@@ -27,7 +27,7 @@ var currentPage = 1;
 var currentImageExpanded = undefined;
 var activeMenu;
 
-const listCharacters = ["qu3stion", "qu3stion2", "exclamation", "c0mma", "amp3rsand", "creator", "ivy", "peri0d"];
+const listCharacters = ["qu3stion", "qu3stion2", "exclamation", "c0mma", "amp3rsand", "creator", "green", "peri0d"];
 
 let tagsType = new Map();
 tagsType.set("character",   {name: "Characters",                color: "#FFFFFF", order: 2});
@@ -46,7 +46,7 @@ tagsAll.set("¿", {name: "Old Qu3stion", class: "qu3stion2",  type: "character",
 tagsAll.set("!", {name: "3xclamation",  class: "exclamation",type: "character", color: "#cc265a", description: ""});
 tagsAll.set(",", {name: "C0mma",        class: "c0mma",      type: "character", color: "#3e6ab7", description: ""});
 tagsAll.set("&", {name: "Amp3rsand",    class: "amp3rsand",  type: "character", color: "#cb993e", description: ""});
-tagsAll.set("G", {name: "Green",        class: "Green",      type: "character", color: "#0e9368", description: ""});
+tagsAll.set("G", {name: "Green",        class: "green",      type: "character", color: "#0e9368", description: ""});
 tagsAll.set(".", {name: "...Peri0d??",  class: "peri0d",     type: "character", color: "#9deb44",      description: ""});
 tagsAll.set(":", {name: "Creator",      class: "creator",    type: "character", color: "#252b2b20", description: ""});
 tagsAll.set("|", {name: "Answ3r",       class: "answ3r",     type: "character", color: "#00000020",      description: ""});
@@ -733,16 +733,21 @@ function tagsCSSBuilder() {
                 color = "#6495a5";
             }
             var coloredText;
-            if (value["class"] == "creator" || value["class"] == "answ3r") {
-                if (value["class"] == "answ3r") {
-                    tagLabel.id = "answ3r";
-                    tagLabel.style.display = "none";
-                }
-                coloredText = `color: ${color};`
+            var color2;
+            if (value["class"] == "creator") {
+                coloredText = `${color}`
+                console.log(coloredText);
+                color2 = coloredText.slice(0, 7);
+            } else if (value["class"] == "answ3r") {
+                tagLabel.id = "answ3r";
+                tagLabel.style.display = "none";
+            } else {
+                coloredText = `#000`
+                color2 = color;
             }
             var rules =
-            `${newClass} { border-color: ${color}; ${coloredText}} ${newClass} > span { color: ${color}; }` +
-            `${newClass_selected} { background-color: ${color}; color: var(--light); transition-duration : 0.2s; } ${newClass_selected} > span { color: var(--light); }`
+            `${newClass} { border-color: ${color}; color: ${coloredText}} ${newClass} > span { color: ${color}; }` +
+            `${newClass_selected} { background-color: ${color2}; color: var(--light); transition-duration : 0.2s; } ${newClass_selected} > span { color: var(--light); }`
             style.innerHTML += rules;
             tagLabel.addEventListener("mouseover", (event) => {
                 var label = event.target;
@@ -795,12 +800,13 @@ function selectedTagCSS(elm, bool) {
 }
 function well() {
     var check = true;
+    console.log(searchingFor);
     for (character of listCharacters) {
+        console.log(character)
         if (searchingFor.includes(character)) {
             // pass.
         } else {
             check = false;
-            // fails check.
         }
     }
     switch (check) {
