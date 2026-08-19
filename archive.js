@@ -187,6 +187,8 @@ async function orientationApply() {
                 .style.gridTemplateRows                 = "auto 1fr"
             infoBox.parentElement
                 .style.padding                          = "10%"
+            infoBox.parentElement
+                .style.paddingTop                       = "5%"
             perPage                                     = 16;
             break;
         case true:
