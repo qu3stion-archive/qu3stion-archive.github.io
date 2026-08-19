@@ -52,7 +52,7 @@ tagsAll.set(":", {name: "Creator",      class: "creator",    type: "character", 
 tagsAll.set("|", {name: "Answ3r",       class: "answ3r",     type: "character", color: "#00000020",      description: ""});
 //
 tagsAll.set("*", {name: "Lore",                 class: "lore",       color: "type", type: "info", description: "Contains important lore pieces!"});
-tagsAll.set("^", {name: "Trivia",               class: "lore",       color: "type", type: "info", description: "Fun facts about Qu3stion; not as important as the lore tidbits."});
+tagsAll.set("^", {name: "Trivia",               class: "trivia",     color: "type", type: "info", description: "Fun facts about Qu3stion; not as important as the lore tidbits."});
 tagsAll.set("_", {name: "Intro",                class: "intro",      color: "type", type: "info", description: "First time a character appears!"});
 tagsAll.set("s", {name: "Cute :3",              class: "cute",       color: "type", type: "misc", description: "All Qu3stion is Cute Medias... but some Medias are more Cuter than others..."});
 tagsAll.set("z", {name: "Spooky",               class: "spooky",     color: "type", type: "misc", description: ""});
@@ -925,6 +925,10 @@ async function search() {
     };
     if (validArr.length < 1) {
         console.warn("Nothing found.");
+        var statuses = document.getElementsByClassName("status");
+        for (output of statuses) {
+            output.innerHTML = "No files found in search.";
+        }
         explorer.style.display = "none";
         return;
     } else if (validArr == mediaOrdered) {
@@ -968,6 +972,7 @@ async function scrub(step) {
 }
 /*
 CODING BY: QNAWAVE & DRONE #4 !!!!!!!!
+CSV parsing tool by: PapaParse (https://www.papaparse.com/)
 */
 function loadForm() {
     const feedback = infoBox.querySelector(".feedback");
