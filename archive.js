@@ -392,7 +392,7 @@ function tagBuilder(tag, to) {
         return true;
     }
 }
-async function init_media() {
+async function init_media() { // CSV parsing tool by: PapaParse (https://www.papaparse.com/)
     Papa.parse("media.csv", {
         header: true,
         download: true,
@@ -487,6 +487,9 @@ async function load() {
                     }
                     break;
                 case "viewCounter":
+                    if (tick.value == 9999) {
+                        window.location.href = "assets/other/truth/truth.html"
+                    }
                     var mediaExpandedRequested = tick2.value;
                     if (mediaExpandedRequested != currentPage) {
                         expand(null, mediaExpandedRequested);

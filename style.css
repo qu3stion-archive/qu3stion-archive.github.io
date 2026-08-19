@@ -637,6 +637,7 @@ dt {
     margin-bottom       : 0.5em;
 }
 .pollss {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
+    display             : grid;
+    grid-template-columns
+                        : 1fr 1fr;
 }
