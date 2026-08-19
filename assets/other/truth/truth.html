@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>¿</title>
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+        <style>
+            body {
+                /*
+                background-image: url("weird.jpg");
+                background-repeat: repeat;
+                background-size: 20%;
+                */
+                background-color: #000;
+                font-family: sans-serif;
+                font-weight: bold;
+                align-items: center;
+                margin: 0;
+                animation: weird 30s linear infinite;
+            }
+            button {
+                all: unset;
+                position: fixed;
+                top: 0;
+                left: 0;
+                width: 100vw;
+                height: 100vh;
+                object-fit: cover;
+                z-index: 999;
+            }
+            #vid1, #vid2, #vid3 {
+                width: 100%;
+                height: 100%;
+            }
+            /*
+            @keyframes weird {
+                0% {
+                    background-position: 0 0;
+                }
+                25% {
+                    background-position: 100% 100%;
+                }
+                50% {
+                    background-position: 200% 0%;
+                }
+                75% {
+                    background-position: 100% 100%;
+                }
+                100% {
+                    background-position: 0% 200%;
+                }
+            }
+            */
+            img {
+                position: fixed;
+                top: 25%;
+                left: 40%;
+                width: 20%;
+                height: auto;
+            }
+        </style>
+    </head>
+    <body>
+        <img src="truth.png">
+    </body>
+    <script>
+            const audio = new Audio("truth.ogg");
+            audio.play();
+    </script>
+</html>
