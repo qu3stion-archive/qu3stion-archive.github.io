@@ -450,6 +450,9 @@ async function load() {
                 if (validPageCharacters.test(key) == false) {
                     event.preventDefault();
                 };
+                if (elm.value.length == 4) {
+                    event.preventDefault();
+                }
             } else {
                 var requested = elm.value;
                 switch (elm.id) {
@@ -474,8 +477,8 @@ async function load() {
         if (event.key == "Enter") {
             switch (document.activeElement.id) {
                 case "pageCounter":
-                    if (typeof tick.value != "number" || tick.value * 1 == NaN) {
-                        return false;
+                    if (tick.value == 9999) {
+                        window.location.href = "assets/other/truth/truth.html"
                     }
                     var currentPageRequested = tick.value;
                     if (currentPageRequested != currentPage) {
@@ -484,9 +487,6 @@ async function load() {
                     }
                     break;
                 case "viewCounter":
-                    if (typeof tick2.value != "number" || tick.value * 1 == NaN) {
-                        return false;
-                    }
                     var mediaExpandedRequested = tick2.value;
                     if (mediaExpandedRequested != currentPage) {
                         expand(null, mediaExpandedRequested);
