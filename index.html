@@ -43,20 +43,22 @@
             <textarea class="notes" readonly disabled></textarea>
         </template>
 
-        <!-- Top button -->
+
+    
         <div id="overlay" class="out"></div>
-        <div class="banner">    
+
+        <div class="banner"> <!-- Top button -->   
             <ul class="navbar">
-            <li class="libar"><a class="navbutton" href="/index.html" >Home</a></li>
+            <li class="libar"><a class="navbutton" href="index.html" >Home</a></li>
             <li class="libar"><a class="navbutton" href="https://qu3stion.crd.co/">My socials!</a></li>
             <li class="libar"><a class="navbutton" href="#soon">SOON</a></li>
             </ul>
-
         </div>
+
         <div id="universal">
             <header>
                 <section class="title panel" onload="load()" id="top">
-                    <img src="assets/logos/logo.jpg"><label>Qu3stion Archive | v0.1 circa August 2026| QNA & Drone #4</label>
+                    <img src="assets/logos/logo.jpg"><label>Qu3stion Archive | Release (v1.0.0) | QNA & Drone #4</label>
                 </section>
             </header>
             <main>
@@ -92,24 +94,24 @@
                                 <span>Page number. Type in a number to skip to that page.</span>
                             </div>
                             <button id="forwards" tabindex="1" onclick="pageTick(1)">&gt;&gt;</button>
+                            <button id="search_tagsbutton" onclick="showHide('tagsBar')">Tags</button>
                         </nav>
                         <span class="status"></span>
                     </section>
                     <section class="explorer">
                     </section>
                 </section>
-                
+            </main>
+            <footer>
                 <!-- Widgets D: -->
-                <section id="top" class="tittle panel" style="grid-template-rows: auto;">
+                <section class="pollss panel">
                     <ws-widget type="polls" iid="6580" style="margin: 10px;"></ws-widget>
                     <ws-widget type="polls" iid="6586" style="margin: 10px;"></ws-widget>
                 </section>
-                
-            </main>
+            </footer>
         </div>
         <div id="tagsBar" class="sidebar out">
             <div class="tagsMenu">
-                <h1>Tags</h1>
             </div>
         </div>
         <div class="notification">
@@ -117,35 +119,33 @@
         </div>
         <div class="screen" id="infoBox">
             <section class="infobox">
-                <section class="droneContainmentCell panel">
-                    <div>
-                        <h1>Got Qu(e)stions?</h1>
-                        <p>We have answ(e)rs!<br>This archive comes with <b>a feedback form!</b></p>
-                        <p>Send all of your...
-                        <ul>
-                            <li>Bug reports</li>
-                            <li>Qu(e)stions</li>
-                            <li>Comments</li>
-                            <li>Suggestions</li>
-                        </ul>
-                        </p>
-                        <p>I will respond to as many as them as I can on my Twitter account!</p>
-                        <a href="https://forms.gle/ehuYV8dXh23B2arw5">Link to Feedback Form!</a>
-                    </div>
-                    <figure>
-                        <img src="assets/drone4.png">
-                        <!-- <div><p>Hallo! I am Drone #4! I am the manager & programmer of this archive!<br><br><a href="https://x.com/_drone4">Follow me on Twitter (@_drone4)</a> for development & form answers!</p></div>
-                        -->
-                    </figure>
-                </section>
-                <section class="info panel">
+                <section class="info_title panel">
                     <h1>The Qu3stion Archive!</h1>
                     <p>Created by: QNA (@QNAwave) & Drone #4 (@computerlings)</p>
                 </section>
-                <section class="panel">
-                    <p>hmmmm..</p>
+                <section class="drone panel">
+                    <div>
+                        <span>Changelog</span>
+                        <dl>
+                            <dt>AUGUST 19th</dt>
+                            <dd>Release.</dd>
+                        </dl>
+                    </div>
+                    <figure>
+                        <img src="assets/drone4.png">
+                    </figure>
                 </section>
-                <button onclick="showHide('infoBox')">
+                <section class="info panel">
+                    <div>
+                        <p>Free space!</p>
+                        <p>...</p>
+                        <p>For now. If you have any idea for what could go here, send them in the form!</p>
+                    </div>
+                </section>
+                <section class="feedback panel">
+                    <!--iframe spawns here...-->
+                </section>
+                <button class="close2" onclick="showHide('infoBox')">
                     <img src="https://www.svgrepo.com/show/459853/double-down-sign.svg" alt="Close Tab">
                 </button>
             </section>

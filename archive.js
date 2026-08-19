@@ -9,7 +9,7 @@ const searchBar = gallery.querySelector(".search");
 const scrubBar  = viewer.querySelector(".search");
 
 const tagsBar           = document.getElementById("tagsBar");
-const infoBox           = document.getElementById("infoBox");
+const infoBox           = document.getElementById("infoBox").querySelector(".infobox");
 const overlay           = document.getElementById("overlay");
 
 const placeholder_img   = "media/0.jpg";
@@ -98,6 +98,16 @@ tagsDate.set("11", {name: "July '26",      class: "july26"     , type: "date", c
 tagsDate.set("12", {name: "August '26",    class: "august26"   , type: "date", color: "#FFFFFF", description: ""});
 
 /*
+UTILITY!
+__________________________________
+*/
+function setCSS(elm, properties) {
+    for (property in properties) {
+        console.log(property)
+        elm.style[property] = properties[property];
+    }
+}
+/*
 MOBILE DETECTION!
 __________________________________
 
@@ -125,31 +135,108 @@ async function orientationApply() {
         reload = true;
     }
     switch (CSSvertical) {
+        // ALL OF THIS IS TEMPORARY!!
+        // we'll make a separate stylesheet for mobile later.
         case false:
-            weirdRoot.style.setProperty("--tagsBar-width", "20%");
-            archive  .style.gridTemplateColumns           = "2fr 3fr";
-            archive  .style.gridTemplateRows              = "100%";
-            universal.style.marginLeft                    = "10%";
-            universal.style.marginRight                   = "10%";
-            explorer .style.gridTemplateColumns           = "1fr 1fr 1fr 1fr";
-            searchBar.style.gridTemplateColumns           = "40% auto";
-            searchBar.querySelector(".status").style.display = "block";
-            details   .style.gridTemplateRows              = "5% auto";
-            
-            perPage                                       = 16;
+            weirdRoot
+                .style.setProperty("--tagsBar-width", "20%");
+            archive
+                .style.gridTemplateColumns              = "2fr 3fr";
+            archive
+                .style.gridTemplateRows                 = "100%";
+            universal
+                .style.marginLeft                       = "10%";
+            universal
+                .style.marginRight                      = "10%";
+            explorer
+                .style.gridTemplateColumns              = "1fr 1fr 1fr 1fr";
+            searchBar
+                .style.gridTemplateColumns              = "40% auto";
+            searchBar
+                .querySelector(".status")
+                .style.display                          = "block";
+            details
+                .style.gridTemplateRows                 = "5% auto";
+            infoBox
+                .style.marginBottom                     = "0"
+            infoBox
+                .querySelector(".close2")
+                .style.width                            = "20%";
+            infoBox
+                .querySelector(".close2")
+                .style.left                             = "40%";
+            infoBox
+                .querySelector(".close2")
+                .style.height                           = "10%";
+            infoBox
+                .querySelector(".close2")
+                .style.bottom                           = "-10%";
+            infoBox
+                .querySelector(".info")
+                .style.display                          = "grid"
+            infoBox
+                .querySelector(".drone")
+                .style.display                          = "grid";
+            infoBox
+                .style.gridTemplateAreas                = `"drone title info" "drone feedback info"`;
+            infoBox
+                .style.gridTemplateColumns              = "1fr 3fr 1fr"
+            infoBox
+                .style.gridTemplateRows                 = "auto 1fr"
+            infoBox
+                .style.gridTemplateRows                 = "auto 1fr"
+            infoBox.parentElement
+                .style.padding                          = "10%"
+            perPage                                     = 16;
             break;
         case true:
-            weirdRoot.style.setProperty("--tagsBar-width", "100%");
-            archive  .style.gridTemplateColumns           = "1fr";
-            archive  .style.gridTemplateRows              = "auto auto";
-            universal.style.marginLeft                    = "1%";
-            universal.style.marginRight                   = "1%";
-            explorer .style.gridTemplateColumns           = "1fr 1fr";
-            searchBar.style.gridTemplateColumns           = "100% auto";
-            searchBar.querySelector(".status").style.display = "none";
-            details   .style.gridTemplateRows              = "1fr auto";
-
-            perPage                                       = 6;
+            weirdRoot
+                .style.setProperty("--tagsBar-width", "100%");
+            archive
+                .style.gridTemplateColumns              = "1fr";
+            archive
+                .style.gridTemplateRows                 = "auto auto";
+            universal
+                .style.marginLeft                       = "1%";
+            universal
+                .style.marginRight                      = "1%";
+            explorer
+                .style.gridTemplateColumns              = "1fr 1fr";
+            searchBar
+                .style.gridTemplateColumns              = "100% auto";
+            searchBar
+                .querySelector(".status").style.display = "none";
+            details
+                .style.gridTemplateRows                 = "1fr auto";
+            infoBox
+                .style.marginBottom                     = "10vh";
+            infoBox
+                .querySelector(".close2")
+                .style.width                            = "50%";
+            infoBox
+                .querySelector(".close2")
+                .style.left                             = "25%";
+            infoBox
+                .querySelector(".close2")
+                .style.height                           = "5%";
+            infoBox
+                .querySelector(".close2")
+                .style.bottom                           = "-5%";
+            infoBox
+                .querySelector(".info")
+                .style.display                          = "none";
+            infoBox
+                .querySelector(".drone")
+                .style.display                          = "none";
+            infoBox
+                .style.gridTemplateAreas                = `"title" "feedback"`;
+            infoBox
+                .style.gridTemplateColumns              = "1fr"
+            infoBox
+                .style.gridTemplateRows                 = "auto 1fr"
+            infoBox.parentElement
+                .style.padding                          = "5%";
+            perPage                                     = 6;
             break;
     }
     return true;
@@ -408,7 +495,8 @@ async function load() {
     })
     init_placeholder();
     tagsSearchBuilder();
-    tagsCSSBuilder()
+    tagsCSSBuilder();
+    loadForm();
     orientationHandler();
     showHide("infoBox");
 };
@@ -630,6 +718,17 @@ function showHide(menuID) {
     if (activeMenu !== undefined && menuID != activeMenu) {
         showHide(activeMenu);
     }
+    if (menuID == "tagsBar") {
+        document
+            .getElementById("search_tagsbutton")
+            .style
+            .zIndex = 101;
+    } else {
+        document
+            .getElementById("search_tagsbutton")
+            .style
+            .zIndex = "auto";
+    }
     switch (data["state"]) {
         case true:
             menu.classList.add("out");
@@ -688,7 +787,7 @@ function appendToSearch(event) {
         var tagClass = button.classList[0];
         var arr = [...searchingFor]; // I <3 Spread Operator...
         if (tagClass == "answ3r") {
-            window.location.replace("answ3r.html");
+            window.location.replace("assets/other/someone/answ3r.html");
         }
         switch (searchingFor.includes(tagClass)) {
             case true:
@@ -716,7 +815,7 @@ function getLabelByData(tagClass) {
 }
 function tagsCSSBuilder() {
     const style = document.createElement("style");
-
+    style.id = "tags"
     for (arr of [tagsAll, tagsDate]) {
         arr.forEach((value, key, map) => {
             var tagLabel = getLabelByData(value["class"]);
@@ -736,11 +835,12 @@ function tagsCSSBuilder() {
             var color2;
             if (value["class"] == "creator") {
                 coloredText = `${color}`
-                console.log(coloredText);
                 color2 = coloredText.slice(0, 7);
             } else if (value["class"] == "answ3r") {
+                coloredText = `${color}`
                 tagLabel.id = "answ3r";
                 tagLabel.style.display = "none";
+                color2 = coloredText.slice(0, 7);
             } else {
                 coloredText = `#000`
                 color2 = color;
@@ -765,27 +865,6 @@ function tagsCSSBuilder() {
     }
     document.head.appendChild(style);
 }
-/*
-    if (tag["color"] !== null && tag["color"] != "#FFFFFF") {
-        if (tag["color"] == "type") {
-            label.style.borderColor = tagsType.get(tag["type"])["color"];
-        } else {
-            label.style.borderColor = tag["color"];
-        }
-    } else {
-        label.style.borderColor = "#6495a5";
-        dot.style.color = "#6495a5";
-    }
-if (tag["class"] == "creator") {
-        label.style.color = tag["color"];
-        label.classList.add("coloredText");
-    }
-    if (tag["class"] == "answ3r") {
-        label.id            = "answ3r";
-        label.style.display = "none";
-        label.style.color   = "#00000020";
-    }
-*/
 function selectedTagCSS(elm, bool) {
     switch (bool) {
         case true:
@@ -888,3 +967,9 @@ async function scrub(step) {
 /*
 CODING BY: QNAWAVE & DRONE #4 !!!!!!!!
 */
+function loadForm() {
+    const feedback = infoBox.querySelector(".feedback");
+    var iframe = document.createElement("iframe");
+    iframe.src = "https://forms.gle/ehuYV8dXh23B2arw5";
+    feedback.appendChild(iframe);
+}

@@ -55,7 +55,7 @@ body {
     background-color    : #FFF;
     box-sizing          : border-box;
     padding             : 4px;
-    font-size           : clamp(50%, 14px, 100%);
+    font-size           : clamp(0.5rem, 14px, 1rem);
     align-items         : center;
     width               : 100%;
 }
@@ -64,65 +64,65 @@ body {
 }
 
 .navbar {
-  list-style-type: none;
-  margin: 0;
-  padding: var(--gap);
-  overflow: hidden;
+    list-style-type     : none;
+    margin              : 0;
+    padding             : var(--gap);
+    overflow            : hidden;
   
 }
 .navbar, .libar {
-  float: left;
+    float               : left;
 }
 
 .navbar, .libar {
-  display: block;
-  color: white;
-  text-align: center;
-  padding: var(--gap);
-  text-decoration: none;
+    display             : block;
+    color               : white;
+    text-align          : center;
+    padding             : var(--gap);
+    text-decoration     : none;
 }
 
 .navbutton {
-  appearance: none;
-  background-color: #000000;
-  border: 2px solid #1A1A1A;
-  border-radius: 5px;
-  box-sizing: border-box;
-  color: #FFFFFF;
-  cursor: pointer;
-  display: inline-block;
-  font-family: Roobert,-apple-system,BlinkMacSystemFont,"Segoe UI",Helvetica,Arial,sans-serif,"Apple Color Emoji","Segoe UI Emoji","Segoe UI Symbol";
-  font-size: 16px;
-  font-weight: 600;
-  line-height: normal;
-  margin: 0;
-  min-height: 60px;
-  min-width: 0;
-  outline: none;
-  padding: 16px 30px;
-  text-align: center;
-  text-decoration: none;
-  transition: all 300ms cubic-bezier(.23, 1, 0.32, 1);
-  user-select: none;
-  -webkit-user-select: none;
-  touch-action: manipulation;
-  width: 100%;
-  will-change: transform;
+    appearance          : none;
+    background-color    : #000000;
+    border              : 2px solid #1A1A1A;
+    border-radius       : 5px;
+    box-sizing          : border-box;
+    color               : #FFFFFF;
+    cursor              : pointer;
+    display             : inline-block;
+    font-family         : Roobert,-apple-system,BlinkMacSystemFont,"Segoe UI",Helvetica,Arial,sans-serif,"Apple Color Emoji","Segoe UI Emoji","Segoe UI Symbol";
+    font-size           : 16px;
+    font-weight         : 600;
+    line-height         : normal;
+    margin              : 0;
+    min-height          : 60px;
+    min-width           : 0;
+    outline             : none;
+    padding             : 16px 30px;
+    text-align          : center;
+    text-decoration     : none;
+    transition          : all 300ms cubic-bezier(.23, 1, 0.32, 1);
+    user-select         : none;
+    -webkit-user-select : none;
+    touch-action        : manipulation;
+    width               : 100%;
+    will-change         : transform;
 }
 
 .navbutton:disabled {
-  pointer-events: none;
+  pointer-events        : none;
 }
 
 .navbutton:hover {
-  box-shadow: rgba(0, 0, 0, 0.25) 0 8px 15px;
-  transform: translateY(-2px);
-  background-image: url('/assets/static.gif');  
+  box-shadow            : rgba(0, 0, 0, 0.25) 0 8px 15px;
+  transform             : translateY(-2px);
+  background-image      : url('assets/static.gif');  
 }
 
 .navbutton:active {
-  box-shadow: none;
-  transform: translateY(0);
+  box-shadow            : none;
+  transform             : translateY(0);
 }
 
 .title {
@@ -227,15 +227,23 @@ article button {
     height              : 100%;
     width               : 100%;
     display             : grid;
+    grid-template-areas :
+        "drone title info"
+        "drone feedback info";
     grid-template-columns
-                        : 1fr 4fr 1fr;
+                        : 1fr 3fr 1fr;
     grid-template-rows
-                        : 100%;
+                        : auto 1fr;
     gap                 : var(--gap);
     position            : relative;
     border-radius       : 10px;
     background-color    : #DBE9F3;
     padding             : var(--gap);
+    font-size           : clamp(0.5rem, 14px, 1rem);
+}
+.infobox span {
+    font-size           : clamp(0.5rem, 24px, 2rem);
+    margin              : 0;
 }
 .infobox > button {
     position            : absolute;
@@ -244,14 +252,14 @@ article button {
     width               : 20%;
     height              : 10%;
     align-items         : center;
-    border-radius: inherit;
+    border-radius       : inherit;
     border-top-left-radius
                         : 0;
     border-top-right-radius
                         : 0;
     border              : 8px solid #DBE9F3;
     border-top          : 0;
-    background-color    : #b5cedf;
+    background-color    : #DBE9F3;
 }
 .infobox > button > img {
     margin-top          : 2%;
@@ -267,37 +275,49 @@ article button {
     border              : 2px #c56b60 solid;
     transition-duration : 0.2s;
 }
-.info {
+.infobox > .feedback {
+    padding             : calc(var(--gap));
+    grid-area           : feedback;
+}
+.infobox > .info {
     width               : auto;
     padding             : calc(var(--gap) * 2);
+    grid-area           : info;
 }
-.droneContainmentCell {
+.infobox > .info_title {
+    grid-area           : title;
+    text-align          : center;
+}
+.info_title > h1 {
+    margin              : 0;
+    font-size           : 2rem;
+}
+.drone {
     display             : grid;
     grid-template-columns
                         : auto;
     grid-template-rows  : 1fr auto;
+    grid-area           : drone;
     width               : auto;
     height              : 100%;
     border-radius       : 10px;
     padding             : 0;
 }
-.droneContainmentCell > div {
-    padding             : var(--gap);
-    margin              : var(--gap);
+.drone > div {
+    padding             : calc(var(--gap) * 2);
     border-radius       : 10px;
-    font-size           : clamp(1%, 20px, 100%);
 }
-.droneContainmentCell > div > h1 {
-    margin              : 0;
+.feedback > iframe {
+    width               : 100%;
+    height              : 100%;
+    scrollbar-width     : none;
+    box-sizing          : border-box;
 }
-.droneContainmentCell > figure {
+.drone > figure {
     position            : relative;
     top                 : 0;
     right               : 0;
     margin              : 0;
-}
-.droneContainmentCell > figure > img {
-    transform           : scale(-1, 1);
 }
 .search {
     display             : grid;
@@ -309,7 +329,7 @@ article button {
     gap                 : inherit;
     display             : grid;
     grid-template-columns
-                        : 60px 1fr auto 1fr;
+                        : 60px 1fr auto 1fr 60px;
     height              : auto;
     box-sizing          : border-box;
 }
@@ -318,12 +338,15 @@ article button {
     grid-template-columns
                         : 2fr 4fr 2fr;
 }
+#search_tagsbutton {
+    z-index: 101;
+}
 #tag_searching {
     display             : grid;
     padding             : 8px;
 }
 .search span {
-    font-size           : 14px;
+    font-size           : clamp(0.5rem, 14px, 1rem);
 }
 .src {
     display             : grid;
@@ -332,7 +355,7 @@ article button {
 }
 .div_id {
     text-align          : right;
-    font-size           : clamp(50%, 20px, 100%)
+    font-size           : clamp(0.5rem, 20px, 1rem);
 }
 .tags {
     display             : flex;
@@ -363,7 +386,7 @@ article button {
     align-items         : center;
     gap                 : 4px;
     padding             : 4px 11px 4px 8px;
-    font-size           : clamp(75%, 12px, 100%);
+    font-size           : clamp(0.75rem, 12px, 1rem);
     color               : #000;
     background-color    : transparent;
     border              : 1.5px solid;
@@ -402,11 +425,6 @@ article button {
 .sidebar.out {
     animation-name      : slideOut;
     animation-duration  : 0.5s;
-}
-
-.sidebar > h1 {
-    font-size           : 20px;
-    font-weight         : normal;
 }
 .tagsMenu {
     display             : flex;
@@ -582,7 +600,7 @@ details {
     background-color    : #437ca3;
     color               : #fff;
     text-align: center;
-    font-size           : clamp(50%, 14px, 100%);
+    font-size           : clamp(0.5rem, 14px, 1rem);
     padding             : 8px;
     border-radius       : 5px;
     box-sizing: border-box;
@@ -607,4 +625,18 @@ nav > .tick.tooltip > span {
     visibility          : visible;
     opacity             : 100%;
     transition-duration : 0.2s;
+}
+dl {
+    background-color    : #DBE9F3;
+    padding             : var(--gap);
+    box-sizing          : border-box;
+    border-radius       : 10px;
+}
+dt {
+    font-weight         : bold;
+    margin-bottom       : 0.5em;
+}
+.pollss {
+    display: flex;
+    flex-direction: row;
 }

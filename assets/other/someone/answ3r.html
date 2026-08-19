@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>¿</title>
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+        <style>
+            body {
+                background-color: black;
+                font-family: sans-serif;
+                font-weight: bold;
+                align-items: center;
+                margin: 0;
+            }
+            button {
+                all: unset;
+                position: fixed;
+                top: 0;
+                left: 0;
+                width: 100vw;
+                height: 100vh;
+                object-fit: cover;
+                z-index: 999;
+            }
+            #vid1, #vid2, #vid3 {
+                width: 100%;
+                height: 100%;
+            }
+        </style>
+    </head>
+    <body>
+        <button id="clickIt" data-progress="1">
+            <video id="vid1" preload="auto" loading="eager">
+                <source src="someone.mp4" type="video/mp4">
+            </video>
+            <video id="vid2" preload="auto" loading="eager" style="display: none;" loop>
+                <source src="someoneloop.mp4" type="video/mp4">
+            </video>
+            <video id="vid3" preload="auto" loading="eager" style="display: none;">
+                <source src="looking.mp4" type="video/mp4">
+            </video>
+        </button>
+    </body>
+    <script>
+        const button = document.getElementById("clickIt");
+        const vid1 = document.getElementById("vid1");
+        const vid2 = document.getElementById("vid2");
+        const vid3 = document.getElementById("vid3");
+        
+        button.addEventListener('click', function() {
+            switch (button.dataset.progress) {
+                case "1":
+                    button.disabled = true;
+                    vid1.play();
+                    break;
+                case "2":
+                    button.disabled = true;
+                    vid2.style.display = "none";
+                    vid3.style.display = "block";
+                    vid3.play()
+                    vid2.pause()
+                    button.dataset.progress = "3";
+            }
+        });
+        vid1.addEventListener('ended', function() {
+            button.disabled = false;
+            vid2.play();
+            vid1.style.display = "none";
+            vid2.style.display = "block";
+            vid1.pause();
+            button.dataset.progress = "2";
+        });
+        vid3.addEventListener('ended', function() {
+            window.location.replace("https://qu3stion-archive.github.io/");
+        });
+    </script>
+</html>
