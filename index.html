@@ -10,7 +10,7 @@
         <link rel="icon" type="image/jpg" sizes="16x16" href="assets/logos/logo_16x16.jpg">
         <script src="papaparse.min.js"></script>
     </head>
-    <body onload="load()" id="top">
+    <body>
         <!-- TEMPLATE 1: Thumbnails -->
         <template id="template_">
             <article>
@@ -42,10 +42,17 @@
 
         <!-- Top button -->
         <div id="overlay" class="out"></div>
-        <div class="banner"></div>
+        <div class="banner">    
+            <ul class="navbar">
+            <li class="libar"><a class="navbutton" href="/index.html" >Home</a></li>
+            <li class="libar"><a class="navbutton" href="https://qu3stion.crd.co/">My socials!</a></li>
+            <li class="libar"><a class="navbutton" href="#contact">SOON</a></li>
+            </ul>
+
+        </div>
         <div id="universal">
             <header>
-                <section class="title panel">
+                <section class="title panel" onload="load()" id="top">
                     <img src="assets/logos/logo.jpg"><label>Qu3stion Archive | v0.1 circa August 2026| QNA & Drone #4</label>
                 </section>
             </header>

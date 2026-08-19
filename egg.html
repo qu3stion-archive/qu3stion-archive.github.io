@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>.</title>
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+        <style>
+            @font-face {
+                font-family: "pixel";
+                src: url("assets/fonts/pixel_operator.ttf") format("truetype");
+            }
+            body {
+                background-color: black;
+                font-family: "pixel", sans-serif;
+                font-weight: bold;
+                align-items: center;
+                margin: 0;
+            }
+            #man {
+                height: 100vh;
+                display: flex;
+                flex-direction: column;
+                justify-content: center;
+            }
+            #well {
+                display: flex;
+                flex-direction: column;
+                align-items: center;
+            }
+            #well > img {
+                width: 500px;
+                height: 500px;
+            }
+            #well > p {
+                height: 10px;
+            }
+            #dialog {
+                font-size: 24px;
+            }
+            button.interact {
+                all: unset;
+            }
+            button.interact:hover {
+                color: yellow;
+            }
+            #choice {
+                display: flex;
+                flex-direction: row;
+                justify-content: center;
+                height: 10px;
+                gap: 50px;
+                margin-block: 24px;
+            }
+            a {
+                all: unset;
+                color: white;
+                font-size: 24px;
+            }
+            a:hover {
+                color: yellow;
+            }
+        </style>
+    </head>
+    <body>
+        <audio id="audio" loop style="display: none;"><source src="assets/other/answ3r.ogg" type="audio/ogg"></audio>
+        <div id="man">
+            <div id="well">
+                <button class="interact" onclick="play()"><img src="assets/other/answ3r.gif"></button>
+                <p id="dialog" style="color: white; position: relative; top: 0px; left: 0px;"></p>
+                <div id="choice"></div>
+            </div>
+        </div>
+    </body>
+    <script>
+        var playing = false;
+        document.documentElement.requestFullscreen();
+        const cont   = document.getElementById("well");
+        const dialog = document.getElementById("dialog");
+        const choice = document.getElementById("choice");
+        const audio = document.getElementById("audio");
+        const snd_text = new Audio("assets/text.wav");
+        audio.play();
+        var text = [
+            "Well, there is a computerling here.",
+            "She seems happy to see you.",
+            "She offers you something.",
+            [
+                {
+                    text: "Yes",
+                    type: "a",
+                    link: "assets/other/egg.png",
+                    download: "egg",
+                    delay: 3000,
+                    do: function() {
+                        setTimeout(() => {
+                            window.location.replace(this.link);
+                        }, this.delay)
+                    },
+                },
+                {
+                    text: "No",
+                    type: "a",
+                    link: "index.html",
+                    delay: 3000,
+                    do: function() {
+                        window.location.replace(this.link)
+                    },
+                }
+            ]
+        ]
+
+        function delay(ms) {
+            return new Promise((resolve, reject) => {
+                setTimeout(function(){
+                    resolve("yay!")
+                }, ms)
+            })
+        }
+        dialog.style.display = "none";
+        choice.style.display = "flex";
+        async function play() {
+            if (playing == false) {
+                playing = true;
+                for (line of text) {
+                    var interval;
+                    dialog.innerHTML = "";
+                    var type = typeof line;
+                    switch (type) {
+                        case "string":
+                            dialog.style.display = "block";
+                            choice.style.display = "none";
+                            for (letter of line) {
+                                dialog.innerHTML += letter;
+                                var ms;
+                                switch (letter) {
+                                    case ",":
+                                        ms = 250;
+                                        break;
+                                    case " ":
+                                        ms = 0;
+                                        break;
+                                    default:
+                                        ms = 50;
+                                        break;
+                                }
+                                snd_text.play();
+                                var check = await delay(ms)
+                            }
+                            break;
+                        case "object":
+                            dialog.style.display = "none";
+                            choice.style.display = "flex";
+                            for (option of line) {
+                                var elm = document.createElement(option.type);
+                                if (option.download) {
+                                    elm.href = option.link;
+                                    elm.download = option.download;
+                                }
+                                elm.addEventListener("click", (event) => {
+                                    setTimeout(() => {
+                                        window.location.replace("index.html");
+                                    }, 3000)
+                                });
+                                
+                                elm.innerHTML = option.text;
+                                choice.appendChild(elm)
+                            }
+                            var check = await delay(option.delay);
+                            break;
+                    }
+                    
+                    var check2 = await delay(3000);
+                }
+            } else {
+                return false;
+            }
+        }
+        setTimeout(() => {
+            play()
+        }, 10000)
+    </script>
+</html>
