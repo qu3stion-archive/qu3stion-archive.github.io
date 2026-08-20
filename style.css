@@ -206,6 +206,7 @@ img.thumbnail:hover, video.thumbnail:hover{
     display             : block;
 }
 .screen {
+    pointer-events      : none;
     position            : fixed;
     top                 : 0;
     left                : 0;
@@ -220,6 +221,7 @@ img.thumbnail:hover, video.thumbnail:hover{
     box-sizing          : border-box;
 }
 .infobox {
+    pointer-events      : all;
     display             : grid;
     grid-template-columns
                         : 2fr 5fr 2fr;

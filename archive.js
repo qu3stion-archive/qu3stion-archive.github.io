@@ -670,6 +670,9 @@ var animData = {
         state   : false,
     }
 }
+overlay.addEventListener("click", () => {
+    showHide(activeMenu)
+})
 for (id of ["tagsBar", "infoBox", "overlay"]) {
     const elm = document.getElementById(id);
     elm.addEventListener("animationstart", (event) => {
