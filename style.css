@@ -279,10 +279,16 @@ article button {
 .infobox > .strawpage {
     padding             : calc(var(--gap));
     grid-area           : strawpage;
+    display: grid;
+    grid-template-rows: auto 1fr;
+    gap: var(--gap)
 }
 .infobox > .feedback {
     padding             : calc(var(--gap));
     grid-area           : feedback;
+}
+.strawpage > label {
+    font-size: 12px;
 }
 .infobox > .info {
     width               : auto;
@@ -296,6 +302,9 @@ article button {
 .info_title > h1 {
     margin              : 0;
     font-size           : 2rem;
+}
+.info_title > p {
+    font-size           : 0.5rem;
 }
 .drone {
     display             : grid;
