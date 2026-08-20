@@ -984,6 +984,6 @@ CSV parsing tool by: PapaParse (https://www.papaparse.com/)
 function loadForm() {
     const feedback = infoBox.querySelector(".strawpage");
     var iframe = document.createElement("iframe");
-    iframe.src = "https://qu3stion.straw.page/";
+    iframe.src = "https://forms.gle/ehuYV8dXh23B2arw5";
     feedback.appendChild(iframe);
 }

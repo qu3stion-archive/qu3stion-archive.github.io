@@ -659,7 +659,42 @@ dt {
     display             : grid;
     grid-template-columns
                         : 1fr 1fr;
+    grid-area: polls;
 }
 footer {
     margin-bottom: 20vh;
+    display: grid;
+    grid-template-rows: auto auto;
+    grid-template-columns: auto;
+    grid-template-areas: "polls" "credit";
+    gap: var(--gap);
+}
+.credit1 {
+    grid-area: credit;
+    display: grid;
+    grid-template-columns: 20% 1fr;
+    grid-template-areas: "img text";
+    grid-template-rows: auto;
+}
+.credit1 > a {
+    grid-area: img;
+    width: 100%;
+    height: auto;
+}
+.credit1 > div {
+    grid-area: text;
+    background-color: #DBE9F3;
+    padding: var(--gap);
+    border-radius: 10px;
+}
+.credit1 > a > img {
+    transform: scale(-1, 1);
+}
+.credit1 b {
+    color: #db7a2b;
+}
+.credit1 > a:hover > img {
+    transform           : scale(3);
+    transition-duration : 10s;
+    transition-timing-function: linear(0, 0.025 99%, 1);
 }
