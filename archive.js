@@ -180,11 +180,11 @@ async function orientationApply() {
                 .querySelector(".drone")
                 .style.display                          = "grid";
             infoBox
-                .style.gridTemplateAreas                = `"drone title info" "drone feedback info"`;
+                .style.gridTemplateAreas                = `"drone title info" "drone strawpage info" "drone feedback info"`;
             infoBox
                 .style.gridTemplateColumns              = "1fr 3fr 1fr"
             infoBox
-                .style.gridTemplateRows                 = "auto 1fr"
+                .style.gridTemplateRows                 = "auto 1fr auto"
             infoBox
                 .style.gridTemplateRows                 = "auto 1fr"
             infoBox.parentElement
@@ -235,7 +235,7 @@ async function orientationApply() {
                 .querySelector(".drone")
                 .style.display                          = "none";
             infoBox
-                .style.gridTemplateAreas                = `"title" "feedback"`;
+                .style.gridTemplateAreas                = `"title" "strawpage" "feedback"`;
             infoBox
                 .style.gridTemplateColumns              = "1fr"
             infoBox
@@ -982,8 +982,8 @@ CODING BY: QNAWAVE & DRONE #4 !!!!!!!!
 CSV parsing tool by: PapaParse (https://www.papaparse.com/)
 */
 function loadForm() {
-    const feedback = infoBox.querySelector(".feedback");
+    const feedback = infoBox.querySelector(".strawpage");
     var iframe = document.createElement("iframe");
-    iframe.src = "https://forms.gle/ehuYV8dXh23B2arw5";
+    iframe.src = "https://qu3stion.straw.page/";
     feedback.appendChild(iframe);
 }
