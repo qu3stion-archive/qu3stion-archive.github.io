@@ -144,6 +144,8 @@ async function orientationApply() {
                 .style.gridTemplateColumns              = "2fr 3fr";
             archive
                 .style.gridTemplateRows                 = "100%";
+            archive
+                .style.height                           = "900px";
             universal
                 .style.marginLeft                       = "10%";
             universal
@@ -198,6 +200,8 @@ async function orientationApply() {
                 .style.gridTemplateColumns              = "1fr";
             archive
                 .style.gridTemplateRows                 = "auto auto";
+            archive
+                .style.height                           = "auto";
             universal
                 .style.marginLeft                       = "1%";
             universal
