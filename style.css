@@ -55,7 +55,7 @@ body {
     background-color    : #FFF;
     box-sizing          : border-box;
     padding             : 4px;
-    font-size           : clamp(0.5rem, 14px, 1rem);
+    font-size           : clamp(0.5em, 14px, 1em);
     align-items         : center;
     width               : 100%;
 }
@@ -181,7 +181,7 @@ main {
     overflow-x          : none;
     scrollbar-width     : none;
 }
-article {
+.explorer > article {
     display             : flex;
     flex-direction      : column;
     gap                 : 3px;
@@ -199,11 +199,7 @@ img.thumbnail:hover, video.thumbnail:hover{
     transform           : scale(1.07);
     transition-duration : 0.2s;
 }
-article button:focus {
-    transform           : scale(1.07);
-    transition-duration : 0.2s;
-}
-article button {
+.explorer > article button {
     all                 : unset;
 }
 .shown {
@@ -211,8 +207,8 @@ article button {
 }
 .screen {
     position            : fixed;
-    top                 : 0px;
-    left                : 0px;
+    top                 : 0;
+    left                : 0;
     width               : 100%;
     height              : 100%;
     padding             : 10%;
@@ -224,29 +220,124 @@ article button {
     box-sizing          : border-box;
 }
 .infobox {
+    display             : grid;
+    grid-template-columns
+                        : 2fr 5fr 2fr;
+    grid-template-rows  : auto 1fr;
+    grid-template-areas : "s title s2" "s iframe s2" "s credits s2";
+    height              : 100%;
+    width               : 100%;
+    background-color    : #DBE9F3;
+    padding             : var(--gap);
+    gap                 : var(--gap);
+    border-radius       : 10px;
+}
+.infobox > .iframe {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    grid-area: iframe;
+    background-image: url("assets/bg.jpg");
+    background-size: cover;
+    background-attachment: scroll;
+    background-repeat: no-repeat;
+    background-position: center;
+    position: relative;
+    height: 100%;
+}
+.links {
+    width: 100%;
+    height: 100%;
+    box-sizing: border-box;
+    border-radius: 10px;
+    border: #DBE9F3 2px solid;
+    background-color: #FFFFFF96;
+    overflow: hidden;
+}
+.links > div {
+    height: 100%;
+    width: 100%;
+    box-sizing: border-box;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-evenly;
+    gap: calc(var(--gap) * 0.5);
+    padding: calc(var(--gap) * 2);
+}
+.links .link {
+    background-color: transparent;
+    display: grid;
+    grid-template-rows: 1fr auto;
+    grid-template-columns: 100%;
+    width: 17.5%;
+    box-sizing: border-box;
+    height: 100%;
+    gap: calc(var(--gap) * 0.5);
+    font-size: 1.5vh;
+    /*
+    padding: var(--gap);
+    display: grid;
+    grid-template-rows: 4fr 1fr;
+    grid-template-columns: auto;
+    text-align: center;
+    align-items: center;
+    width: 20%;
+    height: auto;
+    box-sizing: border-box;
+    */
+}
+.links label {
+    font-size: clamp(0.5em, 1.5vh, 1em);
+    font-weight: bold;
+    text-align: center;
+}
+.links img {
+
+    height: auto;
+    width: 100%;
+}
+
+
+.iframe > .face {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    width: 30vh;
+}
+.infobox > .title2 {
+    grid-area           : title;
+    display             : flex;
+    flex-direction      : column;
+    justify-content     : center;
+    align-items         : center;
+    height              : 100%;
+    width               : 100%;
+}
+.infobox > .title2 > img {
+    width: auto;
+    max-width: 100%;
+    max-height: 6vh;
+}
+.infobox > .sidebar2 {
+    grid-area           : s;
+    height              : 100%;
+    width               : 100%;
+}
+.infobox > .sidebar3 {
+    grid-area           : s2;
+    height              : 100%;
+    width               : 100%;
+}
+.infobox > .credit {
+    grid-area           : credits;
     height              : 100%;
     width               : 100%;
     display             : grid;
-    grid-template-areas :
-        "drone title info"
-        "drone strawpage info"
-        "drone feedback info";
-    grid-template-columns
-                        : 1fr 3fr 1fr;
-    grid-template-rows
-                        : auto 1fr auto;
-    gap                 : var(--gap);
-    position            : relative;
-    border-radius       : 10px;
-    background-color    : #DBE9F3;
-    padding             : var(--gap);
-    font-size           : clamp(0.5rem, 14px, 1rem);
+    grid-template-rows  : 1fr;
 }
-.infobox span {
-    font-size           : clamp(0.5rem, 24px, 2rem);
-    margin              : 0;
-}
-.infobox > button {
+.infobox > .close {
     position            : absolute;
     bottom              : -10%;
     left                : 40%;
@@ -265,87 +356,6 @@ article button {
 .infobox > button > img {
     margin-top          : 2%;
     height              : 90%;
-}
-.close {
-    background-color    : #fdd6d6;
-    border              : 2px #eb9895 solid;
-    border-radius       : 10px;
-}
-.close:hover {
-    background-color    : #eb9895;
-    border              : 2px #c56b60 solid;
-    transition-duration : 0.2s;
-}
-.infobox > .strawpage {
-    padding             : calc(var(--gap));
-    grid-area           : strawpage;
-    display: grid;
-    grid-template-rows: auto 1fr;
-    gap: var(--gap)
-}
-.infobox > .feedback {
-    padding             : calc(var(--gap));
-    grid-area           : feedback;
-}
-.strawpage > label {
-    font-size: 12px;
-}
-.infobox > .info {
-    width               : auto;
-    padding             : calc(var(--gap) * 2);
-    grid-area           : info;
-}
-.infobox > .info_title {
-    grid-area           : title;
-    text-align          : center;
-}
-.info_title > h1 {
-    margin              : 0;
-    font-size           : 2rem;
-}
-.info_title > p {
-    font-size           : 0.5rem;
-}
-.drone {
-    display             : grid;
-    grid-template-columns
-                        : auto;
-    grid-template-rows  : 1fr auto;
-    grid-area           : drone;
-    width               : auto;
-    height              : 100%;
-    border-radius       : 10px;
-    padding             : 0;
-}
-.drone > div {
-    padding             : calc(var(--gap) * 2);
-    border-radius       : 10px;
-}
-.feedback {
-    background-color: #db7a2b;
-    text-align: center;
-}
-.feedback > a {
-    color: #fff;
-    box-sizing          : border-box;
-    font-weight: bold;
-}
-.strawpage > iframe {
-    width               : 100%;
-    height              : 100%;
-    scrollbar-width     : none;
-    box-sizing          : border-box;
-}
-.drone > figure {
-    position            : relative;
-    top                 : 0;
-    right               : 0;
-    margin              : 0;
-}
-.drone > figure > a:hover > img {
-    transform           : scale(10);
-    transition-duration : 15s;
-    transition-timing-function: linear(0, 0.025 99%, 1);
 }
 .search {
     display             : grid;
@@ -374,7 +384,7 @@ article button {
     padding             : 8px;
 }
 .search span {
-    font-size           : clamp(0.5rem, 14px, 1rem);
+    font-size           : clamp(0.5em, 14px, 1em);
 }
 .src {
     display             : grid;
@@ -383,7 +393,7 @@ article button {
 }
 .div_id {
     text-align          : right;
-    font-size           : clamp(0.5rem, 20px, 1rem);
+    font-size           : clamp(0.5em, 20px, 1em);
 }
 .tags {
     display             : flex;
@@ -414,7 +424,7 @@ article button {
     align-items         : center;
     gap                 : 4px;
     padding             : 4px 11px 4px 8px;
-    font-size           : clamp(0.75rem, 12px, 1rem);
+    font-size           : clamp(0.75em, 12px, 1em);
     color               : #000;
     background-color    : transparent;
     border              : 1.5px solid;
@@ -423,8 +433,8 @@ article button {
     border-radius       : 999px;
     vertical-align      : center;
 }
-.tag:hover {
-    transform           : scale(1.07);
+.tag:hover, .link a:hover > img {
+    transform           : scale(1.1);
     transition-duration : 0.2s;
 }
 .tag > span {
@@ -628,7 +638,7 @@ details {
     background-color    : #437ca3;
     color               : #fff;
     text-align: center;
-    font-size           : clamp(0.5rem, 14px, 1rem);
+    font-size           : clamp(0.5em, 14px, 1em);
     padding             : 8px;
     border-radius       : 5px;
     box-sizing: border-box;
@@ -664,37 +674,40 @@ dt {
     font-weight         : bold;
     margin-bottom       : 0.5em;
 }
-.pollss {
-    display             : grid;
-    grid-template-columns
-                        : 1fr 1fr;
-    grid-area: polls;
-}
+
 footer {
     margin-bottom: 20vh;
     display: grid;
-    grid-template-rows: auto auto;
-    grid-template-columns: auto;
-    grid-template-areas: "polls" "credit";
+    grid-template-rows: auto auto auto;
+    grid-template-columns: 1fr 2fr;
+    grid-template-areas: "polls polls" "coms coms" "credit .";
     gap: var(--gap);
+}
+.pollss {
+    display             : grid;
+    grid-template-columns  
+                        : 1fr 1fr;
+    grid-area: polls;
+}
+.commss {
+    display             : grid;
+    grid-area           : coms;
 }
 .credit1 {
     grid-area: credit;
-    display: grid;
-    grid-template-columns: 20% 1fr;
-    grid-template-areas: "img text";
-    grid-template-rows: auto;
+    display: flex;
+    flex-direction: column;
+
 }
 .credit1 > a {
-    grid-area: img;
-    width: 100%;
+    width: 33%;
     height: auto;
 }
 .credit1 > div {
-    grid-area: text;
     background-color: #DBE9F3;
     padding: var(--gap);
     border-radius: 10px;
+    font-size: 1.5vh
 }
 .credit1 > a > img {
     transform: scale(-1, 1);

@@ -6,6 +6,7 @@
         <meta name="kicya-site-verification" content="a8bedc0dc4ce687f7f0212b0502e62470a8782549e1de99f50091c78dd8a4172">
         <title>Qu3stion Archive</title>
         <link href="style.css" rel="stylesheet" type="text/css" media="all">
+        <link href="utility.css" rel="stylesheet" type="text/css" media="all">
         <link rel="icon" href="assets/logos/logo.ico">
         <link rel="icon" type="image/jpg" sizes="32x32" href="assets/logos/logo_32x32.jpg">
         <link rel="icon" type="image/jpg" sizes="16x16" href="assets/logos/logo_16x16.jpg">
@@ -57,7 +58,7 @@
         <div id="universal">
             <header>
                 <section class="title panel" onload="load()" id="top">
-                    <img src="assets/logos/logo.jpg"><label>Qu3stion Archive | Release (v1.0.0) | QNA & Drone #4</label>
+                    <img src="assets/logos/logo.jpg"><label>Qu3stion Archive | Release (v1.1.0) | QNA & Drone #4</label>
                 </section>
             </header>
             <main>
@@ -102,11 +103,21 @@
                 </section>
             </main>
             <footer>
-                <!-- Widgets D: -->
+                <section class="commss panel" id="talk" style="padding: 18px;">
+                    <ws-widget type="comments" name="qu3stion-blog" iid="6589" style="width: 100%;"></ws-widget>
+                </section>
                 <section class="pollss panel">
                     <ws-widget type="polls" iid="6580" style="margin: 10px;"></ws-widget>
                     <ws-widget type="polls" iid="6586" style="margin: 10px;"></ws-widget>
                 </section>
+                <!--
+                <section class="changelog panel">
+                    <h1>[Placeholder...]</h1>
+                    <div>
+                        
+                    </div>
+                </section>
+                -->
                 <section class="credit1 panel">
                     <a href="https://x.com/computerlings">
                         <img src="assets/drone4.png">
@@ -115,68 +126,94 @@
                         <p>Hallo! I am <b>JOANNE DRONE</b> & I programmed ALL of the Javascript for this website! Follow me on Twitter: <a href="https://x.com/computerlings">@COMPUTERLINGS</a>... if you DARE!!!!<br><br>Want to send me suggestions? -- comments? -- bug reports? -- compliments?<br><a href="https://forms.gle/ehuYV8dXh23B2arw5">Go to the FEEDBACK FORM!</a></p>
                     </div>
                 </section>
+                <!-- Widgets D: -->
             </footer>
         </div>
+
+        
         <div id="tagsBar" class="sidebar out">
             <div class="tagsMenu">
             </div>
         </div>
+
+
         <div class="notification">
             <label id="statusAlt" class="status"></label>
         </div>
+        <!--
+        <div class="screen" id="feedbackForm">
+            <section>
+
+            </section>
+        </div>
+        -->
         <div class="screen" id="infoBox">
             <section class="infobox">
-                <section class="info_title panel">
-                    <h1>The Qu3stion Archive!</h1>
-                    <p><b>Created by:</b><br>QNA <a href="https://x.com/qnawave">[@QNAwave]</a> (HTML, CSS)<br>&<br>Drone #4 <a href="https://x.com/computerlings">[@computerlings]</a> (HTML, Javascript)</p>
+                <section class="title2 panel">
+                    <img src="assets/logos/title.png" preload="auto" loading="eager">
                 </section>
-                <section class="drone panel">
-                    <div>
-                        <span>Changelog</span>
-                        <dl>
-                            <dt>AUGUST 19th</dt>
-                            <dd>Release!</dd>
-                        </dl>
-                    </div>
-                    <figure>
-                        <a href="https://x.com/computerlings">
-                            <img src="assets/drone4.png">
+                <section class="sidebar2 panel">
+                    
+                </section>
+                <section class="iframe panel">
+                    <div class="face">
+                        <a href="https://qu3stion.straw.page">
+                            <img src="assets/intro.gif">
                         </a>
-                    </figure>
-                </section>
-                <section class="info panel">
-                    <div>
-                        <p>Free space!</p>
-                        <p>...</p>
-                        <p>For now. If you have any ideas for what could go here, send them in the form!</p>
                     </div>
                 </section>
-                <section class="strawpage panel">
-                    <label>Below, you can talk to the website's programmer, Joanne Drone!<br>(Not Qu3stion, though, <a href="qu3stion.straw.page">if you want to talk to Qu3stion, she answers her strawpage mail!</a>)</label>
-                    <!--iframe spawns here...-->
+                <section class="credit panel">
+                    <div class="links">
+                        <div>
+                            <div class="link">
+                                <a href="https://qu3stion.straw.page">
+                                    <img src="assets/icon.png">
+                                </a>
+                                <label>Talk to Qu3stion</label>
+                            </div>
+                            <div class="link">
+                                <a href="https://qu3stion.crd.co/">
+                                    <img src="assets/icon.png">
+                                </a>
+                                <label>Qu3stion's Socials</label>
+                            </div>
+                            <div class="link">
+                                <a href="https://forms.gle/VMr6kHGbwgEbDiUs9">
+                                    <img src="assets/icon.png">
+                                </a>
+                                <label>Website Feedback</label>
+                            </div>
+                        </div>
+                    </div>
                 </section>
-                <section class="feedback panel">
-                    <a href="https://qu3stion.crd.co/">Click here to TALK TO QU3STION!</a>
+                <section class="sidebar3 panel">
                 </section>
-                <button class="close2" onclick="showHide('infoBox')">
+                <button class="close" onclick="showHide('infoBox')">
                     <img src="https://www.svgrepo.com/show/459853/double-down-sign.svg" alt="Close Tab">
                 </button>
             </section>
         </div>
+
+
         <div id="buttons" class="to-top">
             <button id="infoButton" class="to-top tooltip" tabindex="0" onclick="showHide('infoBox')">
-                <span>Website Information</span>
+                <span>Start Page</span>
                 <img src="https://www.svgrepo.com/show/491697/question-circle.svg" alt="Info">
             </button>
             <button id="tagsButton" class="to-top tooltip" tabindex="0" onclick="showHide('tagsBar')">
-                <span>Tags Menu</span>
+                <span>Menu</span>
                 <img src="https://www.svgrepo.com/show/491652/line-3.svg" alt="Search by Tags">
             </button>
+            <a class="to-top tooltip" href="#talk" tabindex="0">
+                <span>Jump to Comments</span>
+                <img src="https://www.svgrepo.com/show/491671/message-bubble-2.svg" alt="Comments">
+            </a>
             <a class="to-top tooltip" href="#top" tabindex="0">
-                <span>Go to Top</span>
-                <img src="https://www.svgrepo.com/show/491584/caret-up.svg" alt="Go to Top">
+                <span>Jump to Archive</span>
+                <img src="https://www.svgrepo.com/show/491747/archivebox.svg" alt="Archive">
             </a>
         </div>
     </body>
     <script src="archive.js"></script>
+    <script src="changelog.js"></script>
 </html>

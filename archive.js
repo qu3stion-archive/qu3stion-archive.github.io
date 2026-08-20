@@ -1,6 +1,7 @@
 const weirdRoot = document.querySelector(":root");
 const universal = document.getElementById("universal")
 const archive   = document.querySelector("main");
+const footer   = document.querySelector("footer");
 const gallery   = archive.querySelector(".gallery");
 const details   = archive.querySelector(".details");
 const explorer  = document.querySelector(".explorer");
@@ -77,10 +78,11 @@ tagsAll.set("o", {name: "Cool Tricks",          class: "tricks",     color: "typ
 tagsAll.set("`", {name: "Other Computerlings",  class: "others",     color: "type", type: "misc", description: "Qu3stion interacts with other computerlings!"});
 tagsAll.set("%", {name: "Overheating",          class: "overheating",color: "type", type: "arc", description: ""});
 tagsAll.set("a", {name: "Animal Qu3stion",      class: "animal",     color: "type", type: "gags", description: "Qu3stion becomes some kind of animal..."});
-tagsAll.set("y", {name: "Yuri- uh, Romance.",   class: "yuri",       color: "type", type: "misc", description: "There are no medias with this tag. Don't look."});
+tagsAll.set("y", {name: "Yuri!!!",              class: "yuri",       color: "type", type: "misc", description: "There are no medias with this tag. Don't look."});
 tagsAll.set("[", {name: "Image",                class: "img",        color: "type", type: "meta", description: ""});
 tagsAll.set("]", {name: "Video",                class: "vid",        color: "type", type: "meta", description: ""});
 tagsAll.set("#", {name: "Audio Warning!",       class: "warning",    color: "#FF0000", type: "meta", description: ""});
+tagsAll.set("l", {name: "Interrobang",          class: "interrobang",color: "type", type: "arc", description: ""});
 
 let tagsDate = new Map();
 tagsDate.set("0",  {name: "August '25",    class: "august25"   , type: "date", color: "#FFFFFF", description: ""});
@@ -114,7 +116,7 @@ __________________________________
 */
 var CSSvertical = undefined;
 async function orientationHandler() {
-    if (weirdRoot.clientWidth <= weirdRoot.clientHeight) {
+    if (weirdRoot.clientWidth <= weirdRoot.clientHeight || weirdRoot.clientWidth < 600) {
         if (CSSvertical != true) {
             CSSvertical = true;
             orientationApply();
@@ -162,35 +164,27 @@ async function orientationApply() {
             infoBox
                 .style.marginBottom                     = "0"
             infoBox
-                .querySelector(".close2")
-                .style.width                            = "20%";
+                .querySelector(".sidebar2")
+                .style.display                          = "block";
             infoBox
-                .querySelector(".close2")
-                .style.left                             = "40%";
+                .querySelector(".sidebar3")
+                .style.display                          = "block";
             infoBox
-                .querySelector(".close2")
-                .style.height                           = "10%";
-            infoBox
-                .querySelector(".close2")
-                .style.bottom                           = "-10%";
-            infoBox
-                .querySelector(".info")
-                .style.display                          = "grid"
-            infoBox
-                .querySelector(".drone")
-                .style.display                          = "grid";
-            infoBox
-                .style.gridTemplateAreas                = `"drone title info" "drone strawpage info" "drone feedback info"`;
-            infoBox
-                .style.gridTemplateColumns              = "1fr 3fr 1fr"
+                .style.gridTemplateAreas                = `"s title s2" "s iframe s2" "s credits s2"`
             infoBox
                 .style.gridTemplateRows                 = "auto 1fr auto"
             infoBox
-                .style.gridTemplateRows                 = "auto 1fr"
+                .style.gridTemplateColumns              = "2fr 5fr 2fr"
             infoBox.parentElement
-                .style.padding                          = "10%"
+                .style.padding                          = "8%"
             infoBox.parentElement
                 .style.paddingTop                       = "5%"
+            footer
+                .style.gridTemplateRows                 = "auto auto auto"
+            footer
+                .style.gridTemplateColumns              = "1fr 2fr"
+            footer
+                .style.gridTemplateAreas                = `"polls polls" "coms coms" "credit ."`
             perPage                                     = 16;
             break;
         case true:
@@ -215,33 +209,21 @@ async function orientationApply() {
             details
                 .style.gridTemplateRows                 = "1fr auto";
             infoBox
+                .style.gridTemplateAreas                = `"title" "iframe" "credits"`
+            infoBox
+                .style.gridTemplateRows                 = "auto 1fr auto-fill"
+            infoBox
+                .style.gridTemplateColumns              = "100%"
+            infoBox
                 .style.marginBottom                     = "10vh";
-            infoBox
-                .querySelector(".close2")
-                .style.width                            = "50%";
-            infoBox
-                .querySelector(".close2")
-                .style.left                             = "25%";
-            infoBox
-                .querySelector(".close2")
-                .style.height                           = "5%";
-            infoBox
-                .querySelector(".close2")
-                .style.bottom                           = "-5%";
-            infoBox
-                .querySelector(".info")
-                .style.display                          = "none";
-            infoBox
-                .querySelector(".drone")
-                .style.display                          = "none";
-            infoBox
-                .style.gridTemplateAreas                = `"title" "strawpage" "feedback"`;
-            infoBox
-                .style.gridTemplateColumns              = "1fr"
-            infoBox
-                .style.gridTemplateRows                 = "auto 1fr"
             infoBox.parentElement
                 .style.padding                          = "5%";
+            footer
+                .style.gridTemplateRows                 = "auto auto auto"
+            footer
+                .style.gridTemplateColumns              = "1fr"
+            footer
+                .style.gridTemplateAreas                = `"polls" "coms" "credit"`
             perPage                                     = 6;
             break;
     }
@@ -505,7 +487,7 @@ async function load() {
     init_placeholder();
     tagsSearchBuilder();
     tagsCSSBuilder();
-    loadForm();
+    loadForm()
     orientationHandler();
     showHide("infoBox");
 };
@@ -981,9 +963,16 @@ async function scrub(step) {
 CODING BY: QNAWAVE & DRONE #4 !!!!!!!!
 CSV parsing tool by: PapaParse (https://www.papaparse.com/)
 */
+
 function loadForm() {
-    const feedback = infoBox.querySelector(".strawpage");
+    /*
+    const feedback = infoBox.querySelector(".iframe");
     var iframe = document.createElement("iframe");
-    iframe.src = "https://forms.gle/ehuYV8dXh23B2arw5";
+    iframe.src = "socials.html";
     feedback.appendChild(iframe);
+    */
+}
+
+function adjustIframe () {
+
 }
