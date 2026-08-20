@@ -670,12 +670,18 @@ dt {
                         : 1fr 1fr;
     grid-area: polls;
 }
+
+.comss {
+    display             : grid;
+    grid-area: coms;
+    margin: 5px;
+}
 footer {
     margin-bottom: 20vh;
     display: grid;
     grid-template-rows: auto auto;
     grid-template-columns: auto;
-    grid-template-areas: "polls" "credit";
+    grid-template-areas: "polls" "comms" "credit" ;
     gap: var(--gap);
 }
 .credit1 {
