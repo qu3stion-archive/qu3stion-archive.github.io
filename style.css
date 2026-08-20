@@ -646,3 +646,6 @@ dt {
     grid-template-columns
                         : 1fr 1fr;
 }
+footer {
+    margin-bottom: 20vh;
+}
