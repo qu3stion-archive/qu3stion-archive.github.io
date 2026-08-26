@@ -1,19 +1,22 @@
-const weirdRoot = document.querySelector(":root");
-const universal = document.getElementById("universal")
-const archive   = document.querySelector("main");
-const footer   = document.querySelector("footer");
-const gallery   = archive.querySelector(".gallery");
-const details   = archive.querySelector(".details");
-const explorer  = document.querySelector(".explorer");
-const viewer    = document.querySelector("#viewer");
-const searchBar = gallery.querySelector(".search");
-const scrubBar  = viewer.querySelector(".search");
+const weirdRoot         = document.querySelector(":root");
+const universal         = document.getElementById("universal")
+const archive           = document.querySelector("main");
+const footer            = document.querySelector("footer");
+const gallery           = archive.querySelector(".gallery");
+const details           = archive.querySelector(".details");
+const explorer          = document.querySelector(".explorer");
+const viewer            = document.querySelector("#viewer");
+const searchBar         = gallery.querySelector(".search");
+const scrubBar          = viewer.querySelector(".search");
 
 const tagsBar           = document.getElementById("tagsBar");
 const infoBox           = document.getElementById("infoBox").querySelector(".infobox");
 const overlay           = document.getElementById("overlay");
 
 const placeholder_img   = "media/0.jpg";
+
+var darkmode            = false;
+var autoplay            = true;
 
 var mediaCSVData        = []; // Data parsed from the CSV.
 var mediaProcessedData  = new Object(); // Contains all media objects.
@@ -24,11 +27,12 @@ var searchingFor        = []; // Array of tags we are searching for!
 var perPage             = undefined;
 var pageCount;
 
-var currentPage = 1;
-var currentImageExpanded = undefined;
+var currentPage         = 1;
+var currentImageExpanded 
+                        = undefined;
 var activeMenu;
 
-const listCharacters = ["qu3stion", "qu3stion2", "exclamation", "c0mma", "amp3rsand", "creator", "green", "peri0d"];
+const listCharacters     = ["qu3stion", "qu3stion2", "exclamation", "c0mma", "amp3rsand", "creator", "green", "peri0d"];
 
 let tagsType = new Map();
 tagsType.set("character",   {name: "Characters",                color: "#FFFFFF", order: 2});
@@ -160,7 +164,7 @@ async function orientationApply() {
                 .querySelector(".status")
                 .style.display                          = "block";
             details
-                .style.gridTemplateRows                 = "5% auto";
+                .style.gridTemplateRows                 = "5% 5% auto";
             infoBox
                 .style.marginBottom                     = "0"
             infoBox
@@ -319,6 +323,16 @@ const mediaTemplate = {
         this.source2   = clone.querySelector(".expanded");
         if (this.filetype == ".mp4") {
             this.source2.volume = 0.25;
+        }
+        switch (autoplay) {
+            case true:
+                this.source2.muted      = true;
+                this.source2.autoplay   = true;
+                break;
+            case false:
+                this.source2.muted      = false;
+                this.source2.autoplay   = false;
+                break;
         }
         var tagsHolder = clone.querySelector(".tags");
         var noteHolder = clone.querySelector(".notes");
@@ -975,7 +989,33 @@ function loadForm() {
     feedback.appendChild(iframe);
     */
 }
-
-function adjustIframe () {
-
+function checked(id) {
+    const toggle = document.getElementById(id);
+    const toggleType = toggle.name;
+    switch(toggle.checked) {
+        case true:
+            switch(toggleType) {
+                case "autoplay":
+                    autoplay = true;
+                    break;
+            }
+            break;
+        case false:
+            switch(toggleType) {
+                case "autoplay":
+                    autoplay = false;
+                    break;
+            }
+            break;
+    }
+    var cousins = document.getElementsByName(toggleType); // Other toggles that do this!
+    for (cousin of cousins) {
+        cousin.checked = toggle.checked; // Sync up all the toggles for the same feature...
+    }
+}
+var toggles = document.getElementsByClassName("toggle");
+for (toggle of toggles) {
+    toggle.querySelector("input").addEventListener("change", (event) => {
+        checked(event.target.id);
+    })
 }

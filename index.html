@@ -36,7 +36,7 @@
 
         <!-- TEMPLATE 3: Video -->
         <template id="template_vid">
-            <video class="expanded" controls loading="eager" autoplay muted loop preload="none">
+            <video class="expanded" controls loading="eager" loop preload="none">
                 <source src="assets/blank.gif">
             </video>
             <div class="tags"></div>
@@ -70,6 +70,13 @@
                             <span>Media number. Every file has it's own number, listed in the gallery. Type in a number to skip to that file.</span>
                         </div>
                         <button id="forwards2" onclick="pageViewer(1)">&gt;&gt;</button>
+                    </nav>
+                    <nav class="search2_options bar">
+                        <label>Autoplay:</label>
+                        <label class="toggle">
+                            <input type="checkbox" name="autoplay" id="toggle_autoplay2" checked></input>
+                            <span></span>
+                        </label>
                     </nav>
                     <div id="viewer">
                     </div>
@@ -132,6 +139,24 @@
 
         
         <div id="tagsBar" class="sidebar out">
+            <div class="settings">
+                <h1>Settings</h1>
+                <div>
+                    <!--
+                    <label>Dark Mode</label>
+                    <label class="toggle">
+                        <input type="checkbox"></input>
+                        <span></span>
+                    </label>
+                    -->
+                    <label>Autoplay:</label>
+                    <label class="toggle">
+                        <input type="checkbox" name="autoplay" id="toggle_autoplay" checked></input>
+                        <span></span>
+                    </label>
+                </div>
+            </div>
+            <h1>Tags</h1>
             <div class="tagsMenu">
             </div>
         </div>
@@ -140,13 +165,11 @@
         <div class="notification">
             <label id="statusAlt" class="status"></label>
         </div>
-        <!--
         <div class="screen" id="feedbackForm">
             <section>
 
             </section>
         </div>
-        -->
         <div class="screen" id="infoBox">
             <section class="infobox">
                 <section class="title2 panel">
@@ -200,10 +223,6 @@
                 <span>Start Page</span>
                 <img src="https://www.svgrepo.com/show/491697/question-circle.svg" alt="Info">
             </button>
-            <button id="tagsButton" class="to-top tooltip" tabindex="0" onclick="showHide('tagsBar')">
-                <span>Menu</span>
-                <img src="https://www.svgrepo.com/show/491652/line-3.svg" alt="Search by Tags">
-            </button>
             <a class="to-top tooltip" href="#talk" tabindex="0">
                 <span>Jump to Comments</span>
                 <img src="https://www.svgrepo.com/show/491671/message-bubble-2.svg" alt="Comments">
@@ -212,6 +231,10 @@
                 <span>Jump to Archive</span>
                 <img src="https://www.svgrepo.com/show/491747/archivebox.svg" alt="Archive">
             </a>
+            <button id="tagsButton" class="to-top tooltip" tabindex="0" onclick="showHide('tagsBar')">
+                <span>Menu</span>
+                <img src="https://www.svgrepo.com/show/491652/line-3.svg" alt="Search by Tags">
+            </button>
         </div>
     </body>
     <script src="archive.js"></script>
