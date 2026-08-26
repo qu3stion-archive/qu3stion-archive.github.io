@@ -189,6 +189,12 @@ async function orientationApply() {
                 .style.gridTemplateColumns              = "1fr 2fr"
             footer
                 .style.gridTemplateAreas                = `"polls polls" "coms coms" "credit ."`
+            document
+                .querySelector(".pollss")
+                .style.gridTemplateColumns              = "1fr 1fr"
+            document
+                .querySelector(".pollss")
+                .style.gridTemplateRows                 = "auto"
             perPage                                     = 16;
             break;
         case true:
@@ -228,6 +234,12 @@ async function orientationApply() {
                 .style.gridTemplateColumns              = "1fr"
             footer
                 .style.gridTemplateAreas                = `"polls" "coms" "credit"`
+            document
+                .querySelector(".pollss")
+                .style.gridTemplateColumns              = "auto"
+            document
+                .querySelector(".pollss")
+                .style.gridTemplateRows                 = "auto auto"
             perPage                                     = 6;
             break;
     }
