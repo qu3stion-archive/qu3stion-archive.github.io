@@ -1,0 +1,315 @@
+/* ####### tutorial styling - feel free to remove when you copy over ###### */
+.blue { background-color: cyan; }
+.yellow { background-color: yellow; }
+.green { background-color: lime; }
+
+dl {
+  padding: 20px;
+}
+dt {
+  font-weight: bold;
+  overflow-wrap: break-word;
+}
+dd {
+  margin-top: 5px;
+  overflow-wrap: break-word;
+}
+.tutorial {
+  justify-content: center;
+  width: 80%;
+  margin: auto;
+}
+/* if you like the style of my og page, also added 3maqidrawbox.css to your page :)
+   please use a different background though please!
+*/
+/* ######################################################################## */
+
+/* have the max width be the size of your canvas */
+@media screen and (max-width: 500px) {
+  canvas {
+    width: 100%;
+    aspect-ratio: 1 / 1;
+  }
+  #controls, .des {
+    width: 100%;
+  }
+  .guide {
+    padding: 5px;
+  }
+  .flex {
+    display: block;
+  }
+}
+
+:root {
+  --canvasSize: 502px;
+  --borderStyle: 1px solid var(--line);
+
+  --bg: #dbe9f3;
+  --white: #ffffff;
+  --navy: #1f3b52;
+  --navy-deep: #142a3c;
+  --blue: #3f87ad;
+  --blue-deep: #2c6483;
+  --blue-pale: #e6f0f5;
+  --ink: #24333f;
+  --ink-dim: #66727c;
+  --line: #cddce6;
+
+  --checker-a: #dbeffa;
+  --checker-b: #e7f7ff;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html {
+  min-height: 100%;
+  background-color: var(--checker-a);
+  background-image:
+    linear-gradient(45deg, var(--checker-b) 25%, transparent 25%),
+    linear-gradient(-45deg, var(--checker-b) 25%, transparent 25%),
+    linear-gradient(45deg, transparent 75%, var(--checker-b) 75%),
+    linear-gradient(-45deg, transparent 75%, var(--checker-b) 75%);
+  background-size: 56px 56px;
+  background-position: 0 0, 0 28px, 28px -28px, -28px 0px;
+}
+
+body {
+  font-family: Roobert,-apple-system,BlinkMacSystemFont,"Segoe UI",Helvetica,Arial,sans-serif,"Apple Color Emoji","Segoe UI Emoji","Segoe UI Symbol";
+  max-width: 1300px;
+  margin: 36px auto;
+  padding: 34px 40px 46px;
+  background: var(--white);
+  border-radius: 22px;
+  box-shadow: 0 16px 40px rgba(20, 42, 60, 0.16);
+  color: var(--ink);
+  text-align: center;
+}
+
+h1, h2 {
+  font-weight: 900;
+  text-transform: uppercase;
+  letter-spacing: 0.01em;
+  color: var(--navy);
+  margin: 10px 0 15px;
+}
+
+a {
+  color: var(--blue-deep);
+}
+a:hover {
+  color: var(--navy);
+}
+
+canvas {
+  border: 2px solid var(--line);
+  border-radius: 14px;
+  cursor: crosshair;
+  background: var(--white);
+  box-shadow: 0 3px 10px rgba(20, 42, 60, 0.10);
+  margin-bottom: 25px;
+}
+
+.homebutton {
+    appearance          : none;
+    background-color    : var(--invert);
+    border              : 2px solid var(--invert);
+    border-radius       : 20px;
+    box-sizing          : border-box;
+    color               : var(--base);
+    cursor              : pointer;
+    display             : inline-block;
+    font-family         : Roobert,-apple-system,BlinkMacSystemFont,"Segoe UI",Helvetica,Arial,sans-serif,"Apple Color Emoji","Segoe UI Emoji","Segoe UI Symbol";
+    font-size           : 20px;
+    font-weight         : bold;
+    line-height         : normal;
+    margin              : 0;
+    min-height          : 60px;
+    min-width           : 0;
+    outline             : none;
+    padding             : 16px 30px;
+    text-align          : center;
+    text-decoration     : none;
+    transition          : all 300ms cubic-bezier(.23, 1, 0.32, 1);
+    user-select         : none;
+    -webkit-user-select : none;
+    touch-action        : manipulation;
+    width               : 20%;
+    will-change         : transform;
+    border: 3px solid #7297b9;
+    margin-bottom: 20px;
+}
+
+.homebutton:disabled {
+  pointer-events        : none;
+}
+
+.homebutton:hover {
+  box-shadow            : rgba(0, 0, 0, 0.25) 0 3px 10px;
+  transform             : translateY(-2px);
+  background: #98b4d4;
+  color: white;
+}
+
+.homebutton:active {
+  box-shadow            : none;
+  transform             : translateY(0);
+}
+
+.drawbox_con {
+  padding: 10px 0 20px;
+}
+
+.TheCanvas {
+  margin: 0 auto;
+}
+
+.stroke-color {
+  display: inline-block;
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  border: 2px solid var(--white);
+  box-shadow: 0 0 0 2px var(--line);
+  cursor: pointer;
+  margin: 8px 4px;
+  vertical-align: middle;
+}
+
+#gallery {
+  display: flex;
+  /*flex-wrap: wrap;*/
+  justify-content: center;
+  align-content: flex-start;
+  gap: 12px;
+  padding: 14px;
+  max-height: 420px;
+  overflow-y: auto;
+  border: 1px solid var(--line);
+  border-radius: 14px;
+  background: var(--checker-a);
+}
+
+.image-container {
+  border: 1px solid var(--line);
+  border-radius: 14px;
+  padding: 8px;
+  text-align: center;
+  max-width: 280px;
+  background: var(--blue-pale);
+  box-shadow: 0 4px 12px rgba(20, 42, 60, 0.08);
+  transition: transform 0.15s ease, box-shadow 0.15s ease;
+}
+.image-container:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 8px 20px rgba(20, 42, 60, 0.14);
+}
+.image-container img {
+  max-width: 100%;
+  height: auto;
+  display: block;
+  border-radius: 9px;
+}
+
+#controls, .des {
+  width: var(--canvasSize);
+  max-width: 100%;
+  border: 1px solid var(--line);
+  border-radius: 14px;
+  padding: 14px 16px;
+  margin: 0 auto 14px;
+  background-color: var(--blue-pale);
+  text-align: left;
+}
+#controls label, #controls strong {
+  color: var(--navy);
+}
+
+button {
+  font-weight: 90;
+  font-size: 15.6px;
+  letter-spacing: 0.02em;
+  font-weight: bold;
+  background: #cbe6f5;
+  color: #3e6b83;
+  border: none;
+  border-radius: 10px;
+  padding: 10px 20px;
+  cursor: pointer;
+  margin: 4px 4px;
+}
+button:hover {
+  transition-duration: 0.2s;
+  background: #7dabd1;
+  color: #f5fbff;
+}
+
+input[type="text"], select {
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  padding: 5px 10px;
+  font-family: inherit;
+  background: var(--white);
+  color: var(--ink);
+}
+input[type="range"] {
+  accent-color: var(--blue-deep);
+}
+
+hr {
+  border: none;
+  border-top: 1px solid var(--line);
+  margin: 24px 0;
+}
+
+.guide {
+  padding: 20px;
+}
+
+.flex {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+}
+
+@media screen and (max-width: 1500px) {
+  .drawbox_con {
+    padding: 10px 0 20px;
+  }
+  #controls, .des {
+    max-width: 100%;
+  }
+  #controls {
+    max-width: var(--canvasSize);
+  }
+}
+
+@media screen and (max-width: 1000px) {
+  .drawbox_con {
+    padding: 0px;
+  }
+  #controls, .des {
+    width: 100%;
+    max-width: 500px;
+  }
+  .flex {
+    display: block;
+  }
+  .image-container {
+    flex-direction: column;
+    max-width: 100%;
+  }
+}
+
+@media screen and (max-width: 640px) {
+  body {
+    margin: 14px;
+    padding: 24px 18px 34px;
+    border-radius: 16px;
+  }
+  #gallery {
+    max-height: 320px;
+  }
+}
