@@ -1,18 +1,22 @@
-const weirdRoot = document.querySelector(":root");
-const universal = document.getElementById("universal")
-const archive   = document.querySelector("main");
-const gallery   = archive.querySelector(".gallery");
-const details   = archive.querySelector(".details");
-const explorer  = document.querySelector(".explorer");
-const viewer    = document.querySelector("#viewer");
-const searchBar = gallery.querySelector(".search");
-const scrubBar  = viewer.querySelector(".search");
+const weirdRoot         = document.querySelector(":root");
+const universal         = document.getElementById("universal")
+const archive           = document.querySelector("main");
+const footer            = document.querySelector("footer");
+const gallery           = archive.querySelector(".gallery");
+const details           = archive.querySelector(".details");
+const explorer          = document.querySelector(".explorer");
+const viewer            = document.querySelector("#viewer");
+const searchBar         = gallery.querySelector(".search");
+const scrubBar          = viewer.querySelector(".search");
 
 const tagsBar           = document.getElementById("tagsBar");
 const infoBox           = document.getElementById("infoBox").querySelector(".infobox");
 const overlay           = document.getElementById("overlay");
 
 const placeholder_img   = "media/0.jpg";
+
+var darkmode            = false;
+var autoplay            = true;
 
 var mediaCSVData        = []; // Data parsed from the CSV.
 var mediaProcessedData  = new Object(); // Contains all media objects.
@@ -23,11 +27,12 @@ var searchingFor        = []; // Array of tags we are searching for!
 var perPage             = undefined;
 var pageCount;
 
-var currentPage = 1;
-var currentImageExpanded = undefined;
+var currentPage         = 1;
+var currentImageExpanded 
+                        = undefined;
 var activeMenu;
 
-const listCharacters = ["qu3stion", "qu3stion2", "exclamation", "c0mma", "amp3rsand", "creator", "green", "peri0d"];
+const listCharacters     = ["qu3stion", "qu3stion2", "exclamation", "c0mma", "amp3rsand", "creator", "green", "peri0d"];
 
 let tagsType = new Map();
 tagsType.set("character",   {name: "Characters",                color: "#FFFFFF", order: 2});
@@ -77,10 +82,11 @@ tagsAll.set("o", {name: "Cool Tricks",          class: "tricks",     color: "typ
 tagsAll.set("`", {name: "Other Computerlings",  class: "others",     color: "type", type: "misc", description: "Qu3stion interacts with other computerlings!"});
 tagsAll.set("%", {name: "Overheating",          class: "overheating",color: "type", type: "arc", description: ""});
 tagsAll.set("a", {name: "Animal Qu3stion",      class: "animal",     color: "type", type: "gags", description: "Qu3stion becomes some kind of animal..."});
-tagsAll.set("y", {name: "Yuri- uh, Romance.",   class: "yuri",       color: "type", type: "misc", description: "There are no medias with this tag. Don't look."});
+tagsAll.set("y", {name: "Yuri!!!",              class: "yuri",       color: "type", type: "misc", description: "There are no medias with this tag. Don't look."});
 tagsAll.set("[", {name: "Image",                class: "img",        color: "type", type: "meta", description: ""});
 tagsAll.set("]", {name: "Video",                class: "vid",        color: "type", type: "meta", description: ""});
 tagsAll.set("#", {name: "Audio Warning!",       class: "warning",    color: "#FF0000", type: "meta", description: ""});
+tagsAll.set("l", {name: "Interrobang",          class: "interrobang",color: "type", type: "arc", description: ""});
 
 let tagsDate = new Map();
 tagsDate.set("0",  {name: "August '25",    class: "august25"   , type: "date", color: "#FFFFFF", description: ""});
@@ -114,7 +120,7 @@ __________________________________
 */
 var CSSvertical = undefined;
 async function orientationHandler() {
-    if (weirdRoot.clientWidth <= weirdRoot.clientHeight) {
+    if (weirdRoot.clientWidth <= weirdRoot.clientHeight || weirdRoot.clientWidth < 600) {
         if (CSSvertical != true) {
             CSSvertical = true;
             orientationApply();
@@ -158,39 +164,37 @@ async function orientationApply() {
                 .querySelector(".status")
                 .style.display                          = "block";
             details
-                .style.gridTemplateRows                 = "5% auto";
+                .style.gridTemplateRows                 = "5% 5% auto";
             infoBox
                 .style.marginBottom                     = "0"
             infoBox
-                .querySelector(".close2")
-                .style.width                            = "20%";
+                .querySelector(".sidebar2")
+                .style.display                          = "block";
             infoBox
-                .querySelector(".close2")
-                .style.left                             = "40%";
+                .querySelector(".sidebar3")
+                .style.display                          = "block";
             infoBox
-                .querySelector(".close2")
-                .style.height                           = "10%";
-            infoBox
-                .querySelector(".close2")
-                .style.bottom                           = "-10%";
-            infoBox
-                .querySelector(".info")
-                .style.display                          = "grid"
-            infoBox
-                .querySelector(".drone")
-                .style.display                          = "grid";
-            infoBox
-                .style.gridTemplateAreas                = `"drone title info" "drone strawpage info" "drone feedback info"`;
-            infoBox
-                .style.gridTemplateColumns              = "1fr 3fr 1fr"
+                .style.gridTemplateAreas                = `"s title s2" "s iframe s2" "s credits s2"`
             infoBox
                 .style.gridTemplateRows                 = "auto 1fr auto"
             infoBox
-                .style.gridTemplateRows                 = "auto 1fr"
+                .style.gridTemplateColumns              = "2fr 5fr 2fr"
             infoBox.parentElement
-                .style.padding                          = "10%"
+                .style.padding                          = "8%"
             infoBox.parentElement
                 .style.paddingTop                       = "5%"
+            footer
+                .style.gridTemplateRows                 = "auto auto auto"
+            footer
+                .style.gridTemplateColumns              = "1fr 2fr"
+            footer
+                .style.gridTemplateAreas                = `"polls polls" "coms coms" "credit ."`
+            document
+                .querySelector(".pollss")
+                .style.gridTemplateColumns              = "1fr 1fr"
+            document
+                .querySelector(".pollss")
+                .style.gridTemplateRows                 = "auto"
             perPage                                     = 16;
             break;
         case true:
@@ -215,33 +219,27 @@ async function orientationApply() {
             details
                 .style.gridTemplateRows                 = "1fr auto";
             infoBox
+                .style.gridTemplateAreas                = `"title" "iframe" "credits"`
+            infoBox
+                .style.gridTemplateRows                 = "auto 1fr auto-fill"
+            infoBox
+                .style.gridTemplateColumns              = "100%"
+            infoBox
                 .style.marginBottom                     = "10vh";
-            infoBox
-                .querySelector(".close2")
-                .style.width                            = "50%";
-            infoBox
-                .querySelector(".close2")
-                .style.left                             = "25%";
-            infoBox
-                .querySelector(".close2")
-                .style.height                           = "5%";
-            infoBox
-                .querySelector(".close2")
-                .style.bottom                           = "-5%";
-            infoBox
-                .querySelector(".info")
-                .style.display                          = "none";
-            infoBox
-                .querySelector(".drone")
-                .style.display                          = "none";
-            infoBox
-                .style.gridTemplateAreas                = `"title" "strawpage" "feedback"`;
-            infoBox
-                .style.gridTemplateColumns              = "1fr"
-            infoBox
-                .style.gridTemplateRows                 = "auto 1fr"
             infoBox.parentElement
                 .style.padding                          = "5%";
+            footer
+                .style.gridTemplateRows                 = "auto auto auto"
+            footer
+                .style.gridTemplateColumns              = "1fr"
+            footer
+                .style.gridTemplateAreas                = `"polls" "coms" "credit"`
+            document
+                .querySelector(".pollss")
+                .style.gridTemplateColumns              = "auto"
+            document
+                .querySelector(".pollss")
+                .style.gridTemplateRows                 = "auto auto"
             perPage                                     = 6;
             break;
     }
@@ -337,6 +335,16 @@ const mediaTemplate = {
         this.source2   = clone.querySelector(".expanded");
         if (this.filetype == ".mp4") {
             this.source2.volume = 0.25;
+        }
+        switch (autoplay) {
+            case true:
+                this.source2.muted      = true;
+                this.source2.autoplay   = true;
+                break;
+            case false:
+                this.source2.muted      = false;
+                this.source2.autoplay   = false;
+                break;
         }
         var tagsHolder = clone.querySelector(".tags");
         var noteHolder = clone.querySelector(".notes");
@@ -505,7 +513,7 @@ async function load() {
     init_placeholder();
     tagsSearchBuilder();
     tagsCSSBuilder();
-    loadForm();
+    loadForm()
     orientationHandler();
     showHide("infoBox");
 };
@@ -688,6 +696,9 @@ var animData = {
         state   : false,
     }
 }
+overlay.addEventListener("click", () => {
+    showHide(activeMenu)
+})
 for (id of ["tagsBar", "infoBox", "overlay"]) {
     const elm = document.getElementById(id);
     elm.addEventListener("animationstart", (event) => {
@@ -981,9 +992,42 @@ async function scrub(step) {
 CODING BY: QNAWAVE & DRONE #4 !!!!!!!!
 CSV parsing tool by: PapaParse (https://www.papaparse.com/)
 */
+
 function loadForm() {
-    const feedback = infoBox.querySelector(".strawpage");
+    /*
+    const feedback = infoBox.querySelector(".iframe");
     var iframe = document.createElement("iframe");
-    iframe.src = "https://forms.gle/ehuYV8dXh23B2arw5";
+    iframe.src = "socials.html";
     feedback.appendChild(iframe);
+    */
+}
+function checked(id) {
+    const toggle = document.getElementById(id);
+    const toggleType = toggle.name;
+    switch(toggle.checked) {
+        case true:
+            switch(toggleType) {
+                case "autoplay":
+                    autoplay = true;
+                    break;
+            }
+            break;
+        case false:
+            switch(toggleType) {
+                case "autoplay":
+                    autoplay = false;
+                    break;
+            }
+            break;
+    }
+    var cousins = document.getElementsByName(toggleType); // Other toggles that do this!
+    for (cousin of cousins) {
+        cousin.checked = toggle.checked; // Sync up all the toggles for the same feature...
+    }
+}
+var toggles = document.getElementsByClassName("toggle");
+for (toggle of toggles) {
+    toggle.querySelector("input").addEventListener("change", (event) => {
+        checked(event.target.id);
+    })
 }
