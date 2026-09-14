@@ -188,7 +188,7 @@ async function orientationApply() {
             footer
                 .style.gridTemplateColumns              = "1fr 2fr"
             footer
-                .style.gridTemplateAreas                = `"polls polls" "coms coms" "credit ."`
+                .style.gridTemplateAreas                = `"polls polls" "drawb drawb" "coms coms" "credit ."`
             document
                 .querySelector(".pollss")
                 .style.gridTemplateColumns              = "1fr 1fr"
@@ -233,7 +233,7 @@ async function orientationApply() {
             footer
                 .style.gridTemplateColumns              = "1fr"
             footer
-                .style.gridTemplateAreas                = `"polls" "coms" "credit"`
+                .style.gridTemplateAreas                = `"polls" "coms" "drawb" "credit"`
             document
                 .querySelector(".pollss")
                 .style.gridTemplateColumns              = "auto"

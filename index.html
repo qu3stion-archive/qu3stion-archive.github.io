@@ -12,6 +12,7 @@
         <link rel="icon" type="image/jpg" sizes="16x16" href="assets/logos/logo_16x16.jpg">
         <script src="papaparse.min.js"></script>
         <script src="https://u.widget.st/ar.js"></script>
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
     </head>
     <body>
         <!-- TEMPLATE 1: Thumbnails -->
@@ -118,17 +119,7 @@
                     <ws-widget type="polls" iid="12685" style="margin: 10px;"></ws-widget>
                     <ws-widget type="polls" iid="12740" style="margin: 10px;"></ws-widget>
                 </section>
-                <section class="commss panel" style="padding: 18px;">
-                    <ws-widget type="comments" name="qu3stion-blog" iid="6589" style="width: 100%;"></ws-widget>
-                </section>
-                <!--
-                <section class="changelog panel">
-                    <h1>[Placeholder...]</h1>
-                    <div>
-                        
-                    </div>
-                </section>
-                -->
+
                 <section class="credit1 panel">
                     <a href="https://x.com/computerlings">
                         <img src="assets/drone4.png">
@@ -137,7 +128,29 @@
                         <p>Hallo! I am <b>JOANNE DRONE</b> & I programmed ALL of the Javascript for this website! Follow me on Twitter: <a href="https://x.com/computerlings">@COMPUTERLINGS</a>... if you DARE!!!!<br><br>Want to send me suggestions? -- comments? -- bug reports? -- compliments?<br><a href="https://forms.gle/ehuYV8dXh23B2arw5">Go to the FEEDBACK FORM!</a></p>
                     </div>
                 </section>
-                <!-- Widgets D: -->
+
+                <section class="drawgallery panel">
+                    <h2 id="gallery-heading" style="text-align: center;">Drawbox Gallery</h2>
+                    <div style="text-align: center;">
+                    <a class="homebutton" href="https://qu3stion-archive.github.io/drawbox.html">Draw something!</a>
+                    </div>
+                    <div class="gallery-cont">
+                    <div id="gallerybox">Loading images...</div>
+                    </div>
+
+                    <hr>
+                    <br>
+                </section>
+                
+                <!--
+                <section class="changelog panel">
+                    <h1>[Placeholder...]</h1>
+                    <div>
+                        
+                    </div>
+                </section>
+                -->
+
             </footer>
         </div>
 
@@ -240,7 +253,15 @@
                 <img src="https://www.svgrepo.com/show/491652/line-3.svg" alt="Search by Tags">
             </button>
         </div>
-    </body>
+
+        <!-- The gallery doesn't work if i delete these lines for some reason?? so they're hidden-->
+        <canvas id="drawboxcanvas" width="500px" height="500px" hidden></canvas>
+        <fieldset id="controls" hidden>
+        <button id="submit" hidden>Submit drawing</button>
+        </div hidden>
+
+        </body>
     <script src="archive.js"></script>
     <script src="changelog.js"></script>
+    <script src="drawbox.js"></script>
 </html>

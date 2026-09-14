@@ -127,7 +127,7 @@ canvas {
     user-select         : none;
     -webkit-user-select : none;
     touch-action        : manipulation;
-    width               : 20%;
+    width               : 150px;
     will-change         : transform;
     border: 3px solid #7297b9;
     margin-bottom: 20px;
@@ -169,9 +169,9 @@ canvas {
   vertical-align: middle;
 }
 
-#gallery {
+#gallerybox {
   display: flex;
-  /*flex-wrap: wrap;*/
+  flex-wrap: wrap;
   justify-content: center;
   align-content: flex-start;
   gap: 12px;
@@ -188,7 +188,7 @@ canvas {
   border-radius: 14px;
   padding: 8px;
   text-align: center;
-  max-width: 280px;
+  max-width: 200px;
   background: var(--light1);
   box-shadow: 0 4px 12px rgba(20, 42, 60, 0.08);
   transition: transform 0.15s ease, box-shadow 0.15s ease;
@@ -288,10 +288,6 @@ hr {
   .flex {
     display: block;
   }
-  .image-container {
-    flex-direction: column;
-    max-width: 100%;
-  }
 }
 
 @media screen and (max-width: 640px) {
@@ -299,8 +295,4 @@ hr {
     margin: 14px;
     padding: 24px 18px 34px;
     border-radius: 16px;
-  }
-  #gallery {
-    max-height: 320px;
-  }
-}
+  }}

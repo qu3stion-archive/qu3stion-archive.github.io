@@ -129,6 +129,98 @@ body {
   transform             : translateY(0);
 }
 
+#gallerybox {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  align-content: flex-start;
+  gap: 12px;
+  padding: 14px;
+  max-height: 420px;
+  overflow-y: auto;
+  border: 1px solid var(--light3);
+  border-radius: 14px;
+  background: #EEF5FA;
+}
+
+.homebutton {
+        appearance          : none;
+        background-color    : white;
+        border              : 2px solid var(--invert);
+        border-radius       : 20px;
+        box-sizing          : border-box;
+        color               : #24333F;
+        cursor              : pointer;
+        display             : inline-block;
+        font-family         : Roobert,-apple-system,BlgrayMacSystemFont,"Segoe UI",Helvetica,Arial,sans-serif,"Apple Color Emoji","Segoe UI Emoji","Segoe UI Symbol";
+        font-size           : 20px;
+        font-weight         : 600px;
+        line-height         : normal;
+        margin              : 0;
+        min-height          : 60px;
+        min-width           : 0;
+        outline             : none;
+        padding             : 16px 30px;
+        text-align          : center;
+        text-decoration     : none;
+        transition          : all 300ms cubic-bezier(.23, 1, 0.32, 1);
+        user-select         : none;
+        -webkit-user-select : none;
+        touch-action        : manipulation;
+        width               : 250px;
+        will-change         : transform;
+        border: 3px solid #7297b9;
+        margin-bottom: 20px;
+        margin-top: 10px;
+}
+
+.homebutton:disabled {
+  pointer-events        : none;
+}
+
+.homebutton:hover {
+  box-shadow            : rgba(0, 0, 0, 0.25) 0 3px 10px;
+  transform             : translateY(-2px);
+  background: #98b4d4;
+  color: white;
+}
+
+.homebutton:active {
+  box-shadow            : none;
+  transform             : translateY(0);
+}
+
+.image-container {
+  border: 1px solid #bdd3e1;
+  border-radius: 14px;
+  padding: 8px;
+  text-align: center;
+  max-width: 280px;
+  background: var(--light1);
+  box-shadow: 0 4px 12px rgba(20, 42, 60, 0.08);
+  transition: transform 0.15s ease, box-shadow 0.15s ease;
+  background-color: #ecf4fa;
+}
+.image-container:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 8px 20px rgba(20, 42, 60, 0.14);
+}
+.image-container img {
+  max-width: 100%;
+  height: auto;
+  display: block;
+  border-radius: 9px;
+}
+
+#gallery-heading{
+    font-family: Roobert,-apple-system,BlgrayMacSystemFont,"Segoe UI",Helvetica,Arial,sans-serif,"Apple Color Emoji","Segoe UI Emoji","Segoe UI Symbol";
+    font-weight: 900;
+    text-transform: uppercase;
+    letter-spacing: 0.01em;
+    color: #1F3B52;
+    margin: 20px 0 10px;
+}
+
 .title {
     display             : flex;
     flex-direction      : row;
@@ -683,6 +775,13 @@ dt {
     grid-area: coms;
     margin: 5px;
 }
+
+.drawgallery {
+    display             : grid;
+    grid-area: drawb;
+    margin: 5px;
+}
+
 footer {
     margin-bottom: 20vh;
     display: grid;
@@ -695,7 +794,7 @@ footer {
     display: grid;
     grid-template-rows: auto auto auto;
     grid-template-columns: 1fr 2fr;
-    grid-template-areas: "polls polls" "coms coms" "credit .";
+    grid-template-areas: "polls polls" "drawb drawb" "coms coms" "credit .";
     gap: var(--gap);
 }
 .pollss {
@@ -708,6 +807,12 @@ footer {
     display             : grid;
     grid-area           : coms;
 }
+
+.drawgallery {
+    display             : grid;
+    grid-area: drawb;
+}
+
 .credit1 {
     grid-area: credit;
     display: flex;

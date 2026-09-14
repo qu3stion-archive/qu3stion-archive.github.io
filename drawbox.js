@@ -293,7 +293,7 @@ document.getElementById("submit").addEventListener("click", async function () {
 // display gallery of images
 async function fetchImages() {
   if (!DISPLAY_IMAGES) {
-    document.getElementById("gallery").textContent = "images Display is disabled.";
+    document.getElementById("gallerybox").textContent = "images Display is disabled.";
     console.log("Image display is disabled.");
     return;
   }
@@ -303,8 +303,8 @@ async function fetchImages() {
     const csvText = await response.text();
     const rows = csvText.split("\n").slice(1);
 
-    const gallery = document.getElementById("gallery");
-    gallery.innerHTML = "";
+    const gallerybox = document.getElementById("gallerybox");
+    gallerybox.innerHTML = "";
     rows.reverse().forEach((row) => {
       const columns = row.split(",");
       console.log("Row:", row);
@@ -325,9 +325,9 @@ async function fetchImages() {
                     <img src="${imgUrl}" alt="drawing" class="drawbox" title="${myComment}">
                     <p>${timestamp}</p>
                     <p><span>By: <span>${author}</p>
-                    <p><span style="color: #213b4e;font-weight: bold;">> ${myComment} <</p>         
+                    <p><span style="color: #213b4e;font-weight: bold;"> ${myComment} </p> 
                 `;
-        gallery.appendChild(div);
+        gallerybox.appendChild(div);
       }
       
       if(IMAGE_APPROVAL){
@@ -343,7 +343,7 @@ async function fetchImages() {
     });
   } catch (error) {
     console.error("Error fetching images:", error);
-    document.getElementById("gallery").textContent = "Failed to load images.";
+    document.getElementById("gallerybox").textContent = "Failed to load images.";
   }
 
   // lets drawbox images get bigger when clicked
@@ -368,8 +368,10 @@ async function fetchImages() {
     bigImg.src = img.src;
     bigImg.style.maxWidth = '90vw';
     bigImg.style.maxHeight = '90vh';
+    bigImg.style.width = '600px';
     bigImg.style.borderRadius = '10px';
     bigImg.style.boxShadow = '0 0 20px #000';
+
 
     overlay.appendChild(bigImg);
     document.body.appendChild(overlay);
