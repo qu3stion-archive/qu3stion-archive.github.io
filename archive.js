@@ -52,11 +52,12 @@ tagsAll.set("!", {name: "3xclamation",  class: "exclamation",type: "character", 
 tagsAll.set(",", {name: "C0mma",        class: "c0mma",      type: "character", color: "#3e6ab7", description: ""});
 tagsAll.set("&", {name: "Amp3rsand",    class: "amp3rsand",  type: "character", color: "#cb993e", description: ""});
 tagsAll.set("G", {name: "Green",        class: "green",      type: "character", color: "#0e9368", description: ""});
+tagsAll.set("*", {name: "Aster",        class: "aster",      type: "character", color: "#ca679e", description: ""});
 tagsAll.set(".", {name: "...Peri0d??",  class: "peri0d",     type: "character", color: "#9deb44",      description: ""});
 tagsAll.set(":", {name: "Creator",      class: "creator",    type: "character", color: "#252b2b20", description: ""});
 tagsAll.set("|", {name: "Answ3r",       class: "answ3r",     type: "character", color: "#00000020",      description: ""});
 //
-tagsAll.set("*", {name: "Lore",                 class: "lore",       color: "type", type: "info", description: "Contains important lore pieces!"});
+tagsAll.set("÷", {name: "Lore",                 class: "lore",       color: "type", type: "info", description: "Contains important lore pieces!"});
 tagsAll.set("^", {name: "Trivia",               class: "trivia",     color: "type", type: "info", description: "Fun facts about Qu3stion; not as important as the lore tidbits."});
 tagsAll.set("_", {name: "Intro",                class: "intro",      color: "type", type: "info", description: "First time a character appears!"});
 tagsAll.set("s", {name: "Cute :3",              class: "cute",       color: "type", type: "misc", description: "All Qu3stion is Cute Medias... but some Medias are more Cuter than others..."});
@@ -75,7 +76,7 @@ tagsAll.set("w", {name: "Looks Weird",          class: "weird",      color: "typ
 tagsAll.set("u", {name: "UT/DR",                class: "utdr",       color: "type", type: "gags", description: ""});
 tagsAll.set("t", {name: "Cats",                 class: "cats",       color: "type", type: "misc", description: "Discussion of Cats..."});
 tagsAll.set("e", {name: "Ears",                 class: "ears",       color: "type", type: "events", description: ""});
-tagsAll.set("+", {name: "Audience Interactions",class: "gifts",      color: "type", type: "audience", description: "The audiences gives Qu3stion gives, tries to change her screen color, etc."});
+tagsAll.set("+", {name: "Audience Interactions",class: "int",      color: "type", type: "audience", description: "The audiences gives Qu3stion gives, tries to change her screen color, etc."});
 tagsAll.set("-", {name: "Errors/Reboots",       class: "errors",     color: "type", type: "events", description: "Times when Qu3stion's computer crashes / breaks down, and/or resets."});
 tagsAll.set("$", {name: "Music",                class: "music",      color: "type", type: "audience", description: "Qu3stion listens to music!"});
 tagsAll.set("o", {name: "Cool Tricks",          class: "tricks",     color: "type", type: "events", description: "Qu3stion does some cool tricks with her computers, um, powers! Changing colors, changing her screen, etc."});
@@ -83,6 +84,7 @@ tagsAll.set("`", {name: "Other Computerlings",  class: "others",     color: "typ
 tagsAll.set("%", {name: "Overheating",          class: "overheating",color: "type", type: "arc", description: ""});
 tagsAll.set("a", {name: "Animal Qu3stion",      class: "animal",     color: "type", type: "gags", description: "Qu3stion becomes some kind of animal..."});
 tagsAll.set("y", {name: "Yuri!!!",              class: "yuri",       color: "type", type: "misc", description: "There are no medias with this tag. Don't look."});
+tagsAll.set("b", {name: "Gifts",                class: "gifts",      color: "type", type: "misc", description: ""});
 tagsAll.set("[", {name: "Image",                class: "img",        color: "type", type: "meta", description: ""});
 tagsAll.set("]", {name: "Video",                class: "vid",        color: "type", type: "meta", description: ""});
 tagsAll.set("#", {name: "Audio Warning!",       class: "warning",    color: "#FF0000", type: "meta", description: ""});
@@ -102,7 +104,8 @@ tagsDate.set("9",  {name: "May '26",       class: "may26"      , type: "date", c
 tagsDate.set("10", {name: "June '26",      class: "june26"     , type: "date", color: "#FFFFFF", description: ""});
 tagsDate.set("11", {name: "July '26",      class: "july26"     , type: "date", color: "#FFFFFF", description: ""});
 tagsDate.set("12", {name: "August '26",    class: "august26"   , type: "date", color: "#FFFFFF", description: ""});
-
+tagsDate.set("13", {name: "September '26", class: "september26", type: "date", color: "#FFFFFF", description: ""});
+tagsDate.set("14", {name: "October '26",  class: "october26", type: "date", color: "#FFFFFF", description: ""});
 /*
 UTILITY!
 __________________________________
@@ -930,8 +933,11 @@ async function search() {
         for (id of validArr) {
             var media = mediaProcessedData[id];
             for (x = 0; x < media["tags"].length; x++) {
+                console.log(media["tags"]);
                 var tagReceived = media["tags"][x];
-                if (tagReceived["class"] == tag) {
+                if (tagReceived["class"] == undefined) {
+                    continue
+                } else if (tagReceived["class"] == tag) {
                     break;
                 } else if (x + 1 == media["tags"].length) {
                     validArr = validArr.filter((item) => item != id);
